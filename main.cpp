@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 15:16:22 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/06/29 18:25:54 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/06/30 12:52:26 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,20 +85,25 @@ int main(void)
     //         std::cout <<  myvec[i] << std::endl;
     // }
     {
+        unsigned int i;
         ft::vector<int> foo (3,100);   // three ints with a value of 100
         ft::vector<int> bar (5,200);   // five ints with a value of 200
 
         foo.swap(bar);
 
-        std::cout << "foo contains:";
-        for (unsigned i=0; i<foo.size(); i++)
-            std::cout << ' ' << foo[i];
-        std::cout << '\n';
+        // std::cout << "foo contains:";
+        // for (int i = 0; i < foo.size(); i++)
+        // std::cout << ' ' << foo[i];
+        // std::cout << '\n';
 
-        std::cout << "bar contains:";
-        for (unsigned i=0; i<bar.size(); i++)
-            std::cout << ' ' << bar[i];
-        std::cout << '\n';
+        // std::cout << "bar contains:";
+        // for (int i = 0; i < bar.size(); i++)
+        // std::cout << ' ' << bar[i];
+        // std::cout << '\n';
+        // for (int value : foo)
+        //     std::cout << value << std::endl;
+        // for (int value : bar)
+        //     std::cout << value << std::endl;
     }
     // {
     //     std::vector<int> first;
