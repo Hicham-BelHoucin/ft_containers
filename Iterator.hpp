@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:51:29 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/06/30 13:15:19 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/08 07:10:16 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,127 @@
 # define ITERATOR_HPP
 
 # include <iterator>
+# include "iterator_traits.hpp"
 
 namespace ft
 {
     template<typename T>
     class Iterator : public std::iterator<std::random_access_iterator_tag, T>
     {
-        protected:
-            typedef T                                                                               value_type;
-            typedef typename std::iterator<std::random_access_iterator_tag, T>::difference_type  difference_type;
-            typedef typename std::iterator<std::random_access_iterator_tag, T>::pointer          pointer;
-			typedef typename std::iterator<std::random_access_iterator_tag, T>::reference		reference;
         public:
+            typedef T													value_type;
+            typedef typename ft::iterator_traits<T>::difference_type 	difference_type;
+            typedef typename ft::iterator_traits<T>::pointer         	pointer;
+			typedef typename ft::iterator_traits<T>::reference			reference;
             Iterator() : _ptr(nullptr)
             {
             }
-            Iterator(const pointer & copy) : _ptr(copy._ptr)
-            {
-            }
-			Iterator & operator=(const pointer & assign)
+			explicit Iterator(pointer it) : _ptr(it)
 			{
-				this->_ptr = assign._ptr;
-				return *this;
+			}
+			template <class iter>
+			Iterator (const Iterator<iter> & it) : _ptr(it.base())
+			{
 			}
 			~Iterator()
 			{
 			}
 			reference operator*() const
 			{
-				/*
-					Returns a reference to the element pointed to by the iterator.
-					Internally, the function decreases a copy of its base iterator and returns the result of dereferencing it.
-					The iterator shall point to some object in order to be dereferenceable.
-				*/
 				return *_ptr;
+			}
+			value_type base() const
+			{
+				return this->_ptr;
+			}
+			Iterator operator+ (difference_type n) const
+			{
+				Iterator temp = *this;
+				temp._ptr += n;
+				return temp;
+			}
+			Iterator& operator++()
+			{
+				this->_ptr++;
+				return *this;
+			}
+			Iterator  operator++(int)
+			{
+				Iterator temp = *this;
+				++(*this);
+				return *this;
+			}
+			Iterator& operator+= (difference_type n)
+			{
+				this->_ptr += n;
+				return (*this);
+			}
+			Iterator operator- (difference_type n) const
+			{
+				Iterator temp = *this;
+				temp._ptr -= n;
+				return temp;
+			}
+			Iterator operator-= (difference_type n) const
+			{
+				this->_ptr -= n;
+				return *this;
+			}
+			Iterator& operator--()
+			{
+				this->_ptr--;
+				return *this;
+			}
+			Iterator  operator--(int)
+			{
+				Iterator temp = *this;
+				--(*this);
+				return temp;
+			}
+			pointer operator->() const
+			{
+				return &(operator*());
+			}
+			reference operator[] (difference_type n) const
+			{
+				return *(_ptr + n);
+			}
+			friend bool operator!=(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr != rhs._ptr);
+			}
+			friend bool operator==(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr == rhs._ptr);
+			}
+			friend bool operator<(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr < rhs._ptr);
+			}
+			friend bool operator<=(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr <= rhs._ptr);
+			}
+			friend bool operator>(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr > rhs._ptr);
+			}
+			friend bool operator>=(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr >= rhs._ptr);
+			}
+			friend Iterator operator+ (
+						typename Iterator::difference_type n,
+						const Iterator& rev_it)
+			{
+				rev_it._ptr + n;
+				return rev_it;
+			}
+			friend difference_type operator- (
+				const Iterator& lhs,
+				const Iterator& rhs)
+			{
+				return lhs._ptr - rhs._ptr;
 			}
         private:
             pointer _ptr;

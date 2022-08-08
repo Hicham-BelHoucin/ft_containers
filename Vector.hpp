@@ -16,80 +16,84 @@
 #include <memory.h>
 #include <algorithm>
 #include "Iterator.hpp"
+#include "reverse_iterator.hpp"
+#include <type_traits>
+#include <iostream>
+#include "enable_if.hpp"
 
 namespace ft
 {
 	template <class T, class Alloc = std::allocator<T> >
 	class vector
 	{
-		protected:
-			typedef T value_type;
-			typedef size_t size_type;
-			typedef Alloc allocator_type;
-			typedef typename allocator_type::reference reference;
-			typedef typename allocator_type::const_reference const_reference;
-			typedef typename allocator_type::pointer pointer;
-			typedef typename allocator_type::const_pointer const_pointer;
-			typedef typename allocator_type::difference_type difference_type;
-			typedef typename ft::Iterator<T>			iterator;
+		public:
+			typedef T 											value_type;
+			typedef Alloc 										allocator_type;
+			typedef typename allocator_type::reference 			reference;
+			typedef typename allocator_type::size_type 			size_type;
+			typedef typename allocator_type::const_reference 	const_reference;
+			typedef typename allocator_type::pointer 			pointer;
+			typedef typename allocator_type::const_pointer 		const_pointer;
+			typedef typename allocator_type::difference_type 	difference_type;
 		private:
-			T 	*		content;
+			pointer		content;
 			Alloc 		allocator;
 			size_type 	_size;
 			size_type 	index;
 		public:
+			typedef typename ft::Iterator<pointer>						iterator;
+			typedef typename ft::Iterator<const_pointer>				const_iterator;
+			typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 			/* //////////////////////////[ Constructor ]/////////////////////////////// */
 
-			explicit vector(const allocator_type &alloc = allocator_type())
+			explicit vector(const allocator_type &alloc = allocator_type()) : allocator(alloc)
 			{
 				// Constructs an empty container, with no elements.
 				this->_size = 0;
 				this->index = 0;
-				this->allocator = alloc;
 				this->content = nullptr;
 			};
-			explicit vector(unsigned int n, const value_type &val = value_type(),
-							const allocator_type &alloc = allocator_type())
+			explicit vector(size_type n, const value_type &val = value_type(),
+							const allocator_type &alloc = allocator_type()) : allocator(alloc)
 			{
 				/*
 					Constructs a container with n elements. Each element is a copy of val.
 				*/
-				this->allocator = alloc;
 				this->_size = n;
 				this->index = n;
-				this->content = new T(n);
+				this->content = this->allocator.allocate(n);
 				for (int i = 0; i < n; i++)
 					this->content[i] = val;
 			};
-			// template <class InputIterator>
-			// vector (InputIterator first, InputIterator last,
-			// 		const allocator_type& alloc = allocator_type())
-			// {
-			// 	/*
-			// 		Constructs a container with as many elements as the range [first,last)
-			// 		with each element constructed from its corresponding element in that range, in the same order.
-			// 	*/
-			// 	this->allocator = alloc;
-			// 	this->index = 0;
-			// 	this->_size = 0;
-			// 	for (;first != last; first++)
-			// 	{
-			// 		T &temp = first;
-			// 		this->push_back(temp);
-			// 	}
-			// };
+			template <class InputIterator>
+			vector (InputIterator first, InputIterator last,
+					const allocator_type& alloc = allocator_type(),
+					typename ft::enable_if<!std::is_integral<InputIterator>::value>::type * = nullptr) : allocator(alloc)
+			{
+				/*
+					Constructs a container with as many elements as the range [first,last),
+					with each element constructed from its corresponding element in that range, in the same order.
+				*/
+				this->content = this->allocator.allocate((last - first));
+				this->index = 0;
+				for (; first < last; first++)
+				{
+					this->content[this->index] = *first;
+					this->index++;
+				}
+				this->_size = this->index;
+			}
 			vector(const vector &x)
 			{
 				// Constructs a container with a copy of each of the elements in x, in the same order
 				this->allocator = x.allocator;
-				// this->content = new T(x._size);
-				this->content = this->allocator.allocate(5);
+				this->content = this->allocator.allocate((x.size()));
 				this->_size = x._size;
 				this->index = x.index;
-				this->allocator = x.allocator;
-				for (int i = 0; i < x.size(); i++)
-					this->content[i] = x[i];
+				for (int i = 0; i < x.index; i++)
+					this->content[i] = x.content[i];
 			};
 
 			/* //////////////////////////[ Destructors ]/////////////////////////////// */
@@ -97,7 +101,7 @@ namespace ft
 			~vector()
 			{
 				if (this->content != nullptr)
-					delete[] this->content;
+					this->allocator.deallocate(content, _size);
 			};
 
 			/* //////////////////////////[ Operators ]/////////////////////////////// */
@@ -105,9 +109,12 @@ namespace ft
 			vector &operator=(const vector &assign)
 			{
 				// Constructs a container with a copy of each of the elements in x, in the same order
-				this->index = assign.index;
+				this->allocator = assign.allocator;
+				this->content = this->allocator.allocate((assign.size()));
 				this->_size = assign._size;
-				this->content = assign.content;
+				this->index = assign.index;
+				for (int i = 0; i < assign.index; i++)
+					this->content[i] = assign.content[i];
 				return *this;
 			};
 
@@ -115,16 +122,38 @@ namespace ft
 
 			iterator begin()
 			{
-				return (this->content + 0);
+				return (iterator(&this->content[0]));
 			};
 			iterator end()
 			{
-				return (this->content + index);
+				return (iterator(&this->content[index]));
 			};
-			// const_iterator begin() const
-			// {
+			const_iterator begin() const
+			{
+				return const_iterator(&this->content[0]);
+			};
+			const_iterator end() const
+			{
+				return const_iterator(&this->content[index]);
+			};
 
-			// };
+			reverse_iterator rbegin()
+			{
+				return reverse_iterator(end());
+			}
+			const_reverse_iterator rbegin() const
+			{
+				return const_reverse_iterator(begin());
+			}
+
+			reverse_iterator rend()
+			{
+				return reverse_iterator(begin());
+			}
+			const_reverse_iterator rend() const
+			{
+				return const_reverse_iterator(begin());
+			}
 
 			/* //////////////////////////[ Capacity  ]/////////////////////////////// */
 
@@ -187,11 +216,6 @@ namespace ft
 				// returns the number of elements that can be held in currently allocated storage
 				return this->_size;
 			}
-			void shrink_to_fit()
-			{
-				// reduces memory usage by freeing unused memory
-				realloc(index);
-			}
 
 			/* //////////////////////////[ Element access  ]/////////////////////////////// */
 
@@ -225,45 +249,28 @@ namespace ft
 			{
 				// Returns a reference to the first element in the container.
 				// Calling front on an empty container is undefined.
-				return std::begin(this->content);
+				return this->content[0];
 			}
 			const_reference front() const
 			{
 				// Returns a reference to the first element in the container.
 				// Calling front on an empty container is undefined.
-				return std::begin(this->content);
+				return this->content[0];
 			}
 			reference back()
 			{
 				// Returns a reference to the last element in the container.
 				// Calling back on an empty container causes undefined behavior.
-				return std::prev(std::end(this->content));
+				return this->content[index - 1];
 			}
 			const_reference back() const
 			{
 				// Returns a reference to the last element in the container.
 				// Calling back on an empty container causes undefined behavior.
-				return std::prev(std::end(this->content));
+				return this->content[index - 1];
 			}
 
 			/* //////////////////////////[ Element access  ]/////////////////////////////// */
-
-			// template <class InputIterator>
-			// void assign (InputIterator first, InputIterator last)
-			// {
-			// 	/*
-			// 		the new contents are elements constructed from each of the elements in the range between first and last,
-			// 		in the same order.
-			// 	*/
-			// 	for (;first != last; first++)
-			// 	{
-			// 		// T &temp = *first;
-			// 		this->push_back(0);
-			// 	}
-			// 	return ;
-			// }
-
-			/* //////////////////////////[ Modifiers  ]/////////////////////////////// */
 
 			void assign(size_type n, const value_type &val)
 			{
@@ -274,6 +281,26 @@ namespace ft
 				for (int i = 0; i < this->size(); i++)
 					this->content[i] = val;
 			}
+			
+			template <class InputIterator>
+			void assign (InputIterator first, InputIterator last,
+						typename ft::enable_if<!std::is_integral<InputIterator>::value>::type * = nullptr)
+			{
+				/*
+					the new contents are elements constructed from each of the elements in the range between first and last,
+					in the same order.
+				*/
+				this->resize((last - first), 0);
+				for (int i = 0;first < last; first++)
+				{
+					this->content[i] = *first;
+					i++;
+				}
+				return ;
+			}
+
+			/* //////////////////////////[ Modifiers  ]/////////////////////////////// */
+
 			void push_back(const value_type &value)
 			{
 				// add a new element to the vector
@@ -286,7 +313,8 @@ namespace ft
 				}
 				else
 				{
-					this->realloc(this->index + (this->index / 4));
+					if (index >= _size)
+						this->realloc(this->index + (this->index / 4));
 					this->content[index++] = value;
 				}
 			}
@@ -351,7 +379,7 @@ namespace ft
 				/*
 					Returns a copy of the allocator object associated with the vector.
 				*/
-				return this->allocator;
+				return std::allocator<T>(allocator);
 			}
 
 			/* //////////////////////////[ Modifiers  ]/////////////////////////////// */
