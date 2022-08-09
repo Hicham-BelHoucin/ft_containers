@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 07:18:52 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/08 14:36:48 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/09 15:45:32 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 
 # include "../Iterator.hpp"
 # include "../Vector.hpp"
+# include "../lexicographical_compare.hpp"
+# include "../equal.hpp"
 # include <iostream>
 # include <ctime>
 # include <vector>
+# include <cctype>
 
 # define TESTED_TYPE int
 # define NAME_SPACE ft

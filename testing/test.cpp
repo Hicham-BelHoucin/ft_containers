@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/09 10:22:14 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/09 16:06:14 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void fileEdit(std::string filename, std::string search, std::string replace)
 char    *Generate_cmd(int index, std::string name_space)
 {
     std::string     cmd;
-    std::string     tests[11];
+    std::string     tests[22];
     char            *str;
 
     tests[0] = "../Tests/iterator_tests/iterator_tests.cpp";
@@ -80,6 +80,17 @@ char    *Generate_cmd(int index, std::string name_space)
     tests[8] = "../Tests/vector_tests/constructor/constructor.cpp";
     tests[9] = "../Tests/vector_tests/elementAccess/main.cpp";
     tests[10] = "../Tests/vector_tests/modifiers/assign.cpp";
+    tests[11] = "../Tests/vector_tests/modifiers/push_back.cpp";
+    tests[12] = "../Tests/vector_tests/modifiers/pop_back.cpp";
+    tests[13] = "../Tests/vector_tests/modifiers/insert.cpp";
+    tests[14] = "../Tests/vector_tests/modifiers/erase.cpp";
+    tests[15] = "../Tests/vector_tests/modifiers/swap.cpp";
+    tests[16] = "../Tests/vector_tests/modifiers/clear.cpp";
+    tests[17] = "../Tests/vector_tests/overloads/main.cpp";
+    tests[18] = "../Tests/vector_tests/overloads/swap.cpp";
+    tests[19] = "../Tests/vector_tests/allocator/get_allocator.cpp";
+    tests[20] = "../Tests/vector_tests/equal/lexicographical_compare.cpp";
+    tests[21] = "../Tests/vector_tests/equal/equal.cpp";
     cmd = "c++ ";
     cmd += tests[index];
     cmd += " && ./a.out";
@@ -93,7 +104,7 @@ char    *Generate_cmd(int index, std::string name_space)
 
 std::string Generate_name(int index)
 {
-    std::string     tests[11];
+    std::string     tests[22];
 
     tests[0] = "iterator_tests : ";
     tests[1] = "rev_iterator_tests : ";
@@ -106,6 +117,17 @@ std::string Generate_name(int index)
     tests[8] = "constructor : ";
     tests[9] = "elementAccess/main : ";
     tests[10] = "modifiers/assign : ";
+    tests[11] = "modifiers/push_back : ";
+    tests[12] = "modifiers/pop_back : ";
+    tests[13] = "modifiers/insert : ";
+    tests[14] = "modifiers/erase : ";
+    tests[15] = "modifiers/swap : ";
+    tests[16] = "modifiers/clear : ";
+    tests[17] = "overloads/operators : ";
+    tests[18] = "overloads/swap : ";
+    tests[19] = "allocator/get_allocator : ";
+    tests[20] = "lexicographical_compare : ";
+    tests[21] = "equal : ";
     return tests[index];
 }
 
@@ -118,7 +140,7 @@ int main(void)
 
     diff = "diff ft std";
     i = 0;
-    while (i < 11)
+    while (i < 22)
     {
         cmd = Generate_cmd(i, "ft");
         exec(cmd);

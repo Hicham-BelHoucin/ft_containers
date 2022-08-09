@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   max_size.cpp                                       :+:      :+:    :+:   */
+/*   erase.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/08 14:32:33 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/09 10:22:42 by hbel-hou         ###   ########.fr       */
+/*   Created: 2022/08/09 12:13:18 by hbel-hou          #+#    #+#             */
+/*   Updated: 2022/08/09 13:32:15 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,18 @@
 
 int main ()
 {
-    NAME_SPACE::vector<TESTED_TYPE> myvector;
+    vector myvector;
 
-    for (int i = 0; i < 100; i++) myvector.push_back(i);
+    for (int i=1; i<=10; i++) myvector.push_back(i);
 
-    std::cout << "size: " << myvector.size() << "\n";
-    std::cout << "max_size: " << myvector.max_size() << "\n";
+    myvector.erase (myvector.begin()+5);
+
+    myvector.erase (myvector.begin(),myvector.begin()+3);
+
+    std::cout << "myvector contains:";
+    for (unsigned i=0; i < myvector.size(); ++i)
+        std::cout << ' ' << myvector[i];
+    std::cout << '\n';
+
     return 0;
 }

@@ -13,13 +13,15 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include <memory.h>
-#include <algorithm>
-#include "Iterator.hpp"
-#include "reverse_iterator.hpp"
-#include <type_traits>
-#include <iostream>
-#include "enable_if.hpp"
+# include <memory.h>
+# include <algorithm>
+# include "Iterator.hpp"
+# include "reverse_iterator.hpp"
+# include <type_traits>
+# include <iostream>
+# include "enable_if.hpp"
+# include "equal.hpp"
+# include "lexicographical_compare.hpp"
 
 namespace ft
 {
@@ -322,31 +324,118 @@ namespace ft
 			{
 				this->content[this->index--] = 0;
 			}
-			/*
+			
 			iterator insert (iterator position, const value_type& val)
 			{
+				iterator	start;
 
+				start = position;
+				if (position < end())
+				{
+					vector tmp(position, end());
+					*position = val;
+					position++;
+					for (iterator it = tmp.begin(); it != tmp.end(); it++)
+					{
+						if (position < end())
+							*position = *it;
+						else
+							push_back(*it);
+						position++;
+					}
+				}
+				return start;
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
-
+				if (position < end())
+				{
+					vector	tmp(position, end());
+					while (position < end() && n > 0)
+					{
+						*position = val;
+						position++;
+						n--;
+					}
+					insert(position, tmp.begin(), tmp.end());
+				}
+				else if (position >= end() && n > 0)
+				{
+					while (n > 0)
+					{
+						push_back(val);
+						n--;
+					}
+				}
 			}
 			template <class InputIterator>
-			void insert (iterator position, InputIterator first, InputIterator last)
+			void insert (iterator position, InputIterator first, InputIterator last,
+						typename ft::enable_if<!std::is_integral<InputIterator>::value>::type * = nullptr)
 			{
-
+				if (position < end())
+				{
+					vector tmp(position, end());
+					while (position < end() && first < last)
+					{
+						*position = *first;
+						position++;
+						first++;
+					}
+					iterator	it = tmp.begin();
+					while (position < end() && it < tmp.end())
+					{
+						*position = *it;
+						position++;
+						it++;
+					}
+					while (it < tmp.end())
+					{
+						push_back(*it);
+						it++;
+					}
+				}
+				else if (position >= end() && first < last)
+				{
+					while (first < last)
+					{
+						*position = *first;
+						position++;
+						first++;
+					}
+				}
 			}
-			*/
-			/*
 			iterator erase (iterator position)
 			{
-
+				iterator start = position;
+				iterator next(position + 1);
+				while (position < end())
+				{
+					*position = *next;
+					position++;
+					next++;
+				}
+				realloc(size() - 1);
+				return start;
 			}
 			iterator erase (iterator first, iterator last)
 			{
+				iterator start;
 
+				start = first;
+				if (last >= end())
+					realloc(size() - (last - first));
+				else
+				{
+					while (first < end() && last < end())
+					{
+						*first = *last;
+						first++;
+						last++;
+					}
+					realloc(size() - (last - first));
+				}
+				return start;
 			}
-			*/
 			void swap(vector &x)
 			{
 				/*
@@ -386,17 +475,7 @@ namespace ft
 
 			friend bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 			{
-				int capacity;
-
-				if (lhs.size() == rhs.size())
-				{
-					capacity = lhs.size() > rhs.size() ? lhs.size() : rhs.size();
-					for (int i = 0; i < capacity; i++)
-						if (lhs.content[i] != rhs.content[i])
-							return (false);
-					return (true);
-				}
-				return (false);
+				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 			}
 			friend bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 			{
@@ -408,25 +487,11 @@ namespace ft
 			}
 			friend bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 			{
-				return !(lhs < rhs);
+				return rhs < lhs;
 			}
 			friend bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 			{
-				int capacity;
-
-				if (lhs.size() < rhs.size())
-					return (true);
-				else if (lhs.size() > rhs.size() && lhs != rhs)
-					return (false);
-				capacity = lhs.size() > rhs.size() ? lhs.size() : rhs.size();
-				for (int i = 0; i < capacity; i++)
-				{
-					if (lhs.content[i] < rhs.content[i])
-						return (true);
-					else if (lhs.content[i] > rhs.content[i] && lhs != rhs)
-						return (false);
-				}
-				return (false);
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 			}
 			friend bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 			{
