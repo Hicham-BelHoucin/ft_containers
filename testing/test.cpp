@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/09 17:56:28 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/11 08:38:31 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int main(void)
     SetName();
     diff = "diff ft std";
     i = 0;
-    while (i < 22)
+    while (i < MAX)
     {
         cmd = Generate_cmd(i, "ft");
         exec(cmd);
