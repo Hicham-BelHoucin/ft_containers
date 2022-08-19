@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   max_size.cpp                                       :+:      :+:    :+:   */
+/*   make_pair.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/08 14:32:33 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/10 08:24:40 by hbel-hou         ###   ########.fr       */
+/*   Created: 2022/08/12 13:27:56 by hbel-hou          #+#    #+#             */
+/*   Updated: 2022/08/12 13:30:00 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../Tests.hpp"
+#ifndef MAKE_PAIR
+#define MAKE_PAIR
 
-int main ()
+#include "pair.hpp"
+
+namespace ft
 {
-    NAME_SPACE::vector<TESTED_TYPE> myvector;
-
-    for (int i = 0; i < 100; i++) myvector.push_back(i);
-
-    std::cout << "size: " << myvector.size() << "\n";
-    std::cout << "capacity: " << myvector.capacity() << "\n";
-    std::cout << "max_size: " << myvector.max_size() << "\n";
-    return 0;
+    template <class T1, class T2>
+    pair<T1,T2> make_pair (T1 x, T2 y)
+    {
+        return pair<T1, T2>(x, y);
+    };
 }
+
+#endif // MAKE_PAIR

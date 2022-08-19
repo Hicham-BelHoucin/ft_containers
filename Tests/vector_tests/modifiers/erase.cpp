@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 12:13:18 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/09 13:32:15 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/11 08:38:17 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main ()
 
     myvector.erase (myvector.begin()+5);
 
-    myvector.erase (myvector.begin(),myvector.begin()+3);
+    myvector.erase (myvector.begin() + 2,myvector.end());
 
     std::cout << "myvector contains:";
     for (unsigned i=0; i < myvector.size(); ++i)

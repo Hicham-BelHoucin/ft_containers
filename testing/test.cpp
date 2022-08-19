@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/11 08:38:31 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/11 14:02:34 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <iostream>
 # include <fstream>
 # include <string.h>
-# define MAX 22
+# define MAX 25
 
 std::string tests[MAX];
 std::string names[MAX];
@@ -79,6 +79,7 @@ void    SetCmd(void)
         tests[i] = line;
         i++;
     }
+    in_file.close();
 }
 
 void    SetName(void)
@@ -94,6 +95,7 @@ void    SetName(void)
         names[i] = line;
         i++;
     }
+    in_file.close();
 }
 
 char    *Generate_cmd(int index, std::string name_space)
@@ -146,7 +148,8 @@ int main(void)
         else
             std::cout << Generate_name(i) << "\033[0;31m[KO]" << "\033[0m" << std::endl;
         delete [] cmd;
+        exec("rm -f ft std a.out OutPut OutPut1");
         i++;
     }
-    exec("rm -f ft std a.out OutPut OutPut1");
+    exec("rm -f a.out");
 }
