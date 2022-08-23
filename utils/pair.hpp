@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:45:52 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/12 12:09:21 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/23 13:59:06 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ namespace ft
         };
         pair& operator= (const pair& pr)
         {
-            this->first = pr.first;
-            this->second = pr.second;
+            new (this) pair(pr);
             return *this;
         };
         template <class _T1, class _T2>

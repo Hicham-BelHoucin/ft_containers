@@ -6,12 +6,13 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 11:38:48 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/14 13:22:19 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/23 15:03:43 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <iostream>
+#include <map>
 #include"containers/map.hpp"
 #define COUNT 4
 #define MAX 9
@@ -139,15 +140,37 @@ void print2D(node *root)
 }
 
 
+// int main(void)
+// {
+// 	node	*root = NULL;
+// 	node	*wantedNode;
+// 	int myints[] = {14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20};
+
+// 	for (int i = 0; i < 9; i++)
+// 		root = insert(root, myints[i]);
+// 	print2D(root);
+// 	return 0;
+// }
+
+
+
 int main(void)
 {
-	node	*root = NULL;
-	node	*wantedNode;
-	int myints[] = {14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20};
+	// std::vector<std::string>::iterator iter1;
+	// std::vector<std::string> vector;
+	std::map<int, int> map;
+	std::map<int, int>::iterator begin;
+	std::map<int, int>::iterator end;
 
-	for (int i = 0; i < 9; i++)
-		root = insert(root, myints[i]);
-	print2D(root);
-	return 0;
+	map[12] = 58;
+	map[13] = 12;
+	map[11] = 13;
+	map[15] = 42;
+
+	begin = map.begin();
+	end = map.end();
+
+	// (*begin).first;
+	
+	std::cout << (*end).first << std::endl;
 }
-

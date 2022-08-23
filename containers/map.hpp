@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/18 15:21:11 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/23 15:19:32 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,108 +18,13 @@
 #include "../utils/enable_if.hpp"
 #include "../utils/is_integral.hpp"
 #include "../utils/pair.hpp"
+#include "../utils/BinarySearchTree.hpp"
 #include "../utils/make_pair.hpp"
+#include "../utils/pair.hpp"
+#include "../utils/map_iter.hpp"
 
 namespace ft
 {
-	template<typename key_type, typename value_type, typename Compare = std::less<key_type> >
-	struct BinarySearchTree {
-		ft::pair<key_type, value_type> 	data;
-		BinarySearchTree				*right;
-		BinarySearchTree				*left;
-
-		BinarySearchTree(ft::pair<key_type, value_type> data)
-		{
-			this->data = data;
-			this->right = NULL;
-			this->left = NULL;
-		}
-		int			hieght(BinarySearchTree	*root)
-		{
-			int		leftSubTree;
-			int		rightSubTree;
-
-			if (root == NULL)
-				return 0;
-			leftSubTree = hieght(root->left);
-			rightSubTree = hieght(root->right);
-			return std::max(leftSubTree, rightSubTree) + 1;
-		}
-		int			getBalanceFactor(BinarySearchTree *root)
-		{
-			if (root == NULL)
-				return 0;
-			return hieght(root->left) - hieght(root->right);
-		}
-		BinarySearchTree * leftRotate(BinarySearchTree * root)
-		{
-			BinarySearchTree * first;
-			BinarySearchTree * second;
-
-			first = root->right;
-			second = first->left;
-			first->left = root;
-			root->right = second;
-			return first;
-		}
-		BinarySearchTree * rightRotate(BinarySearchTree * root)
-		{
-			BinarySearchTree * first;
-			BinarySearchTree * second;
-
-			first = root->left;
-			second = first->right;
-			first->right = root;
-			root->left = second;
-			return first;
-		}
-		BinarySearchTree	*balanceTree(BinarySearchTree *root, ft::pair<key_type, value_type> key)
-		{
-			int balance;
-
-			balance = getBalanceFactor(root);
-			if (balance > 1 && Compare()(key.first, root->left->data.first))
-				return rightRotate(root);
-			if (balance < -1 && !Compare()(key.first, root->right->data.first))
-				return leftRotate(root);
-			if (balance > 1 && !Compare()(key.first, root->left->data.first))
-			{
-				root->left =  leftRotate(root->left);
-				return rightRotate(root);
-			}
-			if (balance < -1 && Compare()(key.first, root->right->data.first))
-			{
-				root->right = rightRotate(root->right);
-				return leftRotate(root);
-			}
-			return root;
-		}
-		BinarySearchTree	*insert(BinarySearchTree *root, ft::pair<key_type, value_type> data)
-		{
-			if (root == NULL)
-				root = new BinarySearchTree(data);
-			else if (Compare()(data.first, root->data.first))
-				root->left = insert(root->left, data);
-			else if (!Compare()(data.first, root->data.first))
-				root->right = insert(root->right, data);
-			else if (data.first == root->data.first)
-				return root;
-			// root = balanceTree(root, data);
-			return root;
-		}
-		BinarySearchTree	*find(BinarySearchTree *root, key_type key)
-		{
-			if (root == NULL)
-				return NULL;
-			if (root->data.first == key)
-				return root;
-			if (key < root->data.first)
-				root = find(root->left, key);
-			else if (key > root->data.first)
-				root = find(root->right, key);
-			return root;
-		}
-	};
     template < class Key,                                     // map::key_type
            class T,                                       // map::mapped_type
            class Compare = std::less<Key>,                     // map::key_compare
@@ -128,20 +33,23 @@ namespace ft
     class map
     {
         public:
-			typedef Key															key_type;
-			typedef T															mapped_type;
-			typedef Compare														key_compare;
-			typedef Alloc														allocator_type;
-			// typedef typename    allocator_type::referance						referance;
-			// typedef typename    allocator_type::const_referance					const_referance;
-			typedef typename    allocator_type::pointer							pointer;
-			typedef typename    allocator_type::const_pointer					const_pointer;
-			typedef typename	iterator_traits<pointer>::difference_type		difference_type;
-			typedef typename	allocator_type::size_type						size_type;
+			typedef Key																							key_type;
+			typedef T																							mapped_type;
+			typedef Compare																						key_compare;
+			typedef Alloc																						allocator_type;
+			typedef typename	ft::pair<const Key, T>															value_type;
+			typedef typename	allocator_type::reference 														reference;
+			typedef typename	allocator_type::const_reference 												const_reference;
+			typedef typename    allocator_type::pointer															pointer;
+			typedef typename    allocator_type::const_pointer													const_pointer;
+			typedef typename	iterator_traits<pointer>::difference_type										difference_type;
+			typedef typename	allocator_type::size_type														size_type;
+			typedef typename	ft::Iterator<pointer, BinarySearchTree<key_type, mapped_type, Compare> *>		iterator;
+			typedef typename	ft::Iterator<const_pointer, BinarySearchTree<key_type, mapped_type, Compare> *>	const_iterator;
 
 
 			explicit map (const key_compare& comp = key_compare(),
-				const allocator_type& alloc = allocator_type()) : allocator(alloc), root(NULL)
+				const allocator_type& alloc = allocator_type()) : allocator(alloc), root(NULL), _size(0)
 			{	
 			}
 			template <class InputIterator>
@@ -150,41 +58,42 @@ namespace ft
 				const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr) : allocator(alloc), root(NULL)
 			{
-				// while (first != last)
-				// {
-				// 	root = root->insert(root, );
-				// 	first++;
-				// }
+				while (first != last)
+				{
+					root = root->insert(root, *first);
+					first++;
+				}
+			}
+			~map()
+			{
+
 			}
 			/*
 			map (const map& x) : allocator(x.alloc)
 			{
 
 			}
-			~map()
-			{
-
-			}
 			map& operator= (const map& x)
 			{
 
-			}
+			*/
 			iterator begin()
 			{
-				
+				return iterator(root);	
 			}
 			const_iterator begin() const
 			{
-
+				return const_iterator(root);	
 			}
 			iterator end()
 			{
-
+				return iterator(root->end);
 			}
 			const_iterator end() const
 			{
-				
+				return const_iterator(root->end);
 			}
+			/*
 			reverse_iterator rbegin()
 			{
 
@@ -201,14 +110,16 @@ namespace ft
 			{
 				
 			}
+			*/
 			bool empty() const
 			{
-				
+				return _size == 0 ? true : false;	
 			}
 			size_type size() const
 			{
-				
+				return _size;	
 			}
+			/*
 			size_type max_size() const
 			{
 
@@ -252,10 +163,13 @@ namespace ft
 			{
 				
 			}
+			*/
 			void clear()
 			{
-				
+				root->clear();
+				_size = 0;
 			}
+			/*
 			key_compare key_comp() const
 			{
 
