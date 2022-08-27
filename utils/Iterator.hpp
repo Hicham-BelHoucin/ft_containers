@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:51:29 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/11 13:52:29 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/26 10:55:49 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ namespace ft
 			{
 				Iterator temp = *this;
 				++(*this);
-				return *this;
+				return temp;
 			}
 			Iterator& operator+= (difference_type n)
 			{
@@ -99,81 +99,55 @@ namespace ft
 			{
 				return *(_ptr + n);
 			}
-			template <class _Iterator>
-			friend bool operator== (const _Iterator& lhs,
-							const _Iterator& rhs);
-			template <class _Iterator>
-			friend bool operator!= (const _Iterator& lhs,
-							const _Iterator& rhs);
-			template <class _Iterator>
-			friend bool operator<  (const _Iterator& lhs,
-							const _Iterator& rhs);
-			template <class _Iterator>
-			friend bool operator<= (const _Iterator& lhs,
-							const _Iterator& rhs);
-			template <class _Iterator>
-			friend bool operator>  (const _Iterator& lhs,
-							const _Iterator& rhs);
-			template <class _Iterator>
-			friend bool operator>= (const _Iterator& lhs,
-							const _Iterator& rhs);
-			template <class _Iterator>
-			friend _Iterator operator+ (
-					typename _Iterator::difference_type n,
-					const _Iterator& rev_it);
-			template <class _Iterator>
-			friend typename _Iterator::difference_type operator- (
-				const _Iterator& lhs,
-				const _Iterator& rhs);
+			template <class Iterator>
+			friend bool operator!=(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr != rhs._ptr);
+			}
+			template <class Iterator>
+			friend bool operator==(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr == rhs._ptr);
+			}
+			template <class Iterator>
+			friend bool operator<(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr < rhs._ptr);
+			}
+			template <class Iterator>
+			friend bool operator<=(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr <= rhs._ptr);
+			}
+			template <class Iterator>
+			friend bool operator>(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr > rhs._ptr);
+			}
+			template <class Iterator>
+			friend bool operator>=(const Iterator &lhs, const Iterator &rhs)
+			{
+				return (lhs._ptr >= rhs._ptr);
+			}
+			template <class Iterator>
+			friend Iterator operator+ (
+						typename Iterator::difference_type n,
+						const Iterator& rev_it)
+			{
+				rev_it._ptr + n;
+				return rev_it;
+			}
+			template <class Iterator>
+			friend typename Iterator::difference_type operator- (
+				const Iterator& lhs,
+				const Iterator& rhs)
+			{
+				return lhs._ptr - rhs._ptr;
+			}
 
         private:
             pointer _ptr;
     };
-	template <class Iterator>
-	bool operator!=(const Iterator &lhs, const Iterator &rhs)
-	{
-		return (lhs._ptr != rhs._ptr);
-	}
-	template <class Iterator>
-	bool operator==(const Iterator &lhs, const Iterator &rhs)
-	{
-		return (lhs._ptr == rhs._ptr);
-	}
-	template <class Iterator>
-	bool operator<(const Iterator &lhs, const Iterator &rhs)
-	{
-		return (lhs._ptr < rhs._ptr);
-	}
-	template <class Iterator>
-	bool operator<=(const Iterator &lhs, const Iterator &rhs)
-	{
-		return (lhs._ptr <= rhs._ptr);
-	}
-	template <class Iterator>
-	bool operator>(const Iterator &lhs, const Iterator &rhs)
-	{
-		return (lhs._ptr > rhs._ptr);
-	}
-	template <class Iterator>
-	bool operator>=(const Iterator &lhs, const Iterator &rhs)
-	{
-		return (lhs._ptr >= rhs._ptr);
-	}
-	template <class Iterator>
-	Iterator operator+ (
-				typename Iterator::difference_type n,
-				const Iterator& rev_it)
-	{
-		rev_it._ptr + n;
-		return rev_it;
-	}
-	template <class Iterator>
-	typename Iterator::difference_type operator- (
-		const Iterator& lhs,
-		const Iterator& rhs)
-	{
-		return lhs._ptr - rhs._ptr;
-	}
 }
 
 #endif // ITERATOR_HPP

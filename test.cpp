@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 11:38:48 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/23 15:03:43 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/25 17:19:27 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 struct node {
 	int				key;
 	node			*right;
+	node			*parent;
 	node			*left;
 };
 
@@ -35,6 +36,7 @@ node 	*newNode(int key)
 
 	newnode = new node();
 	newnode->key = key;
+	newnode->parent = NULL;
 	newnode->right = NULL;
 	newnode->left = NULL;
 	return newnode;
@@ -111,15 +113,64 @@ node	*insert(node *root, int key)
 {
 	if (root == NULL)
 		root = newNode(key);
-	else if (key < root->key)
-		root->left = insert(root->left, key);
-	else if (key > root->key)
-		root->right = insert(root->right, key);
-	else
+	else if (root->key == key)
 		return root;
+	else if (key < root->key)
+	{	root->left->parent = root;
+		root->left = insert(root->left, key);
+	}
+	else if (key > root->key)
+	{
+		root->right->parent = root;
+		root->right = insert(root->right, key);
+	}
 	return root;
 }
 
+node * min(node *root)
+{
+	if (!root->left)
+		return root;
+	return min(root->left);
+}
+
+node	*deleteNode(node *root, int key)
+{
+	node *temp;
+	if (!root)
+		return NULL;
+	if (key < root->key)
+		root->left = deleteNode(root->left, key);
+	else if (key > root->key)
+		root->right = deleteNode(root->left, key);
+	if (root->key == key)
+	{
+		if (!root->left && !root->right)
+		{
+			delete root;
+			root = NULL;
+		}
+		else if (root->right && !root->left)
+		{
+			temp = root;
+			root = root->right;
+			delete temp;
+		}
+		else if (root->left && !root->right)
+		{
+			temp = root;
+			root = root->left;
+			delete temp;
+		}
+		else
+		{
+			temp = min(root->right);
+			root->key = temp->key;
+			root->right = deleteNode(root->right, temp->key);
+		}
+	}
+	return root;
+}
 
 void print2DUtil(node *root, int space)
 {
@@ -140,37 +191,42 @@ void print2D(node *root)
 }
 
 
-// int main(void)
-// {
-// 	node	*root = NULL;
-// 	node	*wantedNode;
-// 	int myints[] = {14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20};
-
-// 	for (int i = 0; i < 9; i++)
-// 		root = insert(root, myints[i]);
-// 	print2D(root);
-// 	return 0;
-// }
-
-
-
 int main(void)
 {
-	// std::vector<std::string>::iterator iter1;
-	// std::vector<std::string> vector;
-	std::map<int, int> map;
-	std::map<int, int>::iterator begin;
-	std::map<int, int>::iterator end;
+	node	*root = NULL;
+	node	*wantedNode;
+	int myints[] = {14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20};
 
-	map[12] = 58;
-	map[13] = 12;
-	map[11] = 13;
-	map[15] = 42;
+	for (int i = 0; i < 9; i++)
+		root = insert(root, myints[i]);
 
-	begin = map.begin();
-	end = map.end();
-
-	// (*begin).first;
-	
-	std::cout << (*end).first << std::endl;
+	// root = deleteNode(root, 4);
+	// root = deleteNode(root, 8);
+	// root = deleteNode(root, 11);
+	root = deleteNode(root, 7);
+	print2D(root);
+	return 0;
 }
+
+
+
+// int main(void)
+// {
+// 	// std::vector<std::string>::iterator iter1;
+// 	// std::vector<std::string> vector;
+// 	std::map<int, int> map;
+// 	std::map<int, int>::iterator begin;
+// 	std::map<int, int>::iterator end;
+
+// 	map[12] = 58;
+// 	map[13] = 12;
+// 	map[11] = 13;
+// 	map[15] = 42;
+
+// 	begin = map.begin();
+// 	end = map.end();
+
+// 	// (*begin).first;
+	
+// 	std::cout << (*end).first << std::endl;
+// }
