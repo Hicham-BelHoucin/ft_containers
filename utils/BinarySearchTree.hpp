@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/27 14:11:32 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/29 14:51:28 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,32 @@ namespace ft
 			root->end = new BinarySearchTree(ft::pair<key_type, value_type>());
 			return root;
 		}
+		key_type	lowerBound(BinarySearchTree *root, key_type key)
+		{
+			BinarySearchTree 		*_min;
+			BinarySearchTree 		*next;
+			key_type 				next_key;
+
+			if (find(root, key))
+				return key;
+			_min = min(root);
+			next = _min;
+			next_key = next->data.first;
+			while (next != root->end && next->data.first < key && key > _min->data.first)
+			{
+				next = findSuccessor(root, next->data.first);
+				next_key = next->data.first;
+			}
+			if (next_key < key)
+				next_key = key;
+			return next_key;
+		}
+		key_type	upperBound(BinarySearchTree *root, key_type key)
+		{
+			if (find(root, key))
+				return findSuccessor(root, key)->data.first;
+			return lowerBound(root, key);
+		}
 		BinarySearchTree	*find(BinarySearchTree *root, key_type key)
 		{
 			if (root == NULL)
@@ -195,19 +221,6 @@ namespace ft
 					node = node->right;
 			}
 			return Successor;
-		}
-		BinarySearchTree	*findParent(BinarySearchTree *root, key_type key)
-		{
-			BinarySearchTree	*left = root->left;
-			BinarySearchTree	*right = root->right;
-
-			if (root == NULL || root->data.first == key)
-				return NULL;
-			if ((right && right->data.first == key) || (left && left->data.first == key))
-				return root;
-			if (key < root->data.first)
-				return findParent(root->left, key);
-			return findParent(root->right, key);
 		}
 		BinarySearchTree	*Delete(BinarySearchTree * root, key_type key)
 		{

@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/29 15:59:00 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/29 15:55:08 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,9 +175,9 @@ void    compareOutputAndTiming(int ft_time, int std_time, int i)
         std::cout << "          " << Generate_name(i) << "\033[0;31m[KO]" << "\033[0m" << std::endl;
     std::cout << "          \033[1m\033[34mtiming : " << "\033[0m";
     if (ft_time < (std_time * 20))
-        std::cout << "\e[0;32m[OK] " << "\033[0m" << "You Program's timing : " << ft_time << " | expected timing : " << std_time * 20 << std::endl;
+        std::cout << "\e[0;32m[OK] " << "\033[0m" << "ft_timing : " << ft_time << " std_timing : " << std_time << std::endl;
     else
-        std::cout << "\033[0;31m[KO] " << "\033[0m" << "You Program's timing : " << ft_time << " | expected timing : " << std_time * 20 << std::endl;
+        std::cout << "\033[0;31m[KO] " << "\033[0m" << "ft_timing : " << ft_time << " std_timing : " << std_time << std::endl;
 }
 
 void TestContainer()

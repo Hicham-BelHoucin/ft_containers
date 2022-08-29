@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/27 14:44:50 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/29 14:46:46 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,26 @@ namespace ft
     class map
     {
         public:
+			class ValueCopmare
+			{
+				friend class map;
+				private:
+					Compare		compare_fun;
+					ValueCopmare(Compare c) : compare_fun(c) {};
+				public:
+					typedef bool	return_type;
+					typedef	typename ft::pair<const Key, T>		value_type;
+					return_type operator() (const value_type & x, const value_type &y)
+					{
+						return (compare_fun(x.first, y.first));
+					}
+			};
 			typedef Key																				key_type;
 			typedef T																				mapped_type;
 			typedef Compare																			key_compare;
 			typedef BinarySearchTree<key_type, mapped_type, Compare>								Tree;
 			typedef Alloc																			allocator_type;
+			typedef	ValueCopmare																	value_compare;
 			typedef typename	ft::pair<const Key, T>												value_type;
 			typedef typename	allocator_type::reference 											reference;
 			typedef typename	allocator_type::const_reference 									const_reference;
@@ -255,7 +270,6 @@ namespace ft
 					i++;
 				}
 				_size -= i;
-				// std::cout << "min : " << min << "  max :" << max << std::endl;
 				root = root->DeleteRange(root, min, max);
 			}
 
@@ -304,45 +318,62 @@ namespace ft
 			}
 			iterator lower_bound (const key_type& k)
 			{
-				iterator it;
-				Tree *temp;
-				temp = root->findPredecessor(root, k);
-				it = iterator(root, temp);
-				it++;
-				return it;
+				key_type  toFind;
+
+				toFind = root->lowerBound(root, k);
+				return find(toFind);
 			}
 			const_iterator lower_bound (const key_type& k) const
 			{
-				const_iterator it;
-				Tree *temp;
-				temp = root->findPredecessor(root, k);
-				it = const_iterator(root, temp);
-				it++;
-				return it;
+				key_type  toFind;
+
+				toFind = root->lowerBound(root, k);
+				return find(toFind);
 			}
 			iterator upper_bound (const key_type& k)
 			{
-				iterator it;;
-				Tree *temp;
-				temp = root->findSuccessor(root, k);
-				it = iterator(root, temp);
-				return it;
+				key_type  toFind;
+
+				toFind = root->upperBound(root, k);
+				return find(toFind);
 			}
 			const_iterator upper_bound (const key_type& k) const
 			{
-				Tree *temp;
-				const_iterator it;
-				temp = root->findSuccessor(root, k);
-				it = const_iterator(root, temp);
-				return it;
-			}
-			pair<const_iterator,const_iterator> equal_range (const key_type& k) const
-			{
-				
-			}
-			pair<iterator,iterator>             equal_range (const key_type& k)
-			{
+				key_type  toFind;
 
+				toFind = root->upperBound(root, k);
+				return find(toFind);
+			}
+			ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+			{
+				const_iterator _element;
+				const_iterator _next_element;
+
+				_element = lower_bound(k);
+				_next_element = upper_bound(k);
+				return ft::pair<iterator, iterator>(_element, _next_element);
+			}
+			ft::pair<iterator,iterator>             equal_range (const key_type& k)
+			{
+				iterator _element;
+				iterator _next_element;
+
+				_element = lower_bound(k);
+				_next_element = upper_bound(k);
+				return ft::pair<iterator, iterator>(_element, _next_element);
+			}
+
+			/* //////////////////////////[  Observers ]/////////////////////////////// */
+
+
+			key_compare key_comp() const
+			{
+				return comp;
+			}
+
+			value_compare value_comp() const
+			{
+				return 	ValueCopmare(comp);
 			}
 
 			/* //////////////////////////[  GetAllocator ]/////////////////////////////// */
