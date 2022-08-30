@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/29 14:46:46 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 11:37:53 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ namespace ft
     template < class Key,                                     // map::key_type
            class T,                                       // map::mapped_type
            class Compare = std::less<Key>,                     // map::key_compare
-           class Alloc = std::allocator<ft::pair<const Key, T> >    // map::allocator_type
-           > 
+           class Alloc = std::allocator<BinarySearchTree<Key, T, Compare> > >    // map::allocator_type
     class map
     {
         public:
@@ -67,6 +66,7 @@ namespace ft
 
 
 			/* //////////////////////////[ Constructor ]/////////////////////////////// */
+
 			explicit map (const key_compare& comp = key_compare(),
               const allocator_type& alloc = allocator_type())
 			:
@@ -74,7 +74,7 @@ namespace ft
 				allocator(alloc),
 				_size(0),
 				comp(comp)
-			{	
+			{
 			}
 			template <class InputIterator>
 			map (InputIterator first, InputIterator last,
@@ -89,9 +89,7 @@ namespace ft
 			{
 				while (first != last)
 				{
-					// You Need To Replace That Line
-					root = root->insert(root, *first);
-					// insert(first);
+					insert(*first);
 					first++;
 				}
 			}
@@ -109,6 +107,7 @@ namespace ft
 				return *this;
 			}
 			/* //////////////////////////[ Destructor ]/////////////////////////////// */
+			
 			~map()
 			{
 				clear();
@@ -118,24 +117,32 @@ namespace ft
 
 			iterator begin()
 			{
-				Tree * temp;
+				Tree * temp = NULL;
 
+				if (!root)
+					return iterator();
 				temp = root->min(root);
 				return iterator(root, temp);
 			}
 			const_iterator begin() const
 			{
-				Tree * temp;
+				Tree * temp = NULL;
 
+				if (!root)
+					return const_iterator();
 				temp = root->min(root);
 				return const_iterator(root, temp);
 			}
 			iterator end()
 			{
+				if (!root)
+					return iterator();
 				return iterator(root, root->end);
 			}
 			const_iterator end() const
 			{
+				if (!root)
+					return const_iterator();
 				return const_iterator(root, root->end);
 			}
 
@@ -179,7 +186,10 @@ namespace ft
 				if (root->find(root, k))
 					return root->find(root, k)->data.second;
 				else
+				{
 					root = root->insert(root, ft::pair<key_type, mapped_type>(k, mapped_type()));
+					_size++;
+				}
 				return root->find(root, k)->data.second;
 			}
 			mapped_type& at (const key_type& k)
@@ -199,16 +209,16 @@ namespace ft
 			
 			ft::pair<iterator,bool> insert (const value_type& val)
 			{
-				Tree *temp;
-				if (root->find(root, val.first))
-				{
-					temp = root->find(root, val.first);
-					return ft::pair<iterator, bool>(iterator(root, temp), false);
-				}
+				iterator 	it;
+				bool		inserted;
+				
+				inserted = true;
 				root = root->insert(root, val);
-				temp = root->find(root, val.first);
+				it = find(val.first);
+				if (it->second != val.second)
+					inserted = false;
 				_size++;
-				return ft::pair<iterator, bool>(iterator(root, temp), true);
+				return ft::pair<iterator, bool>(it, inserted);
 			}
 
 			iterator insert (iterator position, const value_type& val)
@@ -229,7 +239,7 @@ namespace ft
   			void insert (InputIterator first, InputIterator last, 
 			  		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr)
 			{
-				while (first < last)
+				while (first != last)
 				{
 					insert(*first);
 					first++;
@@ -280,9 +290,12 @@ namespace ft
 
 			void swap (map& x)
 			{
-				map temp = x;
-				x = *this;
-				*this = temp;
+				Tree *__swap;
+
+				__swap = &(*x.root);
+				x.root = &(*(this->root));
+				this->root = __swap;
+				return ;
 			}
 
 			/* //////////////////////////[  Operations ]/////////////////////////////// */
@@ -290,23 +303,19 @@ namespace ft
 			iterator find (const key_type& k)
 			{
 				Tree * temp;
-			
-				if (root->find(root, k))
-				{
-					temp = root->find(root, k);
+
+				temp = root->find(root, k);
+				if (temp != NULL)
 					return iterator(root, temp);
-				}
 				return end();
 			}
 			const_iterator find (const key_type& k) const
 			{
 				Tree * temp;
-			
-				if (root->find(root, k))
-				{
-					temp = root->find(root, k);
+
+				temp = root->find(root, k);
+				if (temp)
 					return iterator(root, temp);
-				}
 				return end();
 				
 			}

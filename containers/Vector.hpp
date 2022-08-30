@@ -247,14 +247,14 @@ namespace ft
 			}
 			reference at(unsigned int pos)
 			{
-				if (pos < 0 && pos > this->size())
-					throw std::out_of_range("out of range !");
+				if (pos < 0 || pos > index)
+					throw std::out_of_range("");
 				return this->content[pos];
 			}
 			const_reference at(unsigned int pos) const
 			{
-				if (pos < 0 && pos > this->size())
-					throw std::out_of_range("out of range  !");
+				if (pos < 0 || pos > index)
+					throw std::out_of_range("");
 				return this->content[pos];
 			}
 			reference front()
@@ -349,84 +349,48 @@ namespace ft
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
-				int		pos;
+				int myints[n];
 
-				if (position > end())
-				{
-					pos = position - begin();
-					resize((position - begin()) + n);
-					position = iterator(&content[pos]);
-					while (n--)
-					{
-						*position = val;
-						position++;
-					}
-				}
-				else
-				{
-					vector	temp(position, end());
-					iterator	__begin;
-
-					pos = position - begin();
-					resize(capacity() + n);
-					position = iterator(&content[pos]);
-					while (n--)
-					{
-						*position = val;
-						position++;
-					}
-					__begin = temp.begin();
-					while (__begin < temp.end() && position < end())
-					{
-						*position = *__begin;
-						++position;
-						__begin++;
-					}
-				}
+				for (int i = 0; i < n; i++)
+					myints[i] = val;
+				insert(position, &myints[0], &myints[n]);
 			}
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last,
 						typename ft::enable_if<!std::is_integral<InputIterator>::value>::type * = nullptr)
 			{
-				int		size;
-				int		pos;
-
-				if (position > end())
+				pointer temp;
+				size_type __size;
+				size_type __pos;
+				size_type i;
+				
+				__size = (size_type(last - first) + size_type(position - begin()));
+				i = 0;
+				if (!(__size > capacity()))
+					__size = (size_type(last - first) + size_type(end() - begin()));
+				temp = allocator.allocate(__size);
+				__pos = size_type(position - begin());
+				_size = (size_type(last - first) + size_type(end() - begin()));
+				while (i < __pos)
 				{
-					pos = position - begin();
-					size = (last - first);
-					resize((position - begin()) + size);
-					position = iterator(&content[pos]);
-					while (first < last)
-					{
-						*position = *first;
-						position++;
-						first++;
-					}
+					temp[i] = content[i];
+					i++;
 				}
-				else
+				while (first != last)
 				{
-					vector	temp(position, end());
-					iterator	__begin;
-
-					size = (last - first);
-					pos = position - begin();
-					resize(capacity() + size);
-					position = iterator(&content[pos]);
-					while (first < last)
-					{
-						*position = *first;
-						position ++;
-						first ++;
-					}
-					__begin = temp.begin();
-					while (__begin < temp.end())
-					{
-						*position = *__begin;
-						position ++;
-						__begin++;
-					}
+					temp[i] = *first;
+					first++;
+					i++;
 				}
+				while (i < __size)
+				{
+					temp[i] = content[__pos];
+					i++;
+					__pos++;
+				}
+				this->allocator.deallocate(content, _size);
+				content = temp;
+				index = __size;
 			}
 			iterator erase (iterator position)
 			{
@@ -503,6 +467,7 @@ namespace ft
 			template <class _T, class _Alloc>
 			friend bool operator>= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs);
 	};
+	
 	/* //////////////////////////[ Non-member function overloads  ]/////////////////////////////// */
 	template <class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)

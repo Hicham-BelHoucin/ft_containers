@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 07:52:00 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/08 15:21:12 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 11:59:35 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(void)
     NAME_SPACE::vector<TESTED_TYPE> second;
     NAME_SPACE::vector<TESTED_TYPE> third;
 
-    first.assign (7,100);
+    first.assign (70,100);
 
     NAME_SPACE::vector<TESTED_TYPE>::iterator it;
     it = first.begin() + 1;

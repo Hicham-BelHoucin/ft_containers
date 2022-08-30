@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 11:38:48 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/25 17:19:27 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/29 18:51:59 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,13 @@ node	*insert(node *root, int key)
 	else if (root->key == key)
 		return root;
 	else if (key < root->key)
-	{	root->left->parent = root;
+	{	
+		// root->left->parent = root;
 		root->left = insert(root->left, key);
 	}
 	else if (key > root->key)
 	{
-		root->right->parent = root;
+		// root->right->parent = root;
 		root->right = insert(root->right, key);
 	}
 	return root;
@@ -194,17 +195,14 @@ void print2D(node *root)
 int main(void)
 {
 	node	*root = NULL;
-	node	*wantedNode;
-	int myints[] = {14, 17, 11, 7, 53, 4, 13, 12, 8, 60, 19, 16, 20};
 
-	for (int i = 0; i < 9; i++)
-		root = insert(root, myints[i]);
+	for (int i = 0; i < 500000; i++)
+		root = insert(root,i);
 
 	// root = deleteNode(root, 4);
 	// root = deleteNode(root, 8);
 	// root = deleteNode(root, 11);
-	root = deleteNode(root, 7);
-	print2D(root);
+	// print2D(root);
 	return 0;
 }
 

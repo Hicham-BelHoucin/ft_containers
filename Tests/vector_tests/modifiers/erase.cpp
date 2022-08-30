@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 12:13:18 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/11 08:38:17 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 11:59:56 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main ()
 {
     vector myvector;
 
-    for (int i=1; i<=10; i++) myvector.push_back(i);
+    for (int i=1; i<=100000; i++) myvector.push_back(i);
 
     myvector.erase (myvector.begin()+5);
 

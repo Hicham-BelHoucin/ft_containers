@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 07:18:52 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/24 17:37:33 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:21:34 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include "Namespace.hpp"
 
 # define TESTED_TYPE int
-# define COUNT 3
+// # define COUNT 3
 
 typedef NAME_SPACE::vector<TESTED_TYPE>             vector;
 typedef NAME_SPACE::vector<TESTED_TYPE>::iterator   iter_type;

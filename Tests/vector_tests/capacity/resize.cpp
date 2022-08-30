@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 14:37:28 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/08 14:42:43 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 11:56:54 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ int main ()
         myvector.push_back(i);
 
     myvector.resize(5);
-    myvector.resize(8, 100);
-    myvector.resize(12);
-
     PrintVectorValues(myvector.begin(), myvector.end());
+    myvector.resize(8, 100);
+    PrintVectorValues(myvector.begin(), myvector.end());
+    myvector.resize(12);
+    PrintVectorValues(myvector.begin(), myvector.end());
+
     return 0;
 }

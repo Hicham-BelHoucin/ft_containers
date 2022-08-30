@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/29 15:59:00 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 15:51:13 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,9 @@ std::string readFile(std::string name)
 
 void    SetCmd(const char *path)
 {
-    std::ifstream   in_file("OutPut");
     std::string     line;
-
     system(path);
+    std::ifstream   in_file("OutPut");
     while (getline(in_file, line, '\n'))
         tests.push_back(line);
     in_file.close();
@@ -110,7 +109,7 @@ void    SetName(void)
     in_file.close();
 }
 
-char    *Generate_cmd(int index, std::string name_space)
+char    *Generate_cmd(int index)
 {
     std::string     cmd;
     char            *str;
@@ -169,15 +168,20 @@ void    compareOutputAndTiming(int ft_time, int std_time, int i)
 
     system("diff ft std > diff");
     output = readFile("./diff");
+    std::cout << "          "<< BOLDWHITE << Generate_name(i) << std::endl;
+    std::cout << "              " << YELLOW << "Output : " << RESET;
     if (output == "")
-        std::cout << "          " << Generate_name(i) << "\e[0;32m[OK]" << "\033[0m" << std::endl;
+        std::cout << BOLDGREEN << "[OK]" << RESET << std::endl;
     else
-        std::cout << "          " << Generate_name(i) << "\033[0;31m[KO]" << "\033[0m" << std::endl;
-    std::cout << "          \033[1m\033[34mtiming : " << "\033[0m";
+    {
+        std::cout << BOLDRED << "[KO]" << RESET << std::endl;
+        exit(1);
+    }
+    std::cout << "              \033[1m\033[34mTiming : " << RESET;
     if (ft_time < (std_time * 20))
-        std::cout << "\e[0;32m[OK] " << "\033[0m" << "You Program's timing : " << ft_time << " | expected timing : " << std_time * 20 << std::endl;
+        std::cout << BOLDGREEN << "[OK] " << RESET << "You Program's timing : " << ft_time << " | expected timing : " << std_time * 20 << std::endl;
     else
-        std::cout << "\033[0;31m[KO] " << "\033[0m" << "You Program's timing : " << ft_time << " | expected timing : " << std_time * 20 << std::endl;
+        std::cout << BOLDRED << "[KO] " << RESET << "You Program's timing : " << ft_time << " | expected timing : " << std_time * 20 << std::endl;
 }
 
 void TestContainer()
@@ -186,17 +190,19 @@ void TestContainer()
     long        ft_time;
     int         i;
 
-    i = 0;
-    while (i < tests.size())
+    // i = 4;
+    i = 14;
+    // while (i < tests.size())
+    while (i < 15)
     {
-        ft_time = compileAndExecute(Generate_cmd(i, "ft"), "./a.out > ft");
+        ft_time = compileAndExecute(Generate_cmd(i), "./a.out > ft");
         fileEdit("./../Tests/Namespace.hpp", "ft", "std");
-        std_time = compileAndExecute(Generate_cmd(i, "std"), "./a.out > std");
+        std_time = compileAndExecute(Generate_cmd(i), "./a.out > std");
         fileEdit("./../Tests/Namespace.hpp", "std", "ft");
         compareOutputAndTiming(ft_time, std_time, i);
+        system("rm -rf ft std a.out OutPut OutPut1 diff *.dSYM");
         i++;
     }
-    system("rm -f ft std a.out diff");
     names.clear();
     tests.clear();
 }
@@ -207,20 +213,21 @@ int main(void)
     std::string     Container[3];
     int             i;
 
-    i = 0;
-    path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
+    i = 1;
+    // path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
+    // path[0] = "find ../Tests/map_tests/constructor.cpp > OutPut";
     path[1] = "find ../Tests/vector_tests/*/*.cpp > OutPut";
     path[2] = "find ../Tests/Stack/*.cpp > OutPut";
     Container[0] = "Map : ";
     Container[1] = "Vactor : ";
     Container[2] = "Stack : ";
-    while (i < 3)
+    while (i < 2)
     {
         SetCmd(path[i]);
         SetName();
-        std::cout << Container[i] << std::endl;
+        std::cout << BOLDMAGENTA << Container[i] << std::endl;
         TestContainer();
         i++;
     }
-    // system("rm -f ft std a.out OutPut OutPut1 diff");
+    system("rm -rf ft std a.out OutPut OutPut1 diff *.dSYM");
 }
