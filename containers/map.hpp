@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/30 11:37:53 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:41:54 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ namespace ft
     template < class Key,                                     // map::key_type
            class T,                                       // map::mapped_type
            class Compare = std::less<Key>,                     // map::key_compare
-           class Alloc = std::allocator<BinarySearchTree<Key, T, Compare> > >    // map::allocator_type
+           class Alloc = std::allocator<ft::pair<const Key, T>	> >    // map::allocator_type
     class map
     {
         public:

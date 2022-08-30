@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/30 15:51:13 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:40:42 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void    compareOutputAndTiming(int ft_time, int std_time, int i)
     else
     {
         std::cout << BOLDRED << "[KO]" << RESET << std::endl;
-        exit(1);
+        // exit(1);
     }
     std::cout << "              \033[1m\033[34mTiming : " << RESET;
     if (ft_time < (std_time * 20))
@@ -190,10 +190,8 @@ void TestContainer()
     long        ft_time;
     int         i;
 
-    // i = 4;
-    i = 14;
-    // while (i < tests.size())
-    while (i < 15)
+    i = 0;
+    while (i < tests.size())
     {
         ft_time = compileAndExecute(Generate_cmd(i), "./a.out > ft");
         fileEdit("./../Tests/Namespace.hpp", "ft", "std");
@@ -213,15 +211,15 @@ int main(void)
     std::string     Container[3];
     int             i;
 
-    i = 1;
-    // path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
+    i = 0;
+    path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
     // path[0] = "find ../Tests/map_tests/constructor.cpp > OutPut";
     path[1] = "find ../Tests/vector_tests/*/*.cpp > OutPut";
     path[2] = "find ../Tests/Stack/*.cpp > OutPut";
     Container[0] = "Map : ";
     Container[1] = "Vactor : ";
     Container[2] = "Stack : ";
-    while (i < 2)
+    while (i < 3)
     {
         SetCmd(path[i]);
         SetName();
