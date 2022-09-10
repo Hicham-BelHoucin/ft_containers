@@ -6,54 +6,48 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:53:34 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/27 11:20:49 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/10 14:28:36 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./containers/map.hpp"
-# define NAME_SPACE std
+#include <sys/time.h>
+#define NS ft
 
-template <class T>
-void    printMap(T first)
+long int	get_time(void)
 {
-    typedef typename T::iterator iterator;
-    iterator begin;
-    iterator end;
+	long int			time;
+	struct timeval		current_time;
 
-    begin = first.begin();
-    end = first.end();
-    while (begin != end)
-    {
-        std::cout << begin->first << std::endl;
-        begin++;
-    }
-    std::cout << "/***********************************/" << std::endl;
+	time = 0;
+	gettimeofday(&current_time, NULL);
+	time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
+	return (time);
 }
 
-int main ()
+int	spent_time(long int time)
 {
-    {
-        NAME_SPACE::map<char,int> first;
+	long int	c_time;
 
-        first['a']=10;
-        first['b']=30;
-        first['c']=50;
-        first['d']=70;
+	c_time = get_time();
+	c_time -= time;
+	return (c_time);
+}
 
-        NAME_SPACE::map<char,int> second (first.begin(),first.end());
-
-        NAME_SPACE::map<char,int> third (second);
-
-        // NAME_SPACE::map<char,int,classcomp> fourth;                 // class as Compare
-
-        // bool(*fn_pt)(char,char) = fncomp;
-        // NAME_SPACE::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
-
-        printMap(first);
-        printMap(second);
-        printMap(third);
-        // printMap(fourth);
-        // printMap(fifth);
-    }
+int main(void)
+{
+    ft::map<int, int>               mymap;
+    ft::map<int, int>::iterator     begin, end;
+    long                            time;
+    
+    time = get_time();
+    std::cout << spent_time(time) << std::endl;
+    for (int i = 0; i < 250; i++)
+        mymap[i] = i;
+    begin = mymap.begin();
+    end = mymap.end();
+    for (;begin != end; begin++)
+        std::cout << begin->first << std::endl;
+    std::cout << spent_time(time) << std::endl;
     return 0;
 }

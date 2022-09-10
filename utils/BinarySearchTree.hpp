@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/30 11:34:57 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/10 14:14:25 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,415 +15,98 @@
 
 #include <iostream>
 #include "./pair.hpp"
-
-// namespace ft
-// {
-// 	template<typename key_type, typename value_type>
-// 	struct Node {
-// 		ft::pair<const key_type, value_type> 	data;
-// 		BinarySearchTree						*right;
-// 		BinarySearchTree						*left;
-// 		BinarySearchTree						*end;
-// 		Node()
-// 		{
-// 			this->data = ft::pair<const key_type, value_type>();
-// 			this->right = NULL;
-// 			this->left = NULL;
-// 			this->end = NULL;
-// 		}
-// 		Node(ft::pair<key_type, value_type> data)
-// 		{
-// 			this->data = data;
-// 			this->right = NULL;
-// 			this->left = NULL;
-// 			this->end = NULL;
-// 		}
-// 		int			hieght(Node	*root)
-// 		{
-// 			int		leftSubTree;
-// 			int		rightSubTree;
-
-// 			if (root == NULL)
-// 				return 0;
-// 			leftSubTree = hieght(root->left);
-// 			rightSubTree = hieght(root->right);
-// 			return std::max(leftSubTree, rightSubTree) + 1;
-// 		}
-// 		int			getBalanceFactor(Node *root)
-// 		{
-// 			if (root == NULL)
-// 				return 0;
-// 			return hieght(root->left) - hieght(root->right);
-// 		}
-// 		Node * leftRotate(Node * root)
-// 		{
-// 			Node * first;
-// 			Node * second;
-
-// 			first = root->right;
-// 			second = first->left;
-// 			first->left = root;
-// 			root->right = second;
-// 			return first;
-// 		}
-// 		Node * rightRotate(Node * root)
-// 		{
-// 			Node * first;
-// 			Node * second;
-
-// 			first = root->left;
-// 			second = first->right;
-// 			first->right = root;
-// 			root->left = second;
-// 			return first;
-// 		}
-// 		Node	*balanceTree(Node *root, ft::pair<key_type, value_type> key)
-// 		{
-// 			int balance;
-
-// 			balance = getBalanceFactor(root);
-// 			if (balance > 1 && Compare()(key.first, root->left->data.first))
-// 				return rightRotate(root);
-// 			if (balance < -1 && !Compare()(key.first, root->right->data.first))
-// 				return leftRotate(root);
-// 			if (balance > 1 && !Compare()(key.first, root->left->data.first))
-// 			{
-// 				root->left =  leftRotate(root->left);
-// 				return rightRotate(root);
-// 			}
-// 			if (balance < -1 && Compare()(key.first, root->right->data.first))
-// 			{
-// 				root->right = rightRotate(root->right);
-// 				return leftRotate(root);
-// 			}
-// 			return root;
-// 		}
-// 		Node	*insert(Node *root, ft::pair<key_type, value_type> data)
-// 		{
-// 			if (root == NULL)
-// 				root = new Node(data);
-// 			else if (data.first == root->data.first)
-// 				return root;
-// 			else if (Compare()(data.first, root->data.first))
-// 				root->left = insert(root->left, data);
-// 			else if (!Compare()(data.first, root->data.first))
-// 				root->right = insert(root->right, data);
-// 			root = balanceTree(root, data);
-// 			root->end = new Node(ft::pair<key_type, value_type>());
-// 			return root;
-// 		}
-// 		key_type	lowerBound(Node *root, key_type key)
-// 		{
-// 			Node 		*_min;
-// 			Node 		*next;
-// 			key_type 				next_key;
-
-// 			if (find(root, key))
-// 				return key;
-// 			_min = min(root);
-// 			next = _min;
-// 			next_key = next->data.first;
-// 			while (next != root->end && next->data.first < key && key > _min->data.first)
-// 			{
-// 				next = findSuccessor(root, next->data.first);
-// 				next_key = next->data.first;
-// 			}
-// 			if (next_key < key)
-// 				next_key = key;
-// 			return next_key;
-// 		}
-// 		key_type	upperBound(Node *root, key_type key)
-// 		{
-// 			if (find(root, key))
-// 				return findSuccessor(root, key)->data.first;
-// 			return lowerBound(root, key);
-// 		}
-// 		Node	*find(Node *root, key_type key)
-// 		{
-// 			if (root == NULL)
-// 				return NULL;
-// 			if (root->data.first == key)
-// 				return root;
-// 			if (key < root->data.first)
-// 				root = find(root->left, key);
-// 			else if (key > root->data.first)
-// 				root = find(root->right, key);
-// 			return root;
-// 		}
-// 		void    clear(Node *root)
-// 		{
-// 			if (!root)
-// 				return ;
-// 			clear(root->left);
-// 			clear(root->right);
-// 			delete root;
-// 			return;
-// 		}
-// 		Node * min(Node *root)
-// 		{
-// 			if (!root->left)
-// 				return root;
-// 			return min(root->left);
-// 		}
-// 		Node * max(Node *root)
-// 		{
-// 			if (!root->right)
-// 				return root;
-// 			return max(root->right);
-// 		}
-// 		Node * findPredecessor(Node * root, key_type key)
-// 		{
-// 			Node * Predecessor;
-// 			Node * current;
-// 			Node * node;
-
-// 			current = root->find(root, key);
-// 			if (!current)
-// 				return NULL;
-// 			if (current->left)
-// 				return root->max(current->left);
-// 			Predecessor = NULL;
-// 			node = root;
-// 			while (node != current)
-// 			{
-// 				if (*current > *node)
-// 				{
-// 					Predecessor = node;
-// 					node = node->right;
-// 				}
-// 				else
-// 					node = node->left;
-// 			}
-// 			return Predecessor;
-// 		}
-// 		Node * findSuccessor(Node * root, key_type key)
-// 		{
-// 			Node * current;
-// 			Node * Successor;
-// 			Node * node;
-
-// 			current = root->find(root, key);
-// 			if (!current)
-// 				return NULL;
-// 			if (current->right)
-// 				return root->min(current->right);
-// 			Successor = root->end;
-// 			node = root;
-// 			while (node != current)
-// 			{
-// 				if (*current < *node)
-// 				{
-// 					Successor = node;
-// 					node = node->left;
-// 				}
-// 				else
-// 					node = node->right;
-// 			}
-// 			return Successor;
-// 		}
-// 		Node	*Delete(Node * root, key_type key)
-// 		{
-// 			Node *temp;
-// 			if (!root)
-// 				return NULL;
-// 			if (key < root->data.first)
-// 				root->left = Delete(root->left, key);
-// 			else if (key > root->data.first)
-// 				root->right = Delete(root->right, key);
-// 			if (root->data.first == key)
-// 			{
-// 				if (!root->left && !root->right)
-// 				{
-// 					delete root;
-// 					root = NULL;
-// 				}
-// 				else if (root->right && !root->left)
-// 				{
-// 					temp = root;
-// 					root = root->right;
-// 					delete temp;
-// 				}
-// 				else if (root->left && !root->right)
-// 				{
-// 					temp = root;
-// 					root = root->left;
-// 					delete temp;
-// 				}
-// 				else
-// 				{
-// 					temp = min(root->right);
-// 					root->data = temp->data;
-// 					root->right = Delete(root->right, temp->data.first);
-// 				}
-// 			}
-// 			return root;
-// 		}
-// 		Node	*DeleteRange(Node * root, key_type min, key_type max)
-// 		{
-// 			Node * temp;
-// 			key_type next;
-// 			if (min == max)
-// 				return Delete(root, max);
-// 			temp = findSuccessor(root, min);
-// 			if (!temp)
-// 				return root;
-// 			next = temp->data.first;
-// 			root = Delete(root, min);
-// 			root = DeleteRange(root, next, max);
-// 			return root;
-// 		}
-// 		void	Inorder(Node * root)
-// 		{
-// 			if (!root)
-// 				return ;
-// 			Inorder(root->left);
-// 			std::cout << "key : " << root->data.first << std::endl;
-// 			std::cout << "value : " << root->data.second << std::endl;
-// 			std::cout << "/*******************\\" << std::endl;
-// 			Inorder(root->right);
-// 		}
-// 		Node	*DuplicateTree(Node * newRoot, Node * root)
-// 		{
-// 			if (!root)
-// 				return NULL;
-// 			newRoot = new Node(root->data);
-// 			newRoot->left = DuplicateTree(newRoot->left, root->left);
-// 			newRoot->right = DuplicateTree(newRoot->right, root->right);
-// 			return newRoot;
-// 		}
-// 		void	swap(Node *other)
-// 		{
-// 			if (!other)
-// 				return ;
-// 		}
-// 		friend bool operator== (const Node& lhs, const Node& rhs)
-// 		{
-// 			return lhs.data.first == rhs.data.first;
-// 		}
-// 		friend bool operator> (const Node& lhs, const Node& rhs)
-// 		{
-// 			return lhs.data.first > rhs.data.first;
-// 		}
-// 		friend bool operator< (const Node& lhs, const Node& rhs)
-// 		{
-// 			return lhs.data.first < rhs.data.first;
-// 		}
-// 	};
-//     template<typename key_type, typename value_type, typename Compare = std::less<key_type>, typename Alloc = std::allocator<Node<key_type, value_type> > >
-// 	struct BinarySearchTree {
-// 		Node		_root;
-// 		Compare		_comp;
-// 		Alloc		_alloc;
-
-// 		typedef typename Compare						key_compare;
-// 		typedef typename Alloc							allocator_type;
-// 		BinarySearchTree() : _root(NULL), _comp(key_compare()), _alloc(allocator_type()) {};
-// 		BinarySearchTree(Node root, const key_compare& comp = key_compare(),
-// 				const allocator_type& alloc = allocator_type()) : _root(root), _comp(comp), _alloc(alloc) {};
-// 	};
-// }
+#include "./Node.hpp"
 
 namespace ft
 {
-    template<typename key_type, typename value_type, typename Compare = std::less<key_type> >
+    template<typename key_type, typename value_type, typename Compare = std::less<key_type>, 
+		typename Alloc = std::allocator<Node<ft::pair<const key_type, value_type> > > >
 	struct BinarySearchTree {
-		ft::pair<const key_type, value_type> 	data;
-		BinarySearchTree						*right;
-		BinarySearchTree						*left;
-		BinarySearchTree						*end;
+		typedef ft::pair<const key_type, value_type>			dataType;
+		typedef	typename				Alloc::pointer			Tree;
+		typedef	size_t											size_type;
+		Alloc													alloc;
+		Tree													root;
 
-		BinarySearchTree()
-		{
-			this->data = ft::pair<const key_type, value_type>();
-			this->right = NULL;
-			this->left = NULL;
-			this->end = NULL;
-		}
-		BinarySearchTree(ft::pair<key_type, value_type> data)
-		{
-			this->data = data;
-			this->right = NULL;
-			this->left = NULL;
-			this->end = NULL;
-		}
-		int			hieght(BinarySearchTree	*root)
-		{
-			int		leftSubTree;
-			int		rightSubTree;
+		BinarySearchTree() : alloc(Alloc()), root(NULL) {}
 
-			if (root == NULL)
+
+		size_t      height(Tree root)
+		{
+			if (!root)
 				return 0;
-			leftSubTree = hieght(root->left);
-			rightSubTree = hieght(root->right);
-			return std::max(leftSubTree, rightSubTree) + 1;
+			return root->height;
 		}
-		int			getBalanceFactor(BinarySearchTree *root)
+
+
+		size_type	max_size(void)
 		{
-			if (root == NULL)
+			return alloc.max_size();
+		}
+
+		int		getBlanceFactor(Tree root)
+		{
+			if (!root)
 				return 0;
-			return hieght(root->left) - hieght(root->right);
+			return height(root->left) - height(root->right);
 		}
-		BinarySearchTree * leftRotate(BinarySearchTree * root)
-		{
-			BinarySearchTree * first;
-			BinarySearchTree * second;
 
-			first = root->right;
-			second = first->left;
-			first->left = root;
-			root->right = second;
-			return first;
-		}
-		BinarySearchTree * rightRotate(BinarySearchTree * root)
+		Tree rightRotate(Tree y)
 		{
-			BinarySearchTree * first;
-			BinarySearchTree * second;
+			Tree x = y->left;
+			Tree T2 = x->right;
 
-			first = root->left;
-			second = first->right;
-			first->right = root;
-			root->left = second;
-			return first;
-		}
-		BinarySearchTree	*balanceTree(BinarySearchTree *root, ft::pair<key_type, value_type> key)
-		{
-			int balance;
+			// Perform rotation
+			x->right = y;
+			y->left = T2;
 
-			balance = getBalanceFactor(root);
-			if (balance > 1 && Compare()(key.first, root->left->data.first))
-				return rightRotate(root);
-			if (balance < -1 && !Compare()(key.first, root->right->data.first))
-				return leftRotate(root);
-			if (balance > 1 && !Compare()(key.first, root->left->data.first))
-			{
-				root->left =  leftRotate(root->left);
-				return rightRotate(root);
-			}
-			if (balance < -1 && Compare()(key.first, root->right->data.first))
-			{
-				root->right = rightRotate(root->right);
-				return leftRotate(root);
-			}
-			return root;
+			// Update heights
+			y->height = std::max(height(y->left),
+							height(y->right)) + 1;
+			x->height = std::max(height(x->left),
+							height(x->right)) + 1;
+
+			// Return new root
+			return x;
 		}
-		BinarySearchTree	*insert(BinarySearchTree *root, ft::pair<key_type, value_type> data)
+
+		Tree leftRotate(Tree x)
 		{
-			if (root == NULL)
-				root = new BinarySearchTree(data);
-			else if (data.first == root->data.first)
+			Tree y = x->right;
+			Tree T2 = y->left;
+
+			// Perform rotation
+			y->left = x;
+			x->right = T2;
+
+			// Update heights
+			x->height = std::max(height(x->left),
+							height(x->right)) + 1;
+			y->height = std::max(height(y->left),
+							height(y->right)) + 1;
+
+			// Return new root
+			return y;
+		}
+
+		Tree  min(Tree root)
+		{
+			if (!root->left)
 				return root;
-			else if (Compare()(data.first, root->data.first))
-				root->left = insert(root->left, data);
-			else if (!Compare()(data.first, root->data.first))
-				root->right = insert(root->right, data);
-			root = balanceTree(root, data);
-			root->end = new BinarySearchTree(ft::pair<key_type, value_type>());
-			return root;
+			return min(root->left);
 		}
-		key_type	lowerBound(BinarySearchTree *root, key_type key)
+
+		Tree  max(Tree root)
 		{
-			BinarySearchTree 		*_min;
-			BinarySearchTree 		*next;
+			if (!root->right)
+				return root;
+			return max(root->right);
+		}
+
+		key_type	lowerBound(Tree root, key_type key)
+		{
+			Tree             		_min;
+			Tree             		next;
 			key_type 				next_key;
 
 			if (find(root, key))
@@ -440,13 +123,15 @@ namespace ft
 				next_key = key;
 			return next_key;
 		}
-		key_type	upperBound(BinarySearchTree *root, key_type key)
+
+		key_type	upperBound(Tree root, key_type key)
 		{
 			if (find(root, key))
 				return findSuccessor(root, key)->data.first;
 			return lowerBound(root, key);
 		}
-		BinarySearchTree	*find(BinarySearchTree *root, key_type key)
+
+		Tree	find(Tree root, key_type key)
 		{
 			if (root == NULL)
 				return NULL;
@@ -458,7 +143,8 @@ namespace ft
 				root = find(root->right, key);
 			return root;
 		}
-		void    clear(BinarySearchTree *root)
+
+		void    clear(Tree root)
 		{
 			if (!root)
 				return ;
@@ -467,29 +153,18 @@ namespace ft
 			delete root;
 			return;
 		}
-		BinarySearchTree * min(BinarySearchTree *root)
-		{
-			if (!root->left)
-				return root;
-			return min(root->left);
-		}
-		BinarySearchTree * max(BinarySearchTree *root)
-		{
-			if (!root->right)
-				return root;
-			return max(root->right);
-		}
-		BinarySearchTree * findPredecessor(BinarySearchTree * root, key_type key)
-		{
-			BinarySearchTree * Predecessor;
-			BinarySearchTree * current;
-			BinarySearchTree * node;
 
-			current = root->find(root, key);
+		Tree  findPredecessor(Tree  root, key_type key)
+		{
+			Tree  Predecessor;
+			Tree  current;
+			Tree  node;
+
+			current = find(root, key);
 			if (!current)
 				return NULL;
 			if (current->left)
-				return root->max(current->left);
+				return max(current->left);
 			Predecessor = NULL;
 			node = root;
 			while (node != current)
@@ -504,17 +179,18 @@ namespace ft
 			}
 			return Predecessor;
 		}
-		BinarySearchTree * findSuccessor(BinarySearchTree * root, key_type key)
-		{
-			BinarySearchTree * current;
-			BinarySearchTree * Successor;
-			BinarySearchTree * node;
 
-			current = root->find(root, key);
+		Tree  findSuccessor(Tree  root, key_type key)
+		{
+			Tree  current;
+			Tree  Successor;
+			Tree  node;
+
+			current = find(root, key);
 			if (!current)
 				return NULL;
 			if (current->right)
-				return root->min(current->right);
+				return min(current->right);
 			Successor = root->end;
 			node = root;
 			while (node != current)
@@ -529,9 +205,10 @@ namespace ft
 			}
 			return Successor;
 		}
-		BinarySearchTree	*Delete(BinarySearchTree * root, key_type key)
+
+		Tree	Delete(Tree  root, key_type key)
 		{
-			BinarySearchTree *temp;
+			Tree temp;
 			if (!root)
 				return NULL;
 			if (key < root->data.first)
@@ -566,9 +243,10 @@ namespace ft
 			}
 			return root;
 		}
-		BinarySearchTree	*DeleteRange(BinarySearchTree * root, key_type min, key_type max)
+
+		Tree	DeleteRange(Tree  root, key_type min, key_type max)
 		{
-			BinarySearchTree * temp;
+			Tree  temp;
 			key_type next;
 			if (min == max)
 				return Delete(root, max);
@@ -580,36 +258,55 @@ namespace ft
 			root = DeleteRange(root, next, max);
 			return root;
 		}
-		void	Inorder(BinarySearchTree * root)
+
+		Tree	createNewNode(dataType Data)
 		{
-			if (!root)
-				return ;
-			Inorder(root->left);
-			std::cout << "key : " << root->data.first << std::endl;
-			std::cout << "value : " << root->data.second << std::endl;
-			std::cout << "/*******************\\" << std::endl;
-			Inorder(root->right);
+			Tree	temp;
+			temp = alloc.allocate(1);
+			alloc.construct(temp, Node<dataType>(ft::pair<key_type, value_type>(Data)));
+			return temp;
 		}
-		BinarySearchTree	*DuplicateTree(BinarySearchTree * newRoot, BinarySearchTree * root)
+
+		Tree	DuplicateTree(Tree  newRoot, Tree  root)
 		{
 			if (!root)
 				return NULL;
-			newRoot = new BinarySearchTree(root->data);
+			newRoot = createNewNode(root->data);
 			newRoot->left = DuplicateTree(newRoot->left, root->left);
 			newRoot->right = DuplicateTree(newRoot->right, root->right);
 			return newRoot;
 		}
-		friend bool operator== (const BinarySearchTree& lhs, const BinarySearchTree& rhs)
+
+		Tree	insert(Tree root, dataType data)
 		{
-			return lhs.data.first == rhs.data.first;
-		}
-		friend bool operator> (const BinarySearchTree& lhs, const BinarySearchTree& rhs)
-		{
-			return lhs.data.first > rhs.data.first;
-		}
-		friend bool operator< (const BinarySearchTree& lhs, const BinarySearchTree& rhs)
-		{
-			return lhs.data.first < rhs.data.first;
+			int		blanceFactor;
+
+			if (!root)
+				return createNewNode(data);
+			else if (root->data.first == data.first)
+				return root;
+			else if (root->data.first < data.first)
+				root->right = insert(root->right, data);
+			else if (root->data.first > data.first)
+				root->left = insert(root->left, data);
+			root->height = 1 + std::max(height(root->left), height(root->right));
+			blanceFactor = getBlanceFactor(root);
+			if (blanceFactor > 1 && data.first < root->left->data.first)
+				return rightRotate(root);
+			if (blanceFactor < -1 && data.first > root->right->data.first)
+				return leftRotate(root);
+			if (blanceFactor > 1 && data.first > root->left->data.first)
+			{
+				root->left = leftRotate(root->left);
+				return rightRotate(root);
+			}
+			if (blanceFactor < -1 && data.first < root->right->data.first)
+			{
+				root->right = rightRotate(root->right);
+				return leftRotate(root);
+			}
+			root->end = createNewNode(dataType());
+			return root;
 		}
 	};
 }

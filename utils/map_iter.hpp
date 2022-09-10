@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 17:48:21 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/29 18:05:48 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/10 14:10:06 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,17 @@
 
 namespace ft
 {
-	template <typename key_type, typename mapped_type, typename Compare>
+	template <typename key_type, typename mapped_type, typename Compare, typename Alloc>
 	class mapIterator : public std::iterator<std::bidirectional_iterator_tag, ft::pair<const key_type, mapped_type> >
 	{
 		public:
-			typedef BinarySearchTree<key_type, mapped_type, Compare> 		Tree;
+			typedef BinarySearchTree<key_type, mapped_type, Compare, Alloc>	bstType;
 			typedef	ft::pair<const key_type, mapped_type>					value_type;
+			typedef Node<value_type>								 		Tree;
 			typedef	value_type&												reference;
 			typedef	value_type*												pointer;
 		protected:
+			bstType	BST;
 			Tree	**root;
 			Tree	*current;
 		public:
@@ -56,7 +58,7 @@ namespace ft
 				return current->data;
 			}
 			mapIterator & operator++() {
-				current = current->findSuccessor(*root, current->data.first);
+				current = BST.findSuccessor(*root, current->data.first);
 				return *this;
 			}
 			mapIterator operator++(int) {
@@ -68,7 +70,7 @@ namespace ft
 				if (current == (*root)->end)
 					current = *root;
 				else
-					current = current->findPredecessor(*root, current->data.first);
+					current = BST.findPredecessor(*root, current->data.first);
 				return *this;
 			}
 			mapIterator operator--(int) {
@@ -110,35 +112,35 @@ namespace ft
 				return (lhs.current >= rhs.current);
 			}
 	};
-	template <typename key_type, typename mapped_type, typename Compare>
-	class constMapIterator : public mapIterator<key_type, mapped_type, Compare>
-	{
-		public:
-			typedef typename mapIterator<key_type, mapped_type, Compare>::Tree 							Tree;
-			typedef	typename mapIterator<key_type, mapped_type, Compare>::value_type					value_type;
-			typedef	typename mapIterator<key_type, mapped_type, Compare>::reference						reference;
-			typedef	typename mapIterator<key_type, mapped_type, Compare>::pointer						pointer;
-			constMapIterator() : mapIterator<key_type, mapped_type, Compare>()
-			{
-			}
-			constMapIterator(const constMapIterator & other )
-			{
-				this->root = other.root;
-				this->current = other.current;
-			}
-			constMapIterator(Tree* root, Tree * current) : mapIterator<key_type, mapped_type, Compare>(root, current)
-			{
-			}
-			~constMapIterator()
-			{
-			}
-			const reference operator*() const {
-				return *this->current->data;
-			}
-			const pointer operator->() const {
-				return &(operator*());
-			}
-	};
+	// template <typename key_type, typename mapped_type, typename Compare>
+	// class constMapIterator : public mapIterator<key_type, mapped_type, Compare>
+	// {
+	// 	public:
+	// 		typedef typename mapIterator<key_type, mapped_type, Compare>::Tree 							Tree;
+	// 		typedef	typename mapIterator<key_type, mapped_type, Compare>::value_type					value_type;
+	// 		typedef	typename mapIterator<key_type, mapped_type, Compare>::reference						reference;
+	// 		typedef	typename mapIterator<key_type, mapped_type, Compare>::pointer						pointer;
+	// 		constMapIterator() : mapIterator<key_type, mapped_type, Compare>()
+	// 		{
+	// 		}
+	// 		constMapIterator(const constMapIterator & other )
+	// 		{
+	// 			this->root = other.root;
+	// 			this->current = other.current;
+	// 		}
+	// 		constMapIterator(Tree* root, Tree * current) : mapIterator<key_type, mapped_type, Compare>(root, current)
+	// 		{
+	// 		}
+	// 		~constMapIterator()
+	// 		{
+	// 		}
+	// 		const reference operator*() const {
+	// 			return *this->current->data;
+	// 		}
+	// 		const pointer operator->() const {
+	// 			return &(operator*());
+	// 		}
+	// };
 	template <typename iterator>
 	class reverse_map_iter 
 	{
