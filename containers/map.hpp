@@ -58,10 +58,10 @@ namespace ft
 			typedef typename	allocator_type::const_reference 									const_reference;
 			typedef typename    allocator_type::pointer												pointer;
 			typedef typename    allocator_type::const_pointer										const_pointer;
-			typedef typename	ft::mapIterator<key_type, mapped_type, Compare, Alloc>						iterator;
-			// typedef typename	ft::constMapIterator<key_type, mapped_type, Compare>				const_iterator;
+			typedef typename	ft::mapIterator<key_type, mapped_type, Compare, Alloc>				iterator;
+			typedef typename	ft::constMapIterator<key_type, mapped_type, Compare, Alloc>			const_iterator;
 			typedef typename	ft::reverse_map_iter<iterator>										reverse_iterator;
-			// typedef typename	ft::const_reverse_map_iter<const_iterator>							const_reverse_iterator;
+			typedef typename	ft::const_reverse_map_iter<const_iterator>							const_reverse_iterator;
 			typedef typename	iterator_traits<pointer>::difference_type							difference_type;
 			typedef typename	allocator_type::size_type											size_type;
 
@@ -125,45 +125,47 @@ namespace ft
 				temp = BST.min(BST.root);
 				return iterator(BST.root, temp);
 			}
-			// const_iterator begin() const
-			// {
-			// 	Tree * temp = NULL;
 
-			// 	if (!root)
-			// 		return const_iterator();
-			// 	temp = root->min(root);
-			// 	return const_iterator(root, temp);
-			// }
+			const_iterator begin() const
+			{
+				pointer	temp;
+
+				if (!BST.root)
+					return const_iterator();
+				temp = BST.min(BST.root);
+				return const_iterator(BST.root, temp);
+			}
 			iterator end()
 			{
 				if (!BST.root)
 					return iterator();
 				return iterator(BST.root, BST.root->end);
 			}
-			// const_iterator end() const
-			// {
-			// 	if (!root)
-			// 		return const_iterator();
-			// 	return const_iterator(root, root->end);
-			// }
 
-			// reverse_iterator rbegin()
-			// {
-			// 	return reverse_iterator(end());
-			// }
-			// const_reverse_iterator rbegin() const
-			// {
-			// 	return const_reverse_iterator(end());
-			// }
+			const_iterator end() const
+			{
+				if (!BST.root)
+					return const_iterator();
+				return const_iterator(BST.root, BST.root->end);
+			}
 
-			// reverse_iterator rend()
-			// {
-			// 	return reverse_iterator(begin());
-			// }
-			// const_reverse_iterator rend() const
-			// {
-			// 	return const_reverse_iterator(begin());
-			// }
+			reverse_iterator rbegin()
+			{
+				return reverse_iterator(end());
+			}
+			const_reverse_iterator rbegin() const
+			{
+				return const_reverse_iterator(end());
+			}
+
+			reverse_iterator rend()
+			{
+				return reverse_iterator(begin());
+			}
+			const_reverse_iterator rend() const
+			{
+				return const_reverse_iterator(begin());
+			}
 
 			/* //////////////////////////[ Capacity ]/////////////////////////////// */
 
@@ -193,185 +195,185 @@ namespace ft
 				}
 				return BST.find(BST.root, k)->data.second;
 			}
-			// mapped_type& at (const key_type& k)
-			// {
-			// 	if (root->find(root, k))
-			// 		return root->find(root, k)->data.second;
-			// 	throw std::out_of_range("out of range !");
-			// }
-			// const mapped_type& at (const key_type& k) const
-			// {
-			// 	if (root->find(root, k))
-			// 		return root->find(root, k)->data.second;
-			// 	throw std::out_of_range("out of range !");
-			// }
+			mapped_type& at (const key_type& k)
+			{
+				if (BST.find(BST.root, k))
+					return BST.find(BST.root, k)->data.second;
+				throw std::out_of_range("out of range !");
+			}
+			const mapped_type& at (const key_type& k) const
+			{
+				if (BST.find(BST.root, k))
+					return BST.find(BST.root, k)->data.second;
+				throw std::out_of_range("out of range !");
+			}
 
 			/* //////////////////////////[  Modifiers ]/////////////////////////////// */
 			
-			// ft::pair<iterator,bool> insert (const value_type& val)
-			// {
-			// 	iterator 	it;
-			// 	bool		inserted;
+			ft::pair<iterator,bool> insert (const value_type& val)
+			{
+				iterator 	it;
+				bool		inserted;
 				
-			// 	inserted = true;
-			// 	root = root->insert(root, val);
-			// 	it = find(val.first);
-			// 	if (it->second != val.second)
-			// 		inserted = false;
-			// 	_size++;
-			// 	return ft::pair<iterator, bool>(it, inserted);
-			// }
+				inserted = true;
+				BST.root = BST.insert(BST.root, val);
+				it = find(val.first);
+				if (it->second != val.second)
+					inserted = false;
+				_size++;
+				return ft::pair<iterator, bool>(it, inserted);
+			}
 
-			// iterator insert (iterator position, const value_type& val)
-			// {
-			// 	Tree * temp;
+			iterator insert (iterator position, const value_type& val)
+			{
+				pointer temp;
 			
-			// 	if (root->find(root, val.first))
-			// 	{
-			// 		temp = root->find(root, val.first);
-			// 		return iterator(root, temp);
-			// 	}
-			// 	insert(val);
-			// 	temp = root->find(root, val.first);
-			// 	return iterator(root, temp);
-			// }
+				if (BST.find(BST.root, val.first))
+				{
+					temp = BST.find(BST.root, val.first);
+					return iterator(BST.root, temp);
+				}
+				insert(val);
+				temp = BST.find(BST.root, val.first);
+				return iterator(BST.root, temp);
+			}
 
-			// template <class InputIterator>
-  			// void insert (InputIterator first, InputIterator last, 
-			//   		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr)
-			// {
-			// 	while (first != last)
-			// 	{
-			// 		insert(*first);
-			// 		first++;
-			// 	}
-			// }
+			template <class InputIterator>
+  			void insert (InputIterator first, InputIterator last, 
+			  		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr)
+			{
+				while (first != last)
+				{
+					insert(*first);
+					first++;
+				}
+			}
 
-			// void erase (iterator position)
-			// {
-			// 	root = root->Delete(root, position->first);
-			// 	_size--;
-			// }
+			void erase (iterator position)
+			{
+				BST.root = BST.Delete(BST.root, position->first);
+				_size--;
+			}
 
-			// size_type erase (const key_type& k)
-			// {
-			// 	root = root->Delete(root, k);
-			// 	_size--;
-			// 	return 1;
-			// }
+			size_type erase (const key_type& k)
+			{
+				BST.root = BST.Delete(BST.root, k);
+				_size--;
+				return 1;
+			}
 
-			// void erase (iterator first, iterator last)
-			// {
-			// 	size_type i;
-			// 	key_type min;
-			// 	key_type max;
+			void erase (iterator first, iterator last)
+			{
+				size_type i;
+				key_type min;
+				key_type max;
 
-			// 	i = 0;
-			// 	min = first->first;
-			// 	if (last == end())
-			// 		max = root->max(root)->data.first;
-			// 	else
-			// 	{
-			// 		last--;
-			// 		max = last->first;
-			// 	}
-			// 	while (first < last)
-			// 	{
-			// 		first ++;
-			// 		i++;
-			// 	}
-			// 	_size -= i;
-			// 	root = root->DeleteRange(root, min, max);
-			// }
+				i = 0;
+				min = first->first;
+				if (last == end())
+					max = BST.max(BST.root)->data.first;
+				else
+				{
+					last--;
+					max = last->first;
+				}
+				while (first < last)
+				{
+					first ++;
+					i++;
+				}
+				_size -= i;
+				BST.root = BST.DeleteRange(BST.root, min, max);
+			}
 
 			void clear()
 			{
 				BST.clear(BST.root);
 			}
 
-			// void swap (map& x)
-			// {
-			// 	Tree *__swap;
+			void swap (map& x)
+			{
+				// Tree *__swap;
 
-			// 	__swap = &(*x.root);
-			// 	x.root = &(*(this->root));
-			// 	this->root = __swap;
-			// 	return ;
-			// }
+				// __swap = &(*x.root);
+				// x.root = &(*(this->root));
+				// this->root = __swap;
+				return ;
+			}
 
 			/* //////////////////////////[  Operations ]/////////////////////////////// */
 
-			// iterator find (const key_type& k)
-			// {
-			// 	Tree * temp;
+			iterator find (const key_type& k)
+			{
+				pointer temp;
 
-			// 	temp = root->find(root, k);
-			// 	if (temp != NULL)
-			// 		return iterator(root, temp);
-			// 	return end();
-			// }
-			// const_iterator find (const key_type& k) const
-			// {
-			// 	Tree * temp;
+				temp = BST.find(BST.root, k);
+				if (temp != NULL)
+					return const_iterator(BST.root, temp);
+				return end();
+			}
+			const_iterator find (const key_type& k) const
+			{
+				pointer temp;
 
-			// 	temp = root->find(root, k);
-			// 	if (temp)
-			// 		return iterator(root, temp);
-			// 	return end();
+				temp = BST.find(BST.root, k);
+				if (temp)
+					return const_iterator(BST.root, temp);
+				return end();
 				
-			// }
-			// size_type count (const key_type& k) const
-			// {
-			// 	if (root->find(root, k))
-			// 		return (1);
-			// 	return (0);
-			// }
-			// iterator lower_bound (const key_type& k)
-			// {
-			// 	key_type  toFind;
+			}
+			size_type count (const key_type& k) const
+			{
+				if (BST.find(BST.root, k))
+					return (1);
+				return (0);
+			}
+			iterator lower_bound (const key_type& k)
+			{
+				key_type  toFind;
 
-			// 	toFind = root->lowerBound(root, k);
-			// 	return find(toFind);
-			// }
-			// const_iterator lower_bound (const key_type& k) const
-			// {
-			// 	key_type  toFind;
+				toFind = BST.lowerBound(BST.root, k);
+				return find(toFind);
+			}
+			const_iterator lower_bound (const key_type& k) const
+			{
+				key_type  toFind;
 
-			// 	toFind = root->lowerBound(root, k);
-			// 	return find(toFind);
-			// }
-			// iterator upper_bound (const key_type& k)
-			// {
-			// 	key_type  toFind;
+				toFind = BST.lowerBound(BST.root, k);
+				return find(toFind);
+			}
+			iterator upper_bound (const key_type& k)
+			{
+				key_type  toFind;
 
-			// 	toFind = root->upperBound(root, k);
-			// 	return find(toFind);
-			// }
-			// const_iterator upper_bound (const key_type& k) const
-			// {
-			// 	key_type  toFind;
+				toFind = BST.upperBound(BST.root, k);
+				return find(toFind);
+			}
+			const_iterator upper_bound (const key_type& k) const
+			{
+				key_type  toFind;
 
-			// 	toFind = root->upperBound(root, k);
-			// 	return find(toFind);
-			// }
-			// ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const
-			// {
-			// 	const_iterator _element;
-			// 	const_iterator _next_element;
+				toFind = BST.upperBound(BST.root, k);
+				return find(toFind);
+			}
+			ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+			{
+				const_iterator _element;
+				const_iterator _next_element;
 
-			// 	_element = lower_bound(k);
-			// 	_next_element = upper_bound(k);
-			// 	return ft::pair<iterator, iterator>(_element, _next_element);
-			// }
-			// ft::pair<iterator,iterator>             equal_range (const key_type& k)
-			// {
-			// 	iterator _element;
-			// 	iterator _next_element;
+				_element = lower_bound(k);
+				_next_element = upper_bound(k);
+				return ft::pair<iterator, iterator>(_element, _next_element);
+			}
+			ft::pair<iterator,iterator>             equal_range (const key_type& k)
+			{
+				iterator _element;
+				iterator _next_element;
 
-			// 	_element = lower_bound(k);
-			// 	_next_element = upper_bound(k);
-			// 	return ft::pair<iterator, iterator>(_element, _next_element);
-			// }
+				_element = lower_bound(k);
+				_next_element = upper_bound(k);
+				return ft::pair<iterator, iterator>(_element, _next_element);
+			}
 
 			/* //////////////////////////[  Observers ]/////////////////////////////// */
 
