@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 15:27:42 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/30 16:42:48 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/19 10:39:02 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,35 +57,36 @@ int main ()
         first['c']=50;
         first['d']=70;
 
-        NAME_SPACE::map<char,int> second (first.begin(),first.end());
+        // NAME_SPACE::map<char,int> second (first.begin(),first.end());
 
-        NAME_SPACE::map<char,int> third (first);
+        // NAME_SPACE::map<char,int> third (first);
 
-        NAME_SPACE::map<char,int,classcomp> fourth;                 // class as Compare
+        // NAME_SPACE::map<char,int,classcomp> fourth;                 // class as Compare
 
-        bool(*fn_pt)(char,char) = fncomp;
-        NAME_SPACE::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
+        // bool(*fn_pt)(char,char) = fncomp;
+        // NAME_SPACE::map<char,int> fifth (first); // function pointer as Compare
+        // NAME_SPACE::map<char,int,bool(*)(char,char)> fifth (first); // function pointer as Compare
 
         printMap(first);
-        printMap(second);
-        printMap(third);
-        printMap(fourth);
-        printMap(fifth);
+        // printMap(second);
+        // printMap(third);
+        // printMap(fourth);
+        // printMap(fifth);
     }
-    {
-        NAME_SPACE::map<char,int> first;
-        NAME_SPACE::map<char,int> second;
+    // {
+    //     NAME_SPACE::map<char,int> first;
+    //     NAME_SPACE::map<char,int> second;
 
-        first['x']=8;
-        first['y']=16;
-        first['z']=32;
+    //     first['x']=8;
+    //     first['y']=16;
+    //     first['z']=32;
 
-        second=first;                // second now contains 3 ints
-        first=NAME_SPACE::map<char,int>();  // and first is now empty
+    //     second=first;                // second now contains 3 ints
+    //     first=NAME_SPACE::map<char,int>();  // and first is now empty
 
-        std::cout << "Size of first: " << first.size() << '\n';
-        std::cout << "Size of second: " << second.size() << '\n';
-    }
+    //     std::cout << "Size of first: " << first.size() << '\n';
+    //     std::cout << "Size of second: " << second.size() << '\n';
+    // }
     return 0;
 }
 

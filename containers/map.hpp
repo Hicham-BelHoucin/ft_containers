@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/10 14:12:51 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/19 10:37:56 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft
     template < class Key,                                     // map::key_type
            class T,                                       // map::mapped_type
            class Compare = std::less<Key>,                     // map::key_compare
-           class Alloc = std::allocator<Node<ft::pair<const Key, T> > >	>    // map::allocator_type
+           class Alloc = std::allocator<ft::pair<const Key, T> >	>    // map::allocator_type
     class map
     {
         public:
@@ -52,6 +52,7 @@ namespace ft
 			typedef Compare																			key_compare;
 			typedef Alloc																			allocator_type;
 			typedef BinarySearchTree<key_type, mapped_type, Compare, Alloc>							Tree;
+			typedef typename Tree::Tree																treePointer;
 			typedef	ValueCopmare																	value_compare;
 			typedef typename	ft::pair<const Key, T>												value_type;
 			typedef typename	allocator_type::reference 											reference;
@@ -96,10 +97,18 @@ namespace ft
 			}
 			map (const map& x)
 			{
+				const_iterator _begin = x.begin();
+				const_iterator _end = x.end();
+
 				allocator = x.allocator;
 				_size = x._size;
 				comp = x.comp;
-				BST.root = x.BST->DuplicateTree(BST.root, x.BST.root);
+				// insert(_begin, _end);
+				while (_begin != _end)
+				{
+					std::cout << _begin->first << std::endl;
+					_begin++;
+				}
 			}
 			map& operator= (const map& x)
 			{
@@ -118,7 +127,7 @@ namespace ft
 
 			iterator begin()
 			{
-				pointer	temp;
+				treePointer	temp;
 
 				if (!BST.root)
 					return iterator();
@@ -128,7 +137,7 @@ namespace ft
 
 			const_iterator begin() const
 			{
-				pointer	temp;
+				treePointer	temp;
 
 				if (!BST.root)
 					return const_iterator();
@@ -305,7 +314,7 @@ namespace ft
 
 			iterator find (const key_type& k)
 			{
-				pointer temp;
+				treePointer temp;
 
 				temp = BST.find(BST.root, k);
 				if (temp != NULL)
@@ -314,7 +323,7 @@ namespace ft
 			}
 			const_iterator find (const key_type& k) const
 			{
-				pointer temp;
+				treePointer temp;
 
 				temp = BST.find(BST.root, k);
 				if (temp)

@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/10 14:14:25 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/19 11:20:31 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ namespace ft
 		typename Alloc = std::allocator<Node<ft::pair<const key_type, value_type> > > >
 	struct BinarySearchTree {
 		typedef ft::pair<const key_type, value_type>			dataType;
-		typedef	typename				Alloc::pointer			Tree;
+		typedef typename Alloc::template rebind<Node<ft::pair<const key_type, value_type> > >::other newAlloc;
+		typedef	typename				newAlloc::pointer			Tree;
 		typedef	size_t											size_type;
-		Alloc													alloc;
+		newAlloc													alloc;
 		Tree													root;
 
-		BinarySearchTree() : alloc(Alloc()), root(NULL) {}
+		
+		BinarySearchTree(const Alloc & allocator = newAlloc()) : alloc(allocator), root(NULL) {}
 
 
 		size_t      height(Tree root)
@@ -90,6 +92,13 @@ namespace ft
 		}
 
 		Tree  min(Tree root)
+		{
+			if (!root->left)
+				return root;
+			return min(root->left);
+		}
+
+		Tree  min(Tree root) const
 		{
 			if (!root->left)
 				return root;
@@ -259,7 +268,7 @@ namespace ft
 			return root;
 		}
 
-		Tree	createNewNode(dataType Data)
+		Tree	createNewNode(const dataType & Data)
 		{
 			Tree	temp;
 			temp = alloc.allocate(1);
@@ -267,15 +276,17 @@ namespace ft
 			return temp;
 		}
 
-		Tree	DuplicateTree(Tree  newRoot, Tree  root)
-		{
-			if (!root)
-				return NULL;
-			newRoot = createNewNode(root->data);
-			newRoot->left = DuplicateTree(newRoot->left, root->left);
-			newRoot->right = DuplicateTree(newRoot->right, root->right);
-			return newRoot;
-		}
+		// Tree	DuplicateTree(Tree  newRoot, Tree  root) const
+		// {
+		// 	dataType Data;
+		// 	if (!root)
+		// 		return NULL;
+		// 	Data = root->data;
+		// 	newRoot = createNewNode(Data);
+		// 	newRoot->left = DuplicateTree(newRoot->left, root->left);
+		// 	newRoot->right = DuplicateTree(newRoot->right, root->right);
+		// 	return newRoot;
+		// }
 
 		Tree	insert(Tree root, dataType data)
 		{

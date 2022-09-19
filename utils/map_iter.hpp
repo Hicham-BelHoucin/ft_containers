@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 17:48:21 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/10 14:10:06 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/19 11:16:13 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ namespace ft
 			{
 			}
 			const reference operator*() const {
-				return *this->current->data;
+				return this->current->data;
 			}
 			const pointer operator->() const {
 				return &(operator*());

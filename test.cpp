@@ -6,145 +6,233 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 11:38:48 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/29 18:51:59 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/18 10:15:59 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <iostream>
 #include <map>
-#include"containers/map.hpp"
-#define COUNT 4
-#define MAX 9
+#include "./utils/pair.hpp"
 
-#define RR "RR"
-#define RL "RL"
-#define LL "LL"
-#define LR "LR"
+template<typename key_type, typename value_type, typename Compare = std::less<key_type> >
+struct BinarySearchTree {
+	ft::pair<const key_type, value_type> 	data;
+	BinarySearchTree						*right;
+	BinarySearchTree						*left;
+	BinarySearchTree						*end;
 
-
-struct node {
-	int				key;
-	node			*right;
-	node			*parent;
-	node			*left;
+	BinarySearchTree()
+	{
+		this->data = ft::pair<const key_type, value_type>();
+		this->right = NULL;
+		this->left = NULL;
+		this->end = NULL;
+	}
+	BinarySearchTree(ft::pair<key_type, value_type> data)
+	{
+		this->data = data;
+		this->right = NULL;
+		this->left = NULL;
+		this->end = NULL;
+	}	
+	friend bool operator== (const BinarySearchTree& lhs, const BinarySearchTree& rhs)
+	{
+		return lhs.data.first == rhs.data.first;
+	}
+	friend bool operator> (const BinarySearchTree& lhs, const BinarySearchTree& rhs)
+	{
+		return lhs.data.first > rhs.data.first;
+	}
+	friend bool operator< (const BinarySearchTree& lhs, const BinarySearchTree& rhs)
+	{
+		return lhs.data.first < rhs.data.first;
+	}
 };
+typedef int key_type;
+typedef int value_type;
 
-node 	*newNode(int key)
+int			hieght(BinarySearchTree<key_type, value_type>	*root)
 {
-	node	*newnode;
+	int		leftSubTree;
+	int		rightSubTree;
 
-	newnode = new node();
-	newnode->key = key;
-	newnode->parent = NULL;
-	newnode->right = NULL;
-	newnode->left = NULL;
-	return newnode;
-}
-
-int height(node *node)
-{
-	int left_side;
-	int right_side;
-
-	if(node == NULL)
+	if (root == NULL)
 		return 0;
-	left_side = height(node -> left);
-	right_side = height(node -> right);
-	return std::max(left_side, right_side) + 1;
+	leftSubTree = hieght(root->left);
+	rightSubTree = hieght(root->right);
+	return std::max(leftSubTree, rightSubTree) + 1;
 }
-
-int getBalance(node *root)
+int			getBalanceFactor(BinarySearchTree<key_type, value_type> *root)
 {
-    if (root == NULL)
-        return 0;
-    return height(root->left) - height(root->right);
+	if (root == NULL)
+		return 0;
+	return hieght(root->left) - hieght(root->right);
 }
 
-
-node *leftRotate(node *root)
+BinarySearchTree<key_type, value_type> * leftRotate(BinarySearchTree<key_type, value_type> * root)
 {
-    node *child;
-    node *T2;
+	BinarySearchTree<key_type, value_type> * first;
+	BinarySearchTree<key_type, value_type> * second;
 
-	child = root->right;
-	T2 = child->left;
-    child->left = root;
-    root->right = T2;
-    return child;
+	first = root->right;
+	second = first->left;
+	first->left = root;
+	root->right = second;
+	return first;
 }
-
-node *rightRotate(node *root)
+BinarySearchTree<key_type, value_type> * rightRotate(BinarySearchTree<key_type, value_type> * root)
 {
-    node *child;
-    node *T2;
+	BinarySearchTree<key_type, value_type> * first;
+	BinarySearchTree<key_type, value_type> * second;
 
-	child = root->left;
-	T2 = child->right;
-    child->right = root;
-    root->left = T2;
-    return child;
+	first = root->left;
+	second = first->right;
+	first->right = root;
+	root->left = second;
+	return first;
 }
-
-
-node	*balanceTree(node *root, int key)
+BinarySearchTree<key_type, value_type>	*balanceTree(BinarySearchTree<key_type, value_type> *root, ft::pair<key_type, value_type> data)
 {
 	int balance;
 
-	balance = getBalance(root);
-	if (balance > 1 && key < root->left->key)
-        return rightRotate(root);
-    if (balance < -1 && key > root->right->key)
-        return leftRotate(root);
-    if (balance > 1 && key > root->left->key)
-    {
-        root->left =  leftRotate(root->left);
-        return rightRotate(root);
-    }
-    if (balance < -1 && key < root->right->key)
-    {
-        root->right = rightRotate(root->right);
-        return leftRotate(root);
-    }
+	balance = getBalanceFactor(root);
+	if (balance > 1 && data.first < root->data.first)
+		return rightRotate(root);
+	if (balance < -1 && data.first > root->data.first)
+		return leftRotate(root);
+	if (balance > 1 && data.first > root->data.first)
+	{
+		root->left =  leftRotate(root->left);
+		return rightRotate(root);
+	}
+	if (balance < -1 && data.first < root->data.first)
+	{
+		root->right = rightRotate(root->right);
+		return leftRotate(root);
+	}
 	return root;
 }
-
-node	*insert(node *root, int key)
+BinarySearchTree<key_type, value_type>	*find(BinarySearchTree<key_type, value_type> *root, key_type key)
 {
 	if (root == NULL)
-		root = newNode(key);
-	else if (root->key == key)
+		return NULL;
+	if (root->data.first == key)
 		return root;
-	else if (key < root->key)
-	{	
-		// root->left->parent = root;
-		root->left = insert(root->left, key);
-	}
-	else if (key > root->key)
-	{
-		// root->right->parent = root;
-		root->right = insert(root->right, key);
-	}
+	if (key < root->data.first)
+		root = find(root->left, key);
+	else if (key > root->data.first)
+		root = find(root->right, key);
 	return root;
 }
-
-node * min(node *root)
+void    clear(BinarySearchTree<key_type, value_type> *root)
+{
+	if (!root)
+		return ;
+	clear(root->left);
+	clear(root->right);
+	delete root;
+	return;
+}
+BinarySearchTree<key_type, value_type> * min(BinarySearchTree<key_type, value_type> *root)
 {
 	if (!root->left)
 		return root;
 	return min(root->left);
 }
-
-node	*deleteNode(node *root, int key)
+BinarySearchTree<key_type, value_type> * max(BinarySearchTree<key_type, value_type> *root)
 {
-	node *temp;
+	if (!root->right)
+		return root;
+	return max(root->right);
+}
+BinarySearchTree<key_type, value_type> * findPredecessor(BinarySearchTree<key_type, value_type> * root, key_type key)
+{
+	BinarySearchTree<key_type, value_type> * Predecessor;
+	BinarySearchTree<key_type, value_type> * current;
+	BinarySearchTree<key_type, value_type> * node;
+
+	current = find(root, key);
+	if (!current)
+		return NULL;
+	if (current->left)
+		return max(current->left);
+	Predecessor = NULL;
+	node = root;
+	while (node != current)
+	{
+		if (*current > *node)
+		{
+			Predecessor = node;
+			node = node->right;
+		}
+		else
+			node = node->left;
+	}
+	return Predecessor;
+}
+BinarySearchTree<key_type, value_type> * findSuccessor(BinarySearchTree<key_type, value_type> * root, key_type key)
+{
+	BinarySearchTree<key_type, value_type> * current;
+	BinarySearchTree<key_type, value_type> * Successor;
+	BinarySearchTree<key_type, value_type> * node;
+
+	current = find(root, key);
+	if (!current)
+		return NULL;
+	if (current->right)
+		return min(current->right);
+	Successor = root->end;
+	node = root;
+	while (node != current)
+	{
+		if (*current < *node)
+		{
+			Successor = node;
+			node = node->left;
+		}
+		else
+			node = node->right;
+	}
+	return Successor;
+}
+key_type	lowerBound(BinarySearchTree<key_type, value_type> *root, key_type key)
+{
+	BinarySearchTree<key_type, value_type> 		*_min;
+	BinarySearchTree<key_type, value_type> 		*next;
+	key_type 				next_key;
+
+	if (find(root, key))
+		return key;
+	_min = min(root);
+	next = _min;
+	next_key = next->data.first;
+	while (next != root->end && next->data.first < key && key > _min->data.first)
+	{
+		next = findSuccessor(root, next->data.first);
+		next_key = next->data.first;
+	}
+	if (next_key < key)
+		next_key = key;
+	return next_key;
+}
+key_type	upperBound(BinarySearchTree<key_type, value_type> *root, key_type key)
+{
+	if (find(root, key))
+		return findSuccessor(root, key)->data.first;
+	return lowerBound(root, key);
+}
+
+BinarySearchTree<key_type, value_type>	*Delete(BinarySearchTree<key_type, value_type> * root, key_type key)
+{
+	BinarySearchTree<key_type, value_type> *temp;
 	if (!root)
 		return NULL;
-	if (key < root->key)
-		root->left = deleteNode(root->left, key);
-	else if (key > root->key)
-		root->right = deleteNode(root->left, key);
-	if (root->key == key)
+	if (key < root->data.first)
+		root->left = Delete(root->left, key);
+	else if (key > root->data.first)
+		root->right = Delete(root->right, key);
+	if (root->data.first == key)
 	{
 		if (!root->left && !root->right)
 		{
@@ -166,65 +254,136 @@ node	*deleteNode(node *root, int key)
 		else
 		{
 			temp = min(root->right);
-			root->key = temp->key;
-			root->right = deleteNode(root->right, temp->key);
+			root->data = temp->data;
+			root->right = Delete(root->right, temp->data.first);
 		}
 	}
 	return root;
 }
-
-void print2DUtil(node *root, int space)
+BinarySearchTree<key_type, value_type>	*DeleteRange(BinarySearchTree<key_type, value_type> * root, key_type min, key_type max)
 {
-    if (root == NULL)
-        return;
-    space += COUNT;
-    print2DUtil(root->right, space);
-    std::cout<<std::endl;
-    for (int i = COUNT; i < space; i++)
-        std::cout<<" ";
-    std::cout<< root->key << "\n";
-    print2DUtil(root->left, space);
+	BinarySearchTree<key_type, value_type> * temp;
+	key_type next;
+	if (min == max)
+		return Delete(root, max);
+	temp = findSuccessor(root, min);
+	if (!temp)
+		return root;
+	next = temp->data.first;
+	root = Delete(root, min);
+	root = DeleteRange(root, next, max);
+	return root;
 }
 
-void print2D(node *root)
+void	Inorder(BinarySearchTree<key_type, value_type> * root)
 {
+	if (!root)
+		return ;
+	if (root->left)
+		Inorder(root->left);
+	std::cout << "key : " << root->data.first << std::endl;
+	std::cout << "value : " << root->data.second << std::endl;
+	std::cout << "/*******************\\" << std::endl;
+	if (root->right)
+		Inorder(root->right);
+}
+
+BinarySearchTree<key_type, value_type>	*DuplicateTree(BinarySearchTree<key_type, value_type> * newRoot, BinarySearchTree<key_type, value_type> * root)
+{
+	if (!root)
+		return NULL;
+	newRoot = new BinarySearchTree<key_type, value_type>(root->data);
+	newRoot->left = DuplicateTree(newRoot->left, root->left);
+	newRoot->right = DuplicateTree(newRoot->right, root->right);
+	return newRoot;
+}
+
+typedef BinarySearchTree<key_type, value_type> Tree;
+
+void	insert(BinarySearchTree<key_type, value_type>* &root, ft::pair<key_type, value_type> data)
+{
+    Tree *curr = root;
+ 
+    // pointer to store the parent of the current Tree
+    static Tree *parent = NULL;
+ 
+    // if the tree is empty, create a new node and set it as root
+    if (root == NULL)
+    {
+        root = new Tree(data);
+        return;
+    }
+ 
+    // traverse the tree and find the parent node of the given key
+	if (parent == NULL){
+
+		while (curr != NULL)
+		{
+			// update the parent to the current node
+			parent = curr;
+	
+			// if the given key is less than the current node, go to the
+			// left subtree; otherwise, go to the right subtree.
+			if (data.first < curr->data.first) {
+				curr = curr->left;
+			}
+			else {
+				curr = curr->right;
+			}
+		}
+	}
+	if (data.first == parent->data.first)
+		return ;
+    // construct a node and assign it to the appropriate parent pointer
+    if (data.first < parent->data.first) {
+        parent->left = new Tree(data);
+		parent = parent->left;
+    }
+    else if (!(data.first == parent->data.first))
+	{
+        parent->right = new Tree(data);
+		parent = parent->right;
+    }
+	
+}
+
+void print2DUtil(Tree *root, int space)
+{
+    // Base case
+    if (root == NULL)
+        return;
+ 
+    // Increase distance between levels
+    space += 5;
+ 
+    // Process right child first
+    print2DUtil(root->right, space);
+ 
+    // Print current Tree after space
+    // count
+    std::cout <<std::endl;
+    for (int i = 5; i < space; i++)
+        std::cout <<" ";
+    std::cout << root->data.first <<"\n";
+ 
+    // Process left child
+    print2DUtil(root->left, space);
+}
+ 
+// Wrapper over print2DUtil()
+void print2D(Tree *root)
+{
+    // Pass initial space count as 0
     print2DUtil(root, 0);
 }
 
-
 int main(void)
 {
-	node	*root = NULL;
+	BinarySearchTree<key_type, value_type> *root = new BinarySearchTree<key_type, value_type>(ft::pair<key_type, value_type>(1,1));
 
-	for (int i = 0; i < 500000; i++)
-		root = insert(root,i);
-
-	// root = deleteNode(root, 4);
-	// root = deleteNode(root, 8);
-	// root = deleteNode(root, 11);
-	// print2D(root);
+	for (int i = 1; i < 100; i++)
+		insert(root, ft::pair<key_type, value_type>(i, std::rand() % 25));
+	// Inorder(root);
+	print2D(root);
 	return 0;
 }
-
-
-
-// int main(void)
-// {
-// 	// std::vector<std::string>::iterator iter1;
-// 	// std::vector<std::string> vector;
-// 	std::map<int, int> map;
-// 	std::map<int, int>::iterator begin;
-// 	std::map<int, int>::iterator end;
-
-// 	map[12] = 58;
-// 	map[13] = 12;
-// 	map[11] = 13;
-// 	map[15] = 42;
-
-// 	begin = map.begin();
-// 	end = map.end();
-
-// 	// (*begin).first;
-	
-// 	std::cout << (*end).first << std::endl;
-// }
