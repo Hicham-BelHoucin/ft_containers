@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/21 10:46:39 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 12:48:31 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ namespace ft
 					last--;
 					max = last->first;
 				}
-				while (first < last)
+				while (first != last)
 				{
 					first ++;
 					i++;

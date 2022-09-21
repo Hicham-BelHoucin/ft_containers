@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 17:48:21 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/21 09:56:54 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 12:47:46 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,26 +93,6 @@ namespace ft
 			{
 				return (lhs.current == rhs.current);
 			}
-			template <class Iterator>
-			friend bool operator<(const Iterator &lhs, const Iterator &rhs)
-			{
-				return (lhs.current < rhs.current);
-			}
-			template <class Iterator>
-			friend bool operator<=(const Iterator &lhs, const Iterator &rhs)
-			{
-				return (lhs.current <= rhs.current);
-			}
-			template <class Iterator>
-			friend bool operator>(const Iterator &lhs, const Iterator &rhs)
-			{
-				return (lhs.current > rhs.current);
-			}
-			template <class Iterator>
-			friend bool operator>=(const Iterator &lhs, const Iterator &rhs)
-			{
-				return (lhs.current >= rhs.current);
-			}
 	};
 	template <typename key_type, typename mapped_type, typename Compare, typename Alloc>
 	class constMapIterator
@@ -173,34 +153,9 @@ namespace ft
 			return (lhs.current != rhs.current);
 		}
 		template <class Iterator>
-		friend bool operator!=(const Iterator &lhs, const Iterator &rhs)
-		{
-			return (lhs.current != rhs.current);
-		}
-		template <class Iterator>
 		friend bool operator==(const Iterator &lhs, const Iterator &rhs)
 		{
 			return (lhs.current == rhs.current);
-		}
-		template <class Iterator>
-		friend bool operator<(const Iterator &lhs, const Iterator &rhs)
-		{
-			return (lhs.current < rhs.current);
-		}
-		template <class Iterator>
-		friend bool operator<=(const Iterator &lhs, const Iterator &rhs)
-		{
-			return (lhs.current <= rhs.current);
-		}
-		template <class Iterator>
-		friend bool operator>(const Iterator &lhs, const Iterator &rhs)
-		{
-			return (lhs.current > rhs.current);
-		}
-		template <class Iterator>
-		friend bool operator>=(const Iterator &lhs, const Iterator &rhs)
-		{
-			return (lhs.current >= rhs.current);
 		}
 		private:
 			bstType		BST;
@@ -265,35 +220,15 @@ namespace ft
 				return &(operator*());
 			}
 			template <class Iterator>
-			friend bool operator!=(const Iterator &lhs, const Iterator &rhs)
+			friend bool operator!=(const reverse_map_iter<Iterator> &lhs, const reverse_map_iter<Iterator> &rhs)
 			{
 				return (lhs.current != rhs.current);
 			}
-			// template <class Iterator>
-			// friend bool operator==(const Iterator &lhs, const Iterator &rhs)
-			// {
-			// 	return (lhs.current == rhs.current);
-			// }
-			// template <class Iterator>
-			// friend bool operator<(const Iterator &lhs, const Iterator &rhs)
-			// {
-			// 	return (lhs.current < rhs.current);
-			// }
-			// template <class Iterator>
-			// friend bool operator<=(const Iterator &lhs, const Iterator &rhs)
-			// {
-			// 	return (lhs.current <= rhs.current);
-			// }
-			// template <class Iterator>
-			// friend bool operator>(const Iterator &lhs, const Iterator &rhs)
-			// {
-			// 	return (lhs.current > rhs.current);
-			// }
-			// template <class Iterator>
-			// friend bool operator>=(const Iterator &lhs, const Iterator &rhs)
-			// {
-			// 	return (lhs.current >= rhs.current);
-			// }
+			template <class Iterator>
+			friend bool operator==(const reverse_map_iter<Iterator> &lhs, const reverse_map_iter<Iterator> &rhs)
+			{
+				return (lhs.current == rhs.current);
+			}
 	};
 	template <typename iterator>
 	class const_reverse_map_iter
@@ -331,10 +266,15 @@ namespace ft
 		const pointer operator->() {
 			return &(operator*());
 		}
-		// template <class Iterator>
-		friend bool operator!=(const const_reverse_map_iter &lhs, const const_reverse_map_iter &rhs)
+		template <class revIterator>
+		friend bool operator!=(const const_reverse_map_iter<revIterator> &lhs, const const_reverse_map_iter<revIterator> &rhs)
 		{
 			return (lhs.it != rhs.it);
+		}
+		template <class revIterator>
+		friend bool operator==(const const_reverse_map_iter<revIterator> &lhs, const const_reverse_map_iter<revIterator> &rhs)
+		{
+			return (lhs.it == rhs.it);
 		}
 		private:
 			iterator_type it;

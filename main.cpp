@@ -6,48 +6,21 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:53:34 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/21 09:45:03 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 12:37:27 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./containers/map.hpp"
-#include <sys/time.h>
-#define NS ft
-
-long int	get_time(void)
-{
-	long int			time;
-	struct timeval		current_time;
-
-	time = 0;
-	gettimeofday(&current_time, NULL);
-	time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
-	return (time);
-}
-
-int	spent_time(long int time)
-{
-	long int	c_time;
-
-	c_time = get_time();
-	c_time -= time;
-	return (c_time);
-}
+#include <map>
 
 int main(void)
 {
-    ft::map<int, int>               mymap;
-    ft::map<int, int>::iterator     begin, end;
-    long                            time;
-    
-    time = get_time();
-    std::cout << spent_time(time) << std::endl;
-    for (int i = 0; i < 250000; i++)
-        mymap[i] = i;
-    begin = mymap.begin();
-    end = mymap.end();
-    for (;begin != end; begin++)
-        std::cout << begin->first << std::endl;
-    std::cout << spent_time(time) << std::endl;
-    return 0;
+    std::map<int, int>  map;
+    std::map<int, int>::iterator begin, end;
+
+    begin = map.begin();
+    end = map.end();
+    while (end == begin)
+    {
+        
+    }
 }
