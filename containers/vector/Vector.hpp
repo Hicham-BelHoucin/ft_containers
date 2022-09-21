@@ -16,12 +16,12 @@
 # include <memory.h>
 # include <algorithm>
 # include <iostream>
-# include "../utils/Iterator.hpp"
-# include "../utils/reverse_iterator.hpp"
-# include "../utils/is_integral.hpp"
-# include "../utils/enable_if.hpp"
-# include "../utils/equal.hpp"
-# include "../utils/lexicographical_compare.hpp"
+# include "../../utils/Iterator.hpp"
+# include "../../utils/reverse_iterator.hpp"
+# include "../../utils/is_integral.hpp"
+# include "../../utils/enable_if.hpp"
+# include "../../utils/equal.hpp"
+# include "../../utils/lexicographical_compare.hpp"
 
 namespace ft
 {
@@ -64,7 +64,7 @@ namespace ft
 					this->_size = n;
 					this->index = n;
 					this->content = this->allocator.allocate(n);
-					for (int i = 0; i < n; i++)
+					for (size_type i = 0; i < n; i++)
 						this->content[i] = val;
 				}
 				catch(const std::exception& e)
@@ -101,7 +101,7 @@ namespace ft
 					this->content = this->allocator.allocate((x.size()));
 					this->_size = x._size;
 					this->index = x.index;
-					for (int i = 0; i < x.index; i++)
+					for (size_type i = 0; i < x.index; i++)
 						this->content[i] = x.content[i];
 				}
 				catch(const std::exception& e)
@@ -184,12 +184,12 @@ namespace ft
 					T *temp;
 					this->index = this->index > new_cap ? new_cap : this->index;
 					temp = this->allocator.allocate(index);
-					for (int i = 0; i < index; i++)
+					for (size_type i = 0; i < index; i++)
 						temp[i] = this->content[i];
 					delete[] this->content;
 					this->_size = new_cap;
 					this->content = this->allocator.allocate(new_cap);
-					for (int i = 0; i < index; i++)
+					for (size_type i = 0; i < index; i++)
 						this->content[i] = temp[i];
 				}
 				catch(const std::exception& e)

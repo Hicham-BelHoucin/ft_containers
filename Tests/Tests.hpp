@@ -6,16 +6,16 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 07:18:52 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/30 16:21:34 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 10:57:36 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TESTS_HPP
 # define TESTS_HPP
 
-# include "../containers/Vector.hpp"
-# include "../containers/Stack.hpp"
-# include "../containers/map.hpp"
+# include "../containers/vector/Vector.hpp"
+# include "../containers/stack/Stack.hpp"
+# include "../containers/map/map.hpp"
 # include "../utils/lexicographical_compare.hpp"
 # include "../utils/equal.hpp"
 # include "../utils/is_integral.hpp"

@@ -6,14 +6,14 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 12:53:27 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/30 11:47:38 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 10:53:15 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include "Vector.hpp"
+#include "../vector/Vector.hpp"
 #include <deque>
 
 namespace ft
