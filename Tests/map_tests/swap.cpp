@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 10:45:33 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/29 17:47:33 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 10:06:37 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@ int main ()
     // bar['b']=22;
     // bar['c']=33;
 
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100; i++)
         bar[i] = i;
-    for (int i = 10000; i < 20000; i++)
+    for (int i = 10; i < 200; i++)
         foo[i] = i;
 
-    // foo.swap(bar);
+    foo.swap(bar);
 
-    // std::cout << "foo contains:\n";
-    // for (NAME_SPACE::map<int,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
-    // std::cout << it->first << " => " << it->second << '\n';
+    std::cout << "foo contains:\n";
+    for (NAME_SPACE::map<int,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 
-    // std::cout << "bar contains:\n";
-    // for (NAME_SPACE::map<int,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
-    // std::cout << it->first << " => " << it->second << '\n';
+    std::cout << "bar contains:\n";
+    for (NAME_SPACE::map<int,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 
     return 0;
 }

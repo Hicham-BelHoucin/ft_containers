@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:53:34 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/10 14:28:36 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 09:45:03 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int main(void)
     
     time = get_time();
     std::cout << spent_time(time) << std::endl;
-    for (int i = 0; i < 250; i++)
+    for (int i = 0; i < 250000; i++)
         mymap[i] = i;
     begin = mymap.begin();
     end = mymap.end();

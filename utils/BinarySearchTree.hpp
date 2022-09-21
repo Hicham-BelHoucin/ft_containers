@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/19 11:20:31 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/20 15:37:55 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ namespace ft
 		typedef ft::pair<const key_type, value_type>			dataType;
 		typedef typename Alloc::template rebind<Node<ft::pair<const key_type, value_type> > >::other newAlloc;
 		typedef	typename				newAlloc::pointer			Tree;
+		typedef typename Alloc::template rebind<const Node<ft::pair<const key_type, value_type> > >::other constnewAlloc;
+		typedef	typename				constnewAlloc::pointer			constTree;
 		typedef	size_t											size_type;
 		newAlloc													alloc;
 		Tree													root;
@@ -111,6 +113,13 @@ namespace ft
 				return root;
 			return max(root->right);
 		}
+		
+		constTree  max(constTree root)
+		{
+			if (!root->right)
+				return root;
+			return max(root->right);
+		}
 
 		key_type	lowerBound(Tree root, key_type key)
 		{
@@ -140,7 +149,20 @@ namespace ft
 			return lowerBound(root, key);
 		}
 
-		Tree	find(Tree root, key_type key)
+		Tree	find(Tree root, key_type key) const
+		{
+			if (root == NULL)
+				return NULL;
+			if (root->data.first == key)
+				return root;
+			if (key < root->data.first)
+				root = find(root->left, key);
+			else if (key > root->data.first)
+				root = find(root->right, key);
+			return root;
+		}
+
+		constTree	find(constTree root, key_type key) const
 		{
 			if (root == NULL)
 				return NULL;
@@ -163,6 +185,31 @@ namespace ft
 			return;
 		}
 
+		constTree  findPredecessor(constTree  root, key_type key)
+		{
+			constTree  Predecessor;
+			constTree  current;
+			constTree  node;
+
+			current = find(root, key);
+			if (!current)
+				return NULL;
+			if (current->left)
+				return max(current->left);
+			Predecessor = NULL;
+			node = root;
+			while (node != current)
+			{
+				if (*current > *node)
+				{
+					Predecessor = node;
+					node = node->right;
+				}
+				else
+					node = node->left;
+			}
+			return Predecessor;
+		}
 		Tree  findPredecessor(Tree  root, key_type key)
 		{
 			Tree  Predecessor;
@@ -194,6 +241,31 @@ namespace ft
 			Tree  current;
 			Tree  Successor;
 			Tree  node;
+
+			current = find(root, key);
+			if (!current)
+				return NULL;
+			if (current->right)
+				return min(current->right);
+			Successor = root->end;
+			node = root;
+			while (node != current)
+			{
+				if (*current < *node)
+				{
+					Successor = node;
+					node = node->left;
+				}
+				else
+					node = node->right;
+			}
+			return Successor;
+		}
+		constTree  findSuccessor(constTree  root, key_type key)
+		{
+			constTree  current;
+			constTree  Successor;
+			constTree  node;
 
 			current = find(root, key);
 			if (!current)
@@ -276,17 +348,33 @@ namespace ft
 			return temp;
 		}
 
-		// Tree	DuplicateTree(Tree  newRoot, Tree  root) const
-		// {
-		// 	dataType Data;
-		// 	if (!root)
-		// 		return NULL;
-		// 	Data = root->data;
-		// 	newRoot = createNewNode(Data);
-		// 	newRoot->left = DuplicateTree(newRoot->left, root->left);
-		// 	newRoot->right = DuplicateTree(newRoot->right, root->right);
-		// 	return newRoot;
-		// }
+		void	Inorder(Tree root) const
+		{
+			if (!root)
+				return ;
+			Inorder(root->left);
+			std::cout << root->data.first << std::endl;
+			Inorder(root->right);
+		}
+
+		Tree cloneBinaryTree(Tree root)
+		{
+			// base case
+			if (root == NULL) {
+				return NULL;
+			}
+		
+			// create a new node with the same data as the root node
+			// Tree root_copy = new Node<dataType>(root->data);
+			Tree root_copy = createNewNode(root->data);
+		
+			// clone the left and right subtree
+			root_copy->left = cloneBinaryTree(root->left);
+			root_copy->right = cloneBinaryTree(root->right);
+		
+			// return cloned root node
+			return root_copy;
+		}
 
 		Tree	insert(Tree root, dataType data)
 		{

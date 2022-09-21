@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/19 10:37:56 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 10:02:07 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,10 @@ namespace ft
 			}
 			map (const map& x)
 			{
-				const_iterator _begin = x.begin();
-				const_iterator _end = x.end();
-
-				allocator = x.allocator;
+				BST.root = BST.cloneBinaryTree(x.BST.root);
 				_size = x._size;
 				comp = x.comp;
-				// insert(_begin, _end);
-				while (_begin != _end)
-				{
-					std::cout << _begin->first << std::endl;
-					_begin++;
-				}
+				allocator = x.allocator;
 			}
 			map& operator= (const map& x)
 			{
@@ -235,7 +227,7 @@ namespace ft
 
 			iterator insert (iterator position, const value_type& val)
 			{
-				pointer temp;
+				treePointer temp;
 			
 				if (BST.find(BST.root, val.first))
 				{
@@ -302,11 +294,11 @@ namespace ft
 
 			void swap (map& x)
 			{
-				// Tree *__swap;
+				Tree *__swap;
 
-				// __swap = &(*x.root);
-				// x.root = &(*(this->root));
-				// this->root = __swap;
+				__swap->root = x.BST.root;
+				x.BST.root = this->BST.root;
+				this->BST.root = __swap->root;
 				return ;
 			}
 
@@ -318,9 +310,10 @@ namespace ft
 
 				temp = BST.find(BST.root, k);
 				if (temp != NULL)
-					return const_iterator(BST.root, temp);
+					return iterator(BST.root, temp);
 				return end();
 			}
+			
 			const_iterator find (const key_type& k) const
 			{
 				treePointer temp;

@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/19 09:38:55 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 10:18:08 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,13 +213,14 @@ int main(void)
 
     i = 0;
     path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
-    // path[0] = "find ../Tests/map_tests/constructor.cpp > OutPut";
+    // path[0] = "find ../Tests/map_tests/swap.cpp > OutPut";
     path[1] = "find ../Tests/vector_tests/*/*.cpp > OutPut";
+    // path[1] = "find ../Tests/vector_tests/modifiers/insert.cpp > OutPut";
     path[2] = "find ../Tests/Stack/*.cpp > OutPut";
     Container[0] = "Map : ";
     Container[1] = "Vactor : ";
     Container[2] = "Stack : ";
-    while (i < 1)
+    while (i < 3)
     {
         SetCmd(path[i]);
         SetName();
