@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 17:48:21 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/21 12:47:46 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/21 12:53:12 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,15 @@ namespace ft
 		const_reverse_map_iter operator++(int) {
 			const_reverse_map_iter temp = *this;
 			++(*this);
+			return temp;
+		}
+		const_reverse_map_iter & operator--() {
+			it++;
+			return *this;
+		}
+		const_reverse_map_iter operator--(int) {
+			const_reverse_map_iter temp = *this;
+			--(*this);
 			return temp;
 		}
 		const reference operator*() const {
