@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 13:44:18 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/11 13:44:18 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/23 18:17:01 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,141 +14,256 @@
 
 # define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
 # define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
-#define RED 1
-#define BLACK 0
+# define RESET   "\033[0m"
+# define COUNT 5
 
-struct RedBlackTree
+typedef enum s_colors {
+	BLACK = 0,
+	RED,
+} t_colors ;
+
+typedef enum s_cases {
+	LL = 1,
+	RR,
+	LR,
+	RL,
+} t_cases ;
+
+struct Node
 {
 	int             data;
 	int             color;
-	RedBlackTree    *parent;
-	RedBlackTree    *left;
-	RedBlackTree    *right;
+	Node    *parent;
+	Node    *left;
+	Node    *right;
 
-	RedBlackTree(int data, int color)
+	Node(int data, int color, Node * parent)
 	{
 		this->data = data;
 		this->color = color;
-		this->parent = NULL;
+		this->parent = parent;
 		this->left = NULL;
 		this->right = NULL;
 	}
+	bool	isLeftChild() {
+		return parent ? this == parent->left : false;
+	}
+	void	changeColor() {
+		color = color == RED ? BLACK : RED;
+	}
 };
 
-RedBlackTree    *&siblingColor(RedBlackTree * node)
+/*
+	insertion : 
+		1 -> insert like in normal binary search tree 
+		2 -> if newnode is not root node we color it with red
+		3 -> if newnode is root node we color it with black
+		4 -> if newnode's parent is red then we have red red conflict and we need to fix it :
+			to fix it need to check color of it parent's sibling :
+				1 -> if color of it's parent's sibling is black or null :
+					- if we have left right insertion condition we need to do a left right rotation and recolor parent and grandparent
+					- if we have right right insertion condition we need to do a left rotation and recolor parent and grandparent
+					- if we have left left insertion condition we need to do a right rotation and recolor parent and grandparent
+					- if we have right left insertion condition we need to do a right left rotation and recolor parent and grandparent
+				2 -> if color of it's parent sibling is red :
+					- recolor parent and sibling and if grandparent of newnode ids not root node then recolor it and recheck with grandparent .
+*/
+
+typedef	Node*	Tree;
+
+Tree rightRotate(Tree y)
 {
-	RedBlackTree * parent;
-	
-	parent = node->parent;
-	// std::cout << 'n' << parent->right->data << std::endl;
-	// std::cout << parent->left->data << std::endl;
-	// std::cout << parent->right->data << std::endl;
-	if (parent->left == node)
-		return parent->right;
-	return parent->left;
+	Tree x = y->left;
+	Tree T2 = x->right;
+
+	// Perform rotation
+	x->right = y;
+	y->left = T2;
+	// change parent
+	x->parent = y->parent;
+	y->parent = x;
+	// Return new root
+	return x;
 }
 
-void    inorder(RedBlackTree * root)
+/*
+					    x
+					  /  \
+					nil  16
+*/
+
+Tree leftRotate(Tree x)
 {
-	if (root == NULL)
-		return ;
-	inorder(root->left);
-	// std::cout << "\033[0m";
-	std::cout << (!root->parent ? "root : " : "child : ") << (root->color ? BOLDRED : BOLDBLACK) << root->data << std::endl;
-	// std::cout << (root->color ? "RED" : "BLACK") << std::endl;
-	std::cout << "\033[0m";
-	// if (root->parent)
-	//     std::cout << "preant : " << root->parent->data << std::endl;
-	inorder(root->right);
-}
-#define COUNT 5
-void print2DUtil(RedBlackTree *root, int space)
-{
-	if (root == NULL)
-		return;
-	space += COUNT;
-	print2DUtil(root->right, space);
-	std::cout<<std::endl;
-	for (int i = COUNT; i < space; i++)
-		std::cout<<" ";
-	// std::cout << root->color << '~' << root->data << std::endl;
-	std::cout<< (root->color ? BOLDRED : BOLDBLACK) << root->data << "\033[0m" << "\n";
-	print2DUtil(root->left, space);
+	Tree y = x->right;
+	Tree T2 = y->left;
+
+	// Perform rotation
+	y->left = x;
+	x->right = T2;
+	// change parent
+	y->parent = x->parent;
+	x->parent = y;
+	// Return new root
+	return y;
 }
 
-void print2D(RedBlackTree *root)
+/*
+	cases:
+		1 -> if root is rightchild and newnode is rightchild :
+			you will need a RR rotation
+		2 -> if root is leftchild and newnode is leftchild :
+			you will need a LL rotation
+		3 -> if root is leftchild and newnode is rightchild:
+			you will need LR rotation
+		3 -> if root is rightchild and newnode is leftchild:
+			you will need RL rotation
+*/
+
+int		getRotationType(Tree root, int data)
 {
-	print2DUtil(root, 0);
+	Tree	newnode;
+
+	if (root->left && root->left->data == data)
+		newnode = root->left;
+	else
+		newnode = root->right;
+	if (!root->isLeftChild() && !newnode->isLeftChild())
+		return RR;
+	else if (root->isLeftChild() && newnode->isLeftChild())
+		return LL;
+	else if (root->isLeftChild() && !newnode->isLeftChild())
+		return LR;
+	else if (!root->isLeftChild() && newnode->isLeftChild())
+		return RL;
+	return 0;
 }
 
-void    blanceTree(RedBlackTree * &parent, RedBlackTree * &newNode, RedBlackTree * &sibling)
+Tree	fixTree(Tree root, int & rotations, int data)
 {
-	/*
-		if parent of new node is RED , then check the color of parent's sibling of new node :
-			1 - if color is black or null then suitable a rotation and recolor.
-			2 - if color is red then recolor and check if parent's parent of new node id not root 
-				node then recolor and recheck .
-	*/
-	if (!parent || !newNode)
-			return ;
-	if (parent->color == RED)
+	Tree	sibling = NULL;
+	int		neededrotation;
+
+	if (!root)
+		return root;
+	if (root->parent)
+		sibling = root->isLeftChild() ? root->parent->right : root->parent->left;
+	if (!sibling || sibling->color == BLACK)
 	{
-		if (!sibling || sibling->color == BLACK)
+		neededrotation = getRotationType(root, data);
+		if (neededrotation == LR)
 		{
-			// suitable a rotation and recolor
-			puts("suitable a rotation and recolor");
-		std::cout << newNode->data << std::endl;
+			root = leftRotate(root);
+			rotations = RR;
 		}
-		else if (sibling && sibling->color == RED)
+		else if (neededrotation == RL)
 		{
-			puts("hello");
-			/*
-				recolor and check if parent's parent of new node id not root 
-				node then recolor and recheck .
-			*/
-			sibling->color = BLACK;
-			parent->color = BLACK;
-			if (parent->parent)
-			{
-				parent->parent->color = parent->parent->color ? BLACK : RED;
-				blanceTree(parent->parent->parent, parent->parent, siblingColor(parent->parent)); 
-			}
+			root = rightRotate(root);
+			rotations = LL;
+		}
+		else if (rotations == LL)
+		{
+			root = leftRotate(root);
+			root->changeColor();
+			root->left->changeColor();
+			// rotations = 0;
+		}
+		else if (rotations == RR)
+		{
+			root = rightRotate(root);
+			root->changeColor();
+			root->right->changeColor();
+			// rotations = 0;
 		}
 	}
+	else if (sibling && sibling->color == RED)
+	{
+		root->changeColor();
+		sibling->changeColor();
+		if (root->parent->parent)
+		{
+			root->parent->changeColor();
+			// if (root->parent->parent->color == RED && root->parent->color == RED)
+			// {
+			// 	// std::cout << root->parent->parent->data << std::endl;
+			// 	root = fixTree(root->parent->parent, rotations, data);
+			// }
+		}
+	}
+	return root;
 }
 
-void insert(RedBlackTree *&root, int data)
+Tree	insert(Tree root, int data, Tree parent, int & rotations)
 {
+	bool	redconfilct = false;
 	if (!root)
-		root = new RedBlackTree(data, BLACK);
-	if (root->data < data)
 	{
-		insert(root->right, data);
-		root->right->parent = root;
-		root->right->color = RED;
-		blanceTree(root, root->right, siblingColor(root->right));
+		if (!parent)
+			root = new Node(data, BLACK, parent);
+		else
+			root = new Node(data, RED, parent);
+	}
+	else if (root->data == data)
+		return root;
+	else if (root->data < data)
+	{
+		root->right = insert(root->right, data, root, rotations);
+		if (root->color == RED && root->right->color == RED)
+			redconfilct = true;
 	}
 	else if (root->data > data)
 	{
-		insert(root->left, data);
-		root->left->parent = root;
-		root->left->color = RED;
-		blanceTree(root, root->left, siblingColor(root->left));
+		root->left = insert(root->left, data, root, rotations);
+		if (root->color == RED && root->left->color == RED)
+			redconfilct = true;
 	}
+	if (rotations == LL)
+	{
+		root = leftRotate(root);
+		root->changeColor();
+		root->left->changeColor();
+		rotations = 0;
+	}
+	else if (rotations == RR)
+	{
+		root = rightRotate(root);
+		root->changeColor();
+		root->right->changeColor();
+		rotations = 0;
+	}
+	if (redconfilct == true)
+		root = fixTree(root, rotations, data);
+	if (root->data == 16)
+	{
+		puts("hello");
+		root = fixTree(root, rotations, data);
+	}
+	return root;
+}
+
+void	Inorder(Tree root, int space)
+{
+	if (!root)
+		return ;
+	Inorder(root->right, space + COUNT);
+	for (int i = 0; i < space; i++)
+		std::cout << " ";
+	std::cout << (root->color == BLACK ? BOLDBLACK : BOLDRED) << root->data << RESET;
+	std::cout << std::endl;
+	Inorder(root->left, space + COUNT);
 }
 
 int main(void)
 {
-	RedBlackTree *root = NULL;
-
-	insert(root, 10);
-	insert(root, 18);
-	insert(root, 7);
-	insert(root, 15);
-	print2D(root);
-	// inorder(root);
-	// for (int i = 0; i < 5; i++)
-		// root = insert(root, i);
-	// std::cout << "done" << std::endl;
-	// inorder(root);
+	Tree root = NULL;
+	int i = 0;
+	root = insert(root, 10, root, i);
+	root = insert(root, 18, root, i);
+	root = insert(root, 7, root, i);
+	root = insert(root, 15, root, i);
+	root = insert(root, 16, root, i);
+	root = insert(root, 30, root, i);
+	root = insert(root, 25, root, i);
+	root = insert(root, 40, root, i);
+	Inorder(root, 0);
+	return 0;
 }
