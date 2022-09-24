@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 13:44:18 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/23 18:17:01 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/24 17:16:50 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ struct Node
 {
 	int             data;
 	int             color;
-	Node    *parent;
-	Node    *left;
-	Node    *right;
+	Node    		*parent;
+	Node    		*left;
+	Node    	*right;
 
 	Node(int data, int color, Node * parent)
 	{
@@ -127,10 +127,12 @@ int		getRotationType(Tree root, int data)
 		newnode = root->left;
 	else
 		newnode = root->right;
+	if (!newnode)
+		return 0;
 	if (!root->isLeftChild() && !newnode->isLeftChild())
-		return RR;
-	else if (root->isLeftChild() && newnode->isLeftChild())
 		return LL;
+	else if (root->isLeftChild() && newnode->isLeftChild())
+		return RR;
 	else if (root->isLeftChild() && !newnode->isLeftChild())
 		return LR;
 	else if (!root->isLeftChild() && newnode->isLeftChild())
@@ -160,19 +162,10 @@ Tree	fixTree(Tree root, int & rotations, int data)
 			root = rightRotate(root);
 			rotations = LL;
 		}
-		else if (rotations == LL)
+		else
 		{
-			root = leftRotate(root);
-			root->changeColor();
-			root->left->changeColor();
-			// rotations = 0;
-		}
-		else if (rotations == RR)
-		{
-			root = rightRotate(root);
-			root->changeColor();
-			root->right->changeColor();
-			// rotations = 0;
+			rotations = neededrotation;
+			// puts("hi");
 		}
 	}
 	else if (sibling && sibling->color == RED)
@@ -180,14 +173,7 @@ Tree	fixTree(Tree root, int & rotations, int data)
 		root->changeColor();
 		sibling->changeColor();
 		if (root->parent->parent)
-		{
 			root->parent->changeColor();
-			// if (root->parent->parent->color == RED && root->parent->color == RED)
-			// {
-			// 	// std::cout << root->parent->parent->data << std::endl;
-			// 	root = fixTree(root->parent->parent, rotations, data);
-			// }
-		}
 	}
 	return root;
 }
@@ -232,11 +218,6 @@ Tree	insert(Tree root, int data, Tree parent, int & rotations)
 	}
 	if (redconfilct == true)
 		root = fixTree(root, rotations, data);
-	if (root->data == 16)
-	{
-		puts("hello");
-		root = fixTree(root, rotations, data);
-	}
 	return root;
 }
 
@@ -264,6 +245,10 @@ int main(void)
 	root = insert(root, 30, root, i);
 	root = insert(root, 25, root, i);
 	root = insert(root, 40, root, i);
+	root = insert(root, 60, root, i);
+	root = insert(root, 2, root, i);
+	root = insert(root, 1, root, i);
+	root = insert(root, 70, root, i);
 	Inorder(root, 0);
 	return 0;
 }
