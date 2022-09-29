@@ -6,19 +6,19 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 12:53:27 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/21 10:53:15 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/27 11:49:56 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include "../vector/Vector.hpp"
+#include "../vector/vector.hpp"
 #include <deque>
 
 namespace ft
 {
-	template <class T, class Container = ft::vector<T> > 
+	template <class T, class Container = ft::vector<T> >
 	class stack
 	{
 		protected:
@@ -53,7 +53,7 @@ namespace ft
 		void pop()
 		{
 			_c.pop_back();
-		}	
+		}
 		template <class _T, class _Container>
 		friend bool operator== (const stack<_T,_Container>& lhs, const stack<_T,_Container>& rhs)
 		{

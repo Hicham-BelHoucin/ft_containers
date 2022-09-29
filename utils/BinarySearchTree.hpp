@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/20 15:37:55 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/25 10:57:26 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,19 @@
 
 namespace ft
 {
-    template<typename key_type, typename value_type, typename Compare = std::less<key_type>, 
+    template<typename key_type, typename value_type, typename Compare = std::less<key_type>,
 		typename Alloc = std::allocator<Node<ft::pair<const key_type, value_type> > > >
 	struct BinarySearchTree {
-		typedef ft::pair<const key_type, value_type>			dataType;
-		typedef typename Alloc::template rebind<Node<ft::pair<const key_type, value_type> > >::other newAlloc;
-		typedef	typename				newAlloc::pointer			Tree;
-		typedef typename Alloc::template rebind<const Node<ft::pair<const key_type, value_type> > >::other constnewAlloc;
-		typedef	typename				constnewAlloc::pointer			constTree;
-		typedef	size_t											size_type;
-		newAlloc													alloc;
-		Tree													root;
+		typedef ft::pair<const key_type, value_type>														dataType;
+		typedef typename Alloc::template rebind<Node<ft::pair<const key_type, value_type> > >::other 		newAlloc;
+		typedef	typename				newAlloc::pointer													Tree;
+		typedef typename Alloc::template rebind<const Node<ft::pair<const key_type, value_type> > >::other 	constnewAlloc;
+		typedef	typename				constnewAlloc::pointer												constTree;
+		typedef	size_t																						size_type;
+		newAlloc																							alloc;
+		Tree																								root;
 
-		
+
 		BinarySearchTree(const Alloc & allocator = newAlloc()) : alloc(allocator), root(NULL) {}
 
 
@@ -113,7 +113,7 @@ namespace ft
 				return root;
 			return max(root->right);
 		}
-		
+
 		constTree  max(constTree root)
 		{
 			if (!root->right)
@@ -132,12 +132,12 @@ namespace ft
 			_min = min(root);
 			next = _min;
 			next_key = next->data.first;
-			while (next != root->end && next->data.first < key && key > _min->data.first)
+			while (next != root->end && Compare()(next->data.first, key) && !Compare()(key, _min->data.first))
 			{
 				next = findSuccessor(root, next->data.first);
 				next_key = next->data.first;
 			}
-			if (next_key < key)
+			if (Compare()(next_key, key))
 				next_key = key;
 			return next_key;
 		}
@@ -153,11 +153,11 @@ namespace ft
 		{
 			if (root == NULL)
 				return NULL;
-			if (root->data.first == key)
+			if (!Compare()(root->data.first, key) && !Compare()(key, root->data.first))
 				return root;
-			if (key < root->data.first)
+			if (Compare()(key, root->data.first))
 				root = find(root->left, key);
-			else if (key > root->data.first)
+			else if (!Compare()(key, root->data.first))
 				root = find(root->right, key);
 			return root;
 		}
@@ -166,11 +166,11 @@ namespace ft
 		{
 			if (root == NULL)
 				return NULL;
-			if (root->data.first == key)
+			if (!Compare()(root->data.first, key) && !Compare()(key, root->data.first))
 				return root;
-			if (key < root->data.first)
+			if (Compare()(key, root->data.first))
 				root = find(root->left, key);
-			else if (key > root->data.first)
+			else if (!Compare()(key, root->data.first))
 				root = find(root->right, key);
 			return root;
 		}
@@ -292,11 +292,11 @@ namespace ft
 			Tree temp;
 			if (!root)
 				return NULL;
-			if (key < root->data.first)
+			if (Compare()(key, root->data.first))
 				root->left = Delete(root->left, key);
-			else if (key > root->data.first)
+			else if (!Compare()(key, root->data.first))
 				root->right = Delete(root->right, key);
-			if (root->data.first == key)
+			if (!Compare()(root->data.first, key) && !Compare()(key, root->data.first))
 			{
 				if (!root->left && !root->right)
 				{
@@ -363,15 +363,15 @@ namespace ft
 			if (root == NULL) {
 				return NULL;
 			}
-		
+
 			// create a new node with the same data as the root node
 			// Tree root_copy = new Node<dataType>(root->data);
 			Tree root_copy = createNewNode(root->data);
-		
+
 			// clone the left and right subtree
 			root_copy->left = cloneBinaryTree(root->left);
 			root_copy->right = cloneBinaryTree(root->right);
-		
+
 			// return cloned root node
 			return root_copy;
 		}
@@ -382,24 +382,26 @@ namespace ft
 
 			if (!root)
 				return createNewNode(data);
-			else if (root->data.first == data.first)
+			if (!Compare()(root->data.first, data.first) && !Compare()(data.first, root->data.first))
 				return root;
-			else if (root->data.first < data.first)
+			else if (Compare()(root->data.first, data.first))
 				root->right = insert(root->right, data);
-			else if (root->data.first > data.first)
+			else if (!Compare()(root->data.first, data.first))
 				root->left = insert(root->left, data);
+			else
+				return root;
 			root->height = 1 + std::max(height(root->left), height(root->right));
 			blanceFactor = getBlanceFactor(root);
-			if (blanceFactor > 1 && data.first < root->left->data.first)
+			if (blanceFactor > 1 && Compare()(data.first, root->left->data.first))
 				return rightRotate(root);
-			if (blanceFactor < -1 && data.first > root->right->data.first)
+			if (blanceFactor < -1 && !Compare()(data.first, root->right->data.first))
 				return leftRotate(root);
-			if (blanceFactor > 1 && data.first > root->left->data.first)
+			if (blanceFactor > 1 && !Compare()(data.first, root->left->data.first))
 			{
 				root->left = leftRotate(root->left);
 				return rightRotate(root);
 			}
-			if (blanceFactor < -1 && data.first < root->right->data.first)
+			if (blanceFactor < -1 && Compare()(data.first, root->right->data.first))
 			{
 				root->right = rightRotate(root->right);
 				return leftRotate(root);

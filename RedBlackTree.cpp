@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 13:44:18 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/24 17:16:50 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/26 16:38:41 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ struct Node
 	int             color;
 	Node    		*parent;
 	Node    		*left;
-	Node    	*right;
+	Node    		*right;
 
 	Node(int data, int color, Node * parent)
 	{
@@ -54,8 +54,8 @@ struct Node
 };
 
 /*
-	insertion : 
-		1 -> insert like in normal binary search tree 
+	insertion :
+		1 -> insert like in normal binary search tree
 		2 -> if newnode is not root node we color it with red
 		3 -> if newnode is root node we color it with black
 		4 -> if newnode's parent is red then we have red red conflict and we need to fix it :
@@ -237,18 +237,20 @@ int main(void)
 {
 	Tree root = NULL;
 	int i = 0;
-	root = insert(root, 10, root, i);
-	root = insert(root, 18, root, i);
-	root = insert(root, 7, root, i);
-	root = insert(root, 15, root, i);
-	root = insert(root, 16, root, i);
-	root = insert(root, 30, root, i);
-	root = insert(root, 25, root, i);
-	root = insert(root, 40, root, i);
-	root = insert(root, 60, root, i);
-	root = insert(root, 2, root, i);
-	root = insert(root, 1, root, i);
-	root = insert(root, 70, root, i);
+	// root = insert(root, 10, root, i);
+	// root = insert(root, 18, root, i);
+	// root = insert(root, 7, root, i);
+	// root = insert(root, 15, root, i);
+	// root = insert(root, 16, root, i);
+	// root = insert(root, 30, root, i);
+	// root = insert(root, 25, root, i);
+	// root = insert(root, 40, root, i);
+	// root = insert(root, 60, root, i);
+	// root = insert(root, 2, root, i);
+	// root = insert(root, 1, root, i);
+	// root = insert(root, 70, root, i);
+
+	
 	Inorder(root, 0);
 	return 0;
 }

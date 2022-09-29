@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:51:29 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/26 10:55:49 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/28 10:43:24 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ namespace ft
 			}
 			Iterator operator-= (difference_type n) const
 			{
-				this->_ptr -= n;
+				Iterator temp = *this;
+
+				temp._ptr = temp._ptr - n;
 				return *this;
 			}
 			Iterator& operator--()
@@ -134,8 +136,7 @@ namespace ft
 						typename Iterator::difference_type n,
 						const Iterator& rev_it)
 			{
-				rev_it._ptr + n;
-				return rev_it;
+				return rev_it + n;
 			}
 			template <class Iterator>
 			friend typename Iterator::difference_type operator- (

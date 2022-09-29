@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 14:28:48 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/09 15:50:20 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/28 16:26:18 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ namespace ft
                 return false;
             else if (*first1 < *first2)
                 return true;
+			first1++;
+			first2++;
         }
         return (first2 != last2);
     }
@@ -40,6 +42,8 @@ namespace ft
                 return false;
             else if (comp(*first1, *first2) == true)
                 return true;
+			first1++;
+			first2++;
         }
         return comp(*first2, *last2);
     }
