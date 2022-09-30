@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 19:43:28 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/09/28 17:59:21 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/29 16:48:32 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,32 @@ void vec_test_erase()
         PRINT_LINE("It:", *it);
         CHECK_AND_PRINT_ALL(v);
 
-        // it = v.erase(it);
+        it = v.erase(it);
 
-        // PRINT_LINE("It:", *it);
-        // CHECK_AND_PRINT_ALL(v);
+        PRINT_LINE("It:", *it);
+        CHECK_AND_PRINT_ALL(v);
 
-        // it = v.erase(v.end() - 1);
+        it = v.erase(v.end() - 1);
 
-        // PRINT_LINE("It:", *it);
-        // CHECK_AND_PRINT_ALL(v);
+        PRINT_LINE("It:", *it);
+        CHECK_AND_PRINT_ALL(v);
 
-        // it = v.erase(v.begin());
+        it = v.erase(v.begin());
 
-        // PRINT_LINE("It:", *it);
-        // CHECK_AND_PRINT_ALL(v);
+        PRINT_LINE("It:", *it);
+        CHECK_AND_PRINT_ALL(v);
     }
 
-    // {
-    //     intvector v(1, 5);
+    {
+        intvector v(1, 5);
 
-    //     intvector::iterator it = v.erase(v.begin());
+        intvector::iterator it = v.erase(v.begin());
 
-    //     if (it != v.end()) {
-    //         PRINT_MSG("Wrong iterator");
-    //     }
-    //     CHECK_AND_PRINT_ALL(v);
-    // }
+        if (it != v.end()) {
+            PRINT_MSG("Wrong iterator");
+        }
+        CHECK_AND_PRINT_ALL(v);
+    }
 }
 
 MAIN(vec_test_erase)

@@ -42,6 +42,41 @@ namespace ft
 			Alloc 		allocator;
 			size_type 	_size;
 			size_type 	index;
+
+			void realloc(unsigned int new_cap)
+			{
+				try
+				{
+					T *temp = nullptr;
+					temp = this->allocator.allocate(index);
+					for (size_type i = 0; i < index; i++)
+						temp[i] = this->content[i];
+					if (content != nullptr && _size > 0)
+					{
+						for (size_type i = 0; i < this->index; i++)
+							allocator.destroy(content + i);
+						allocator.deallocate(content, _size);
+					}
+					this->_size = new_cap;
+					this->content = this->allocator.allocate(new_cap);
+					for (size_type i = 0; i < index; i++)
+						allocator.construct(content + i, temp[i]);
+					this->allocator.deallocate(temp, index);
+				}
+				catch(const std::exception& e)
+				{
+					std::cerr << e.what() << '\n';
+				}
+			}
+
+			template <class _Tp>
+			void    swap(_Tp & x, _Tp & y)
+			{
+				_Tp temp;
+				temp = x;
+				x = y;
+				y = temp;
+			}
 		public:
 			typedef typename ft::Iterator<pointer>						iterator;
 			typedef typename ft::Iterator<const_pointer>				const_iterator;
@@ -166,32 +201,7 @@ namespace ft
 
 			/* //////////////////////////[ Capacity  ]/////////////////////////////// */
 
-			void realloc(unsigned int new_cap)
-			{
-				try
-				{
-					T *temp = nullptr;
-					// this->index = this->index > new_cap ? new_cap : this->index;
-					temp = this->allocator.allocate(index);
-					for (size_type i = 0; i < index; i++)
-						temp[i] = this->content[i];
-					if (content != nullptr && _size > 0)
-					{
-						for (size_type i = 0; i < this->index; i++)
-							allocator.destroy(content + i);
-						allocator.deallocate(content, _size);
-					}
-					this->_size = new_cap;
-					this->content = this->allocator.allocate(new_cap);
-					for (size_type i = 0; i < index; i++)
-						allocator.construct(content + i, temp[i]);
-					this->allocator.deallocate(temp, index);
-				}
-				catch(const std::exception& e)
-				{
-					std::cerr << e.what() << '\n';
-				}
-			}
+
 			bool empty() const
 			{
 				if (this->size())
@@ -236,7 +246,10 @@ namespace ft
 			{
 				if (new_cap < this->_size)
 					return;
-				realloc(new_cap);
+				if (new_cap > max_size())
+					throw std::length_error("");
+				else
+					realloc(new_cap);
 			}
 			size_type capacity() const
 			{
@@ -360,126 +373,108 @@ namespace ft
 
 			iterator insert (iterator position, const value_type& val)
 			{
-				int			pos = 0;
+				size_type	pos = 0;
 
 				pos = &(*position) - content;
 				if (position == end())
 					push_back(val);
-				else if (position == begin())
+				else if (pos <= size())
 				{
-					vector temp(*this);
-
-					clear();
-					push_back(val);
-					iterator start = temp.begin();
-					while (start != temp.end())
-					{
-						push_back(*start);
-						start++;
-					}
+					if (size() >= capacity())
+						realloc(size() * 2);
+					allocator.construct(content + index, content[index]);
+					for (size_type i = index; i > pos ;i--)
+						content[i] = content[i - 1];
+					content[pos] = val;
+					index++;
 				}
 				return (iterator(&content[pos]));
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
-				value_type myints[n];
-
-				for (size_type i = 0; i < n; i++)
-					myints[i] = val;
-				insert(position, &myints[0], &myints[n]);
+				if (n > max_size())
+				{
+					throw std::length_error("");
+					return ;
+				}
+				while (n)
+				{
+					position = insert(position, val);
+					n--;
+				}
 			}
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last,
 						typename ft::enable_if<!std::is_integral<InputIterator>::value>::type * = nullptr)
 			{
-				pointer temp;
-				size_type __size;
-				size_type __pos;
-				size_type i;
+				size_type pos;
 
-				__size = (size_type(last - first) + size_type(position - begin()));
-				i = 0;
-				if (!(__size > capacity()))
-					__size = (size_type(last - first) + size_type(end() - begin()));
-				temp = allocator.allocate(__size);
-				__pos = size_type(position - begin());
-				_size = (size_type(last - first) + size_type(end() - begin()));
-				while (i < __pos)
-				{
-					temp[i] = content[i];
-					i++;
-				}
+				pos = &(*position) - content;
 				while (first != last)
 				{
-					temp[i] = *first;
+					insert(iterator(content + pos), *first);
+					pos++;
 					first++;
-					i++;
 				}
-				while (i < __size)
-				{
-					temp[i] = content[__pos];
-					i++;
-					__pos++;
-				}
-				this->allocator.deallocate(content, _size);
-				content = temp;
-				index = __size;
 			}
+
 			iterator erase (iterator position)
 			{
-				iterator start = position;
-				iterator next(position + 1);
+				size_type pos = position - begin();
 
-				if (position < end())
+				if (pos < size())
 				{
-					allocator.destroy(&(*position));
-					while (position < end())
-					{
-						*position = *next;
-						position++;
-						next++;
-					}
-					realloc(size() - 1);
+					for (size_type i = pos; i < size() - 1; i++)
+						content[i] = content[i + 1];
+					index--;
+					allocator.destroy(content + index);
 				}
-				return start;
+				return iterator(content + pos);
 			}
 
 			iterator erase (iterator first, iterator last)
 			{
-				iterator start;
+				size_type pos = first - begin();
 
-				start = first;
+				if (first == last)
+					return first;
 				if (last >= end())
-					realloc(size() - (end() - first));
-				else
 				{
-					while (first < end() && last < end())
+					while (index > pos)
 					{
-						*first = *last;
-						first++;
-						last++;
+						index--;
+						allocator.destroy(content + index);
 					}
-					realloc(size() - (last - first));
+					return end();
 				}
-				return start;
+				if (last < end())
+				{
+					size_type next = last - begin();
+					size_type i;
+
+					for (i = pos; i < size() && next < size(); i++)
+					{
+						content[i] = content[next];
+						next++;
+					}
+					while (index > i)
+					{
+						index--;
+						allocator.destroy(content + index);
+					}
+				}
+				return iterator(content + pos);
 			}
 
 			void swap(vector &x)
 			{
-				vector temp;
-
-				temp.content = x.content;
-				temp.index = x.index;
-				temp._size = x._size;
-				x.content = this->content;
-				x.index = this->index;
-				x._size = this->_size;
-				this->content = temp.content;
-				this->index = temp.index;
-				this->_size = temp._size;
-				temp.content = temp.allocator.allocate(1);
+				swap(content, x.content);
+				swap(_size, x._size);
+				swap(index, x.index);
+				swap(allocator, x.allocator);
 				return;
 			}
+
 			void clear()
 			{
 				if (content && size() != 0)
@@ -489,10 +484,12 @@ namespace ft
 					this->index = 0;
 				}
 			}
+
 			allocator_type get_allocator() const
 			{
 				return allocator;
 			}
+
 			template <class _T, class _Alloc>
 			friend bool operator== (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs);
 			template <class _T, class _Alloc>
