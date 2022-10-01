@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_comp.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 17:27:49 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/05/18 17:34:56 by mleblanc         ###   ########.fr       */
+/*   Updated: 2022/10/01 17:33:22 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,94 +30,94 @@ void map_test_key_comp()
             PRINT_MSG("Not Less");
         }
 
-        std::advance(cit, 5);
-        std::advance(it, 14);
+        // std::advance(cit, 5);
+        // std::advance(it, 14);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+        // if (comp(it->first, cit->first)) {
+        //     PRINT_MSG("Less");
+        // } else {
+        //     PRINT_MSG("Not Less");
+        // }
 
-        std::advance(it, 7);
-        std::advance(cit, 3);
+        // std::advance(it, 7);
+        // std::advance(cit, 3);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+        // if (comp(it->first, cit->first)) {
+        //     PRINT_MSG("Less");
+        // } else {
+        //     PRINT_MSG("Not Less");
+        // }
 
-        std::advance(it, -3);
-        std::advance(cit, 12);
+        // std::advance(it, -3);
+        // std::advance(cit, 12);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+        // if (comp(it->first, cit->first)) {
+        //     PRINT_MSG("Less");
+        // } else {
+        //     PRINT_MSG("Not Less");
+        // }
 
-        std::advance(it, -1);
-        std::advance(cit, 1);
+        // std::advance(it, -1);
+        // std::advance(cit, 1);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+        // if (comp(it->first, cit->first)) {
+        //     PRINT_MSG("Less");
+        // } else {
+        //     PRINT_MSG("Not Less");
+        // }
     }
 
-    {
-        intmap m(intstr_arr, intstr_arr + intstr_size);
+    // {
+    //     intmap m(intstr_arr, intstr_arr + intstr_size);
 
-        intmap::iterator it = m.begin();
+    //     intmap::iterator it = m.begin();
 
-        intmap::const_iterator cit = m.begin();
+    //     intmap::const_iterator cit = m.begin();
 
-        intmap::key_compare comp = m.key_comp();
+    //     intmap::key_compare comp = m.key_comp();
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+    //     if (comp(it->first, cit->first)) {
+    //         PRINT_MSG("Less");
+    //     } else {
+    //         PRINT_MSG("Not Less");
+    //     }
 
-        std::advance(it, 14);
-        std::advance(cit, 5);
+    //     std::advance(it, 14);
+    //     std::advance(cit, 5);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+    //     if (comp(it->first, cit->first)) {
+    //         PRINT_MSG("Less");
+    //     } else {
+    //         PRINT_MSG("Not Less");
+    //     }
 
-        std::advance(it, 7);
-        std::advance(cit, 3);
+    //     std::advance(it, 7);
+    //     std::advance(cit, 3);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+    //     if (comp(it->first, cit->first)) {
+    //         PRINT_MSG("Less");
+    //     } else {
+    //         PRINT_MSG("Not Less");
+    //     }
 
-        std::advance(it, -3);
-        std::advance(cit, 12);
+    //     std::advance(it, -3);
+    //     std::advance(cit, 12);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
+    //     if (comp(it->first, cit->first)) {
+    //         PRINT_MSG("Less");
+    //     } else {
+    //         PRINT_MSG("Not Less");
+    //     }
 
-        std::advance(it, -1);
-        std::advance(cit, 1);
+    //     std::advance(it, -1);
+    //     std::advance(cit, 1);
 
-        if (comp(it->first, cit->first)) {
-            PRINT_MSG("Less");
-        } else {
-            PRINT_MSG("Not Less");
-        }
-    }
+    //     if (comp(it->first, cit->first)) {
+    //         PRINT_MSG("Less");
+    //     } else {
+    //         PRINT_MSG("Not Less");
+    //     }
+    // }
 }
 
 MAIN(map_test_key_comp)

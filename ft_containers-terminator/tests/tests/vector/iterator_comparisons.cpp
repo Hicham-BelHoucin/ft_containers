@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   iterator_comparisons.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 21:08:45 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/05/14 19:50:38 by mleblanc         ###   ########.fr       */
+/*   Updated: 2022/09/30 13:17:47 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

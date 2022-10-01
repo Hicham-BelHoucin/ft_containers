@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/25 10:57:26 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/01 16:10:54 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ namespace ft
 		typedef ft::pair<const key_type, value_type>														dataType;
 		typedef typename Alloc::template rebind<Node<ft::pair<const key_type, value_type> > >::other 		newAlloc;
 		typedef	typename				newAlloc::pointer													Tree;
-		typedef typename Alloc::template rebind<const Node<ft::pair<const key_type, value_type> > >::other 	constnewAlloc;
-		typedef	typename				constnewAlloc::pointer												constTree;
+		typedef	typename				newAlloc::const_pointer													constTree;
+		// typedef typename Alloc::template rebind<const Node<ft::pair<const key_type, value_type> > >::other 	constnewAlloc;
+		// typedef	typename				constnewAlloc::pointer												constTree;
 		typedef	size_t																						size_type;
 		newAlloc																							alloc;
 		Tree																								root;
@@ -95,33 +96,49 @@ namespace ft
 
 		Tree  min(Tree root)
 		{
-			if (!root->left)
+			if (!root)
 				return root;
-			return min(root->left);
+			else if (root->right && Compare()(root->right->data.first, root->data.first))
+				return min(root->right);
+			else if (root->left && Compare()(root->left->data.first, root->data.first))
+				return min(root->left);
+			return root;
 		}
 
 		Tree  min(Tree root) const
 		{
-			if (!root->left)
+			if (!root)
 				return root;
-			return min(root->left);
+			else if (root->right && Compare()(root->right->data.first, root->data.first))
+				return min(root->right);
+			else if (root->left && Compare()(root->left->data.first, root->data.first))
+				return min(root->left);
+			return root;
 		}
 
 		Tree  max(Tree root)
 		{
-			if (!root->right)
+			if (!root)
 				return root;
-			return max(root->right);
+			else if (root->right && !Compare()(root->right->data.first, root->data.first))
+				return max(root->right);
+			else if (root->left && !Compare()(root->left->data.first, root->data.first))
+				return max(root->left);
+			return root;
 		}
 
 		constTree  max(constTree root)
 		{
-			if (!root->right)
+			if (!root)
 				return root;
-			return max(root->right);
+			else if (root->right && !Compare()(root->right->data.first, root->data.first))
+				return max(root->right);
+			else if (root->left && !Compare()(root->left->data.first, root->data.first))
+				return max(root->left);
+			return root;
 		}
 
-		key_type	lowerBound(Tree root, key_type key)
+		key_type	lowerBound(Tree root, key_type key) const
 		{
 			Tree             		_min;
 			Tree             		next;
@@ -142,12 +159,25 @@ namespace ft
 			return next_key;
 		}
 
-		key_type	upperBound(Tree root, key_type key)
+		key_type	upperBound(Tree root, key_type key) const
 		{
 			if (find(root, key))
 				return findSuccessor(root, key)->data.first;
 			return lowerBound(root, key);
 		}
+
+		// Tree	find(Tree root, key_type key)
+		// {
+		// 	if (root == NULL)
+		// 		return NULL;
+		// 	if (!Compare()(root->data.first, key) && !Compare()(key, root->data.first))
+		// 		return root;
+		// 	if (Compare()(key, root->data.first))
+		// 		root = find(root->left, key);
+		// 	else if (!Compare()(key, root->data.first))
+		// 		root = find(root->right, key);
+		// 	return root;
+		// }
 
 		Tree	find(Tree root, key_type key) const
 		{
@@ -175,16 +205,6 @@ namespace ft
 			return root;
 		}
 
-		void    clear(Tree root)
-		{
-			if (!root)
-				return ;
-			clear(root->left);
-			clear(root->right);
-			delete root;
-			return;
-		}
-
 		constTree  findPredecessor(constTree  root, key_type key)
 		{
 			constTree  Predecessor;
@@ -200,7 +220,8 @@ namespace ft
 			node = root;
 			while (node != current)
 			{
-				if (*current > *node)
+				// if (*current > *node)
+				if (!Compare()(current->data.first, node->data.first))
 				{
 					Predecessor = node;
 					node = node->right;
@@ -210,6 +231,7 @@ namespace ft
 			}
 			return Predecessor;
 		}
+
 		Tree  findPredecessor(Tree  root, key_type key)
 		{
 			Tree  Predecessor;
@@ -225,7 +247,8 @@ namespace ft
 			node = root;
 			while (node != current)
 			{
-				if (*current > *node)
+				// if (*current > *node)
+				if (!Compare()(current->data.first, node->data.first))
 				{
 					Predecessor = node;
 					node = node->right;
@@ -236,7 +259,7 @@ namespace ft
 			return Predecessor;
 		}
 
-		Tree  findSuccessor(Tree  root, key_type key)
+		Tree  findSuccessor(Tree  root, key_type key) const
 		{
 			Tree  current;
 			Tree  Successor;
@@ -251,7 +274,7 @@ namespace ft
 			node = root;
 			while (node != current)
 			{
-				if (*current < *node)
+				if (Compare()(current->data.first, node->data.first))
 				{
 					Successor = node;
 					node = node->left;
@@ -261,7 +284,8 @@ namespace ft
 			}
 			return Successor;
 		}
-		constTree  findSuccessor(constTree  root, key_type key)
+
+		constTree  findSuccessor(constTree  root, key_type key) const
 		{
 			constTree  current;
 			constTree  Successor;
@@ -276,7 +300,7 @@ namespace ft
 			node = root;
 			while (node != current)
 			{
-				if (*current < *node)
+				if (Compare()(current->data.first, node->data.first))
 				{
 					Successor = node;
 					node = node->left;
@@ -287,42 +311,43 @@ namespace ft
 			return Successor;
 		}
 
-		Tree	Delete(Tree  root, key_type key)
+		void	Delete(Tree  &root, key_type key)
 		{
 			Tree temp;
+
+			temp = NULL;
 			if (!root)
-				return NULL;
+				return ;
 			if (Compare()(key, root->data.first))
-				root->left = Delete(root->left, key);
+				Delete(root->left, key);
 			else if (!Compare()(key, root->data.first))
-				root->right = Delete(root->right, key);
+				Delete(root->right, key);
 			if (!Compare()(root->data.first, key) && !Compare()(key, root->data.first))
 			{
 				if (!root->left && !root->right)
 				{
-					delete root;
+					destroyAndDeallocate(root);
 					root = NULL;
 				}
 				else if (root->right && !root->left)
 				{
 					temp = root;
 					root = root->right;
-					delete temp;
+					destroyAndDeallocate(temp);
 				}
 				else if (root->left && !root->right)
 				{
 					temp = root;
 					root = root->left;
-					delete temp;
+					destroyAndDeallocate(temp);
 				}
 				else
 				{
 					temp = min(root->right);
 					root->data = temp->data;
-					root->right = Delete(root->right, temp->data.first);
+					Delete(root->right, temp->data.first);
 				}
 			}
-			return root;
 		}
 
 		Tree	DeleteRange(Tree  root, key_type min, key_type max)
@@ -330,12 +355,15 @@ namespace ft
 			Tree  temp;
 			key_type next;
 			if (min == max)
-				return Delete(root, max);
+			{
+				Delete(root, max);
+				return root;
+			}
 			temp = findSuccessor(root, min);
 			if (!temp)
 				return root;
 			next = temp->data.first;
-			root = Delete(root, min);
+			Delete(root, min);
 			root = DeleteRange(root, next, max);
 			return root;
 		}
@@ -357,6 +385,29 @@ namespace ft
 			Inorder(root->right);
 		}
 
+		void	destroyAndDeallocate(Tree root)
+		{
+			if (root->end)
+			{
+				destroyAndDeallocate(root->end);
+				root->end = NULL;
+			}
+			alloc.destroy(root);
+			alloc.deallocate(root, 1);
+		}
+
+		void    clear(Tree &root)
+		{
+			if (!root)
+				return ;
+			clear(root->left);
+			clear(root->right);
+			destroyAndDeallocate(root);
+			if (root->end)
+				destroyAndDeallocate(root->end);
+			return;
+		}
+
 		Tree cloneBinaryTree(Tree root)
 		{
 			// base case
@@ -376,38 +427,39 @@ namespace ft
 			return root_copy;
 		}
 
-		Tree	insert(Tree root, dataType data)
+		void	insert(Tree &root, dataType data)
 		{
 			int		blanceFactor;
 
 			if (!root)
-				return createNewNode(data);
+			{
+				root = createNewNode(data);
+				return ;
+			}
 			if (!Compare()(root->data.first, data.first) && !Compare()(data.first, root->data.first))
-				return root;
+				return ;
 			else if (Compare()(root->data.first, data.first))
-				root->right = insert(root->right, data);
+				insert(root->right, data);
 			else if (!Compare()(root->data.first, data.first))
-				root->left = insert(root->left, data);
-			else
-				return root;
+				insert(root->left, data);
 			root->height = 1 + std::max(height(root->left), height(root->right));
 			blanceFactor = getBlanceFactor(root);
 			if (blanceFactor > 1 && Compare()(data.first, root->left->data.first))
-				return rightRotate(root);
-			if (blanceFactor < -1 && !Compare()(data.first, root->right->data.first))
-				return leftRotate(root);
-			if (blanceFactor > 1 && !Compare()(data.first, root->left->data.first))
+				root = rightRotate(root);
+			else if (blanceFactor < -1 && !Compare()(data.first, root->right->data.first))
+				root = leftRotate(root);
+			else if (blanceFactor > 1 && !Compare()(data.first, root->left->data.first))
 			{
 				root->left = leftRotate(root->left);
-				return rightRotate(root);
+				root = rightRotate(root);
 			}
-			if (blanceFactor < -1 && Compare()(data.first, root->right->data.first))
+			else if (blanceFactor < -1 && Compare()(data.first, root->right->data.first))
 			{
 				root->right = rightRotate(root->right);
-				return leftRotate(root);
+				root = leftRotate(root);
 			}
-			root->end = createNewNode(dataType());
-			return root;
+			if (!root->end)
+				root->end = createNewNode(dataType());
 		}
 	};
 }

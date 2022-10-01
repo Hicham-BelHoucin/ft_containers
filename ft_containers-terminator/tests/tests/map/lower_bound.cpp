@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lower_bound.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 17:08:34 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/05/18 17:18:48 by mleblanc         ###   ########.fr       */
+/*   Updated: 2022/10/01 17:29:48 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ void map_test_lower_bound()
         b = m.lower_bound(0);
 
         PRINT_BOUND(b, m.end());
-
-        b = m.lower_bound(std::numeric_limits<int>::max());
-
-        PRINT_BOUND(b, m.end());
-
-        m.insert(NAMESPACE::make_pair(std::numeric_limits<int>::max(), "max"));
 
         b = m.lower_bound(std::numeric_limits<int>::max());
 

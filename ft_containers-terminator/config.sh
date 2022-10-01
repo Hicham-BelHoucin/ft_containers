@@ -1,3 +1,3 @@
 #!/bin/bash
 
-FT_CONTAINERS="../containers/vector"
+FT_CONTAINERS="../containers/map"

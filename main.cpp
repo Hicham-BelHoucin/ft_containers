@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:53:34 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/25 10:14:49 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/30 13:09:29 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,27 @@ void	Inorder(Tree root, int space)
 	Inorder(root->left, space + COUNT);
 }
 
+#include <vector>
+
 int main(void)
 {
-    ft::BinarySearchTree<int, int> BST;
+    // ft::BinarySearchTree<int, int> BST;
 
-	int i = 3;
-	BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
-	BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
-	BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
-	for (int i = 0; i < 8; i++)
-		BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
+	// int i = 3;
+	// BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
+	// BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
+	// BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
+	// for (int i = 0; i < 8; i++)
+	// 	BST.root = BST.insert(BST.root, ft::pair<int,int>(i,i));
 
-	Inorder(BST.root, 0);
+	// Inorder(BST.root, 0);
+
+	std::vector<int>		v(100, 2);
+
+	std::vector<int>::iterator it = v.begin();
+	std::vector<int>::const_iterator it1 = v.begin();
+
+	if (it == it1)
+		std::cout << "hello" << std::endl;
+
 }

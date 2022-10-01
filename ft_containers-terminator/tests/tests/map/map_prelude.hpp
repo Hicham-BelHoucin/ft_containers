@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_prelude.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 20:49:46 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/05/24 13:27:12 by mleblanc         ###   ########.fr       */
+/*   Updated: 2022/10/01 14:24:15 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void print_map(It first, It last)
 
 #define PRINT_MAP(map)                                                                             \
     {                                                                                              \
-        std::cout << "\nMap content:\n";                                                           \
+        std::cout << "\nMap content:" << std::endl;                                                           \
         print_map(map.begin(), map.end());                                                         \
         std::cout << std::endl;                                                                    \
     }

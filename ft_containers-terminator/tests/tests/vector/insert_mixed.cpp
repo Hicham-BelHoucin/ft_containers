@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 19:51:54 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/09/30 10:55:27 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/09/30 15:19:28 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,30 @@
 void vec_test_insert_mixed()
 {
     SETUP_ARRAYS();
+	
+    {
+        strvector v;
+
+        v.insert(v.end(), s_string, s_string + s_size);
+
+        CHECK_AND_PRINT_ALL(v);
+
+        v.insert(v.end() - 10, b_string, b_string + b_size);
+
+        CHECK_AND_PRINT_ALL(v);
+
+        v.insert(v.begin(), "Hello");
+
+        CHECK_AND_PRINT_ALL(v);
+
+        v.insert(v.begin() + 1, "World");
+
+        CHECK_AND_PRINT_ALL(v);
+
+        v.insert(v.begin() + 2, 9, "!");
+
+        CHECK_AND_PRINT_ALL(v);
+    }
 
     {
         intvector v;
@@ -51,29 +75,6 @@ void vec_test_insert_mixed()
         CHECK_AND_PRINT_ALL(v);
     }
 
-    {
-        strvector v;
-
-        v.insert(v.end(), s_string, s_string + s_size);
-
-        CHECK_AND_PRINT_ALL(v);
-
-        v.insert(v.end() - 10, b_string, b_string + b_size);
-
-        CHECK_AND_PRINT_ALL(v);
-
-        v.insert(v.begin(), "Hello");
-
-        CHECK_AND_PRINT_ALL(v);
-
-        v.insert(v.begin() + 1, "World");
-
-        CHECK_AND_PRINT_ALL(v);
-
-        v.insert(v.begin() + 2, 9, "!");
-
-        CHECK_AND_PRINT_ALL(v);
-    }
 }
 
 MAIN(vec_test_insert_mixed)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   iterator.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:38:20 by mleblanc          #+#    #+#             */
-/*   Updated: 2022/05/17 15:48:27 by mleblanc         ###   ########.fr       */
+/*   Updated: 2022/10/01 18:51:16 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void map_test_iterator()
         strmap::iterator it2 = m.begin();
         strmap::const_iterator cit = m.begin();
         strmap::const_iterator cit2 = m.begin();
+
 
         if (it == it2) {
             PRINT_MSG("Equal");

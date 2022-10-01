@@ -108,15 +108,7 @@ namespace ft
 					const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr) : content(nullptr) , allocator(alloc), _size(0), index(0)
 			{
-				try
-				{
-					for (; first != last; first++)
-						push_back(*first);
-				}
-				catch(const std::exception& e)
-				{
-					std::cerr << e.what() << '\n';
-				}
+				assign(first, last);
 			}
 			vector(const vector &x)
 			{
@@ -175,6 +167,7 @@ namespace ft
 			{
 				return const_iterator(&this->content[0]);
 			};
+
 			const_iterator end() const
 			{
 				return const_iterator(&this->content[index]);
@@ -194,6 +187,7 @@ namespace ft
 			{
 				return reverse_iterator(begin());
 			}
+
 			const_reverse_iterator rend() const
 			{
 				return const_reverse_iterator(begin());
@@ -345,13 +339,12 @@ namespace ft
 
 			void push_back(const value_type &value)
 			{
-				if (index == 0)
+				if (index == 0 && !content && !_size)
 				{
 					content = allocator.allocate(1);
 					allocator.construct(content + index, value);
 					index++;
-					if (!_size)
-						_size = 1;
+					_size = 1;
 				}
 				else
 				{

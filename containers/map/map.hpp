@@ -6,23 +6,26 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 09:45:02 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/21 12:48:31 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/01 18:54:35 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <iostream>
-#include "../../utils/iterator_traits.hpp"
-#include "../../utils/enable_if.hpp"
-#include "../../utils/is_integral.hpp"
-#include "../../utils/pair.hpp"
-#include "../../utils/BinarySearchTree.hpp"
-#include "../../utils/Node.hpp"
-#include "../../utils/make_pair.hpp"
-#include "../../utils/pair.hpp"
-#include "../../utils/map_iter.hpp"
+# include <iostream>
+# include "../../utils/iterator_traits.hpp"
+# include "../../utils/enable_if.hpp"
+# include "../../utils/is_integral.hpp"
+# include "../../utils/pair.hpp"
+# include "../../utils/BinarySearchTree.hpp"
+# include "../../utils/Node.hpp"
+# include "../../utils/equal.hpp"
+# include "../../utils/make_pair.hpp"
+# include "../../utils/pair.hpp"
+# include "../../utils/map_iter.hpp"
+# include "../../utils/rev_map_iter.hpp"
+# include "../../utils/lexicographical_compare.hpp"
 
 namespace ft
 {
@@ -32,6 +35,15 @@ namespace ft
            class Alloc = std::allocator<ft::pair<const Key, T> >	>    // map::allocator_type
     class map
     {
+		private:
+			template <class _Tp>
+			void    swap(_Tp & x, _Tp & y)
+			{
+				_Tp temp;
+				temp = x;
+				x = y;
+				y = temp;
+			}
         public:
 			class ValueCopmare
 			{
@@ -60,9 +72,9 @@ namespace ft
 			typedef typename    allocator_type::pointer												pointer;
 			typedef typename    allocator_type::const_pointer										const_pointer;
 			typedef typename	ft::mapIterator<key_type, mapped_type, Compare, Alloc>				iterator;
-			typedef typename	ft::constMapIterator<key_type, mapped_type, Compare, Alloc>			const_iterator;
+			typedef typename	ft::mapIterator<key_type, mapped_type, Compare, Alloc>	const_iterator;
 			typedef typename	ft::reverse_map_iter<iterator>										reverse_iterator;
-			typedef typename	ft::const_reverse_map_iter<const_iterator>							const_reverse_iterator;
+			typedef typename	ft::reverse_map_iter<const_iterator>							const_reverse_iterator;
 			typedef typename	iterator_traits<pointer>::difference_type							difference_type;
 			typedef typename	allocator_type::size_type											size_type;
 
@@ -84,14 +96,15 @@ namespace ft
 				const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr)
 			:
+				BST(),
 				allocator(alloc),
 				_size(0),
-				BST(),
 				comp(comp)
 			{
 				while (first != last)
 				{
-					insert(*first);
+					BST.insert(BST.root, *first);
+					_size++;
 					first++;
 				}
 			}
@@ -109,10 +122,12 @@ namespace ft
 				return *this;
 			}
 			/* //////////////////////////[ Destructor ]/////////////////////////////// */
-			
+
 			~map()
 			{
-				clear();
+				// BST.clear(BST.root);
+				if (BST.root)
+					clear();
 			}
 
 			/* //////////////////////////[ Iterators ]/////////////////////////////// */
@@ -136,6 +151,7 @@ namespace ft
 				temp = BST.min(BST.root);
 				return const_iterator(BST.root, temp);
 			}
+
 			iterator end()
 			{
 				if (!BST.root)
@@ -154,6 +170,7 @@ namespace ft
 			{
 				return reverse_iterator(end());
 			}
+
 			const_reverse_iterator rbegin() const
 			{
 				return const_reverse_iterator(end());
@@ -163,6 +180,7 @@ namespace ft
 			{
 				return reverse_iterator(begin());
 			}
+
 			const_reverse_iterator rend() const
 			{
 				return const_reverse_iterator(begin());
@@ -172,11 +190,11 @@ namespace ft
 
 			bool empty() const
 			{
-				return _size == 0 ? true : false;	
+				return _size == 0 ? true : false;
 			}
 			size_type size() const
 			{
-				return _size;	
+				return _size;
 			}
 			size_type max_size() const
 			{
@@ -191,17 +209,19 @@ namespace ft
 					return BST.find(BST.root, k)->data.second;
 				else
 				{
-					BST.root = BST.insert(BST.root, ft::pair<key_type, mapped_type>(k, mapped_type()));
+					BST.insert(BST.root, ft::pair<key_type, mapped_type>(k, mapped_type()));
 					_size++;
 				}
 				return BST.find(BST.root, k)->data.second;
 			}
+
 			mapped_type& at (const key_type& k)
 			{
 				if (BST.find(BST.root, k))
 					return BST.find(BST.root, k)->data.second;
 				throw std::out_of_range("out of range !");
 			}
+
 			const mapped_type& at (const key_type& k) const
 			{
 				if (BST.find(BST.root, k))
@@ -210,25 +230,27 @@ namespace ft
 			}
 
 			/* //////////////////////////[  Modifiers ]/////////////////////////////// */
-			
+
 			ft::pair<iterator,bool> insert (const value_type& val)
 			{
 				iterator 	it;
 				bool		inserted;
-				
+
+				(void)val;
 				inserted = true;
-				BST.root = BST.insert(BST.root, val);
-				it = find(val.first);
-				if (it->second != val.second)
+				if (BST.find(BST.root, val.first))
 					inserted = false;
-				_size++;
+				BST.insert(BST.root, val);
+				it = find(val.first);
+				if (inserted)
+					_size++;
 				return ft::pair<iterator, bool>(it, inserted);
 			}
 
 			iterator insert (iterator position, const value_type& val)
 			{
 				treePointer temp;
-			
+
 				(void)position;
 				if (BST.find(BST.root, val.first))
 				{
@@ -241,7 +263,7 @@ namespace ft
 			}
 
 			template <class InputIterator>
-  			void insert (InputIterator first, InputIterator last, 
+  			void insert (InputIterator first, InputIterator last,
 			  		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr)
 			{
 				while (first != last)
@@ -253,15 +275,22 @@ namespace ft
 
 			void erase (iterator position)
 			{
-				BST.root = BST.Delete(BST.root, position->first);
-				_size--;
+				if (BST.root)
+				{
+					BST.Delete(BST.root, position->first);
+					_size--;
+				}
 			}
 
 			size_type erase (const key_type& k)
 			{
-				BST.root = BST.Delete(BST.root, k);
-				_size--;
-				return 1;
+				if (BST.root && BST.find(BST.root, k))
+				{
+					BST.Delete(BST.root, k);
+					_size--;
+					return 1;
+				}
+				return 0;
 			}
 
 			void erase (iterator first, iterator last)
@@ -270,36 +299,38 @@ namespace ft
 				key_type min;
 				key_type max;
 
-				i = 0;
-				min = first->first;
-				if (last == end())
-					max = BST.max(BST.root)->data.first;
-				else
+				i = std::distance(first, last);
+				if (BST.root)
 				{
-					last--;
-					max = last->first;
+					min = first->first;
+					if (last == end())
+						max = BST.max(BST.root)->data.first;
+					else
+					{
+						last--;
+						max = last->first;
+					}
+					BST.root = BST.DeleteRange(BST.root, min, max);
+					_size -= i;
 				}
-				while (first != last)
-				{
-					first ++;
-					i++;
-				}
-				_size -= i;
-				BST.root = BST.DeleteRange(BST.root, min, max);
 			}
 
 			void clear()
 			{
-				BST.clear(BST.root);
+				if (BST.root)
+				{
+					BST.clear(BST.root);
+					BST.root = NULL;
+					_size = 0;
+				}
 			}
 
 			void swap (map& x)
 			{
-				Tree *__swap;
-
-				__swap->root = x.BST.root;
-				x.BST.root = this->BST.root;
-				this->BST.root = __swap->root;
+				swap(x.BST.root, BST.root);
+				swap(_size, x._size);
+				swap(comp, x.comp);
+				swap(allocator, x.allocator);
 				return ;
 			}
 
@@ -310,11 +341,11 @@ namespace ft
 				treePointer temp;
 
 				temp = BST.find(BST.root, k);
-				if (temp != NULL)
+				if (temp)
 					return iterator(BST.root, temp);
 				return end();
 			}
-			
+
 			const_iterator find (const key_type& k) const
 			{
 				treePointer temp;
@@ -323,39 +354,52 @@ namespace ft
 				if (temp)
 					return const_iterator(BST.root, temp);
 				return end();
-				
+
 			}
+
 			size_type count (const key_type& k) const
 			{
 				if (BST.find(BST.root, k))
 					return (1);
 				return (0);
 			}
+
 			iterator lower_bound (const key_type& k)
 			{
 				key_type  toFind;
 
+				if (!BST.root || std::numeric_limits<key_type>::max() <= k)
+					return end();
 				toFind = BST.lowerBound(BST.root, k);
 				return find(toFind);
 			}
+
 			const_iterator lower_bound (const key_type& k) const
 			{
 				key_type  toFind;
 
+				if (!BST.root || std::numeric_limits<key_type>::max() <= k)
+					return end();
 				toFind = BST.lowerBound(BST.root, k);
 				return find(toFind);
 			}
+
 			iterator upper_bound (const key_type& k)
 			{
 				key_type  toFind;
 
+				if (!BST.root || std::numeric_limits<key_type>::max() <= k)
+					return end();
 				toFind = BST.upperBound(BST.root, k);
 				return find(toFind);
 			}
+
 			const_iterator upper_bound (const key_type& k) const
 			{
 				key_type  toFind;
 
+				if (!BST.root || std::numeric_limits<key_type>::max() <= k)
+					return end();
 				toFind = BST.upperBound(BST.root, k);
 				return find(toFind);
 			}
@@ -364,15 +408,19 @@ namespace ft
 				const_iterator _element;
 				const_iterator _next_element;
 
+				if (find(k) == end())
+					return ft::pair<const_iterator, const_iterator>(end(), end());
 				_element = lower_bound(k);
 				_next_element = upper_bound(k);
-				return ft::pair<iterator, iterator>(_element, _next_element);
+				return ft::pair<const_iterator, const_iterator>(_element, _next_element);
 			}
 			ft::pair<iterator,iterator>             equal_range (const key_type& k)
 			{
 				iterator _element;
 				iterator _next_element;
 
+				// if (find(k) == end())
+				// 	return ft::pair<iterator, iterator>(end(), end());
 				_element = lower_bound(k);
 				_next_element = upper_bound(k);
 				return ft::pair<iterator, iterator>(_element, _next_element);
@@ -398,12 +446,53 @@ namespace ft
 				return Alloc(allocator);
 			}
 
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool operator== ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
+			{
+				if (lhs.size() != rhs.size())
+					return false;
+				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+			}
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool operator!= ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
+			{
+				return !(lhs == rhs);
+			}
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool operator<= ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
+			{
+				return !(rhs < lhs);
+			}
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool operator > ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
+			{
+				return rhs < lhs;
+			}
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool operator< ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
+			{
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+			}
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool operator>= ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
+			{
+				return 	!(lhs < rhs);
+			}
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend void swap (map<_Key,_T,_Compare,_Alloc>& x, map<_Key,_T,_Compare,_Alloc>& y);
+
 		private:
 			Tree 												BST;
 			Alloc												allocator;
 			size_type											_size;
 			key_compare											comp;
 	};
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	void swap (map<_Key,_T,_Compare,_Alloc>& x, map<_Key,_T,_Compare,_Alloc>& y)
+	{
+		x.swap(y);
+	}
 }
 
 #endif // MAP_HPP
