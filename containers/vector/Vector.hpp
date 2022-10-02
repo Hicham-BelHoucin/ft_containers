@@ -77,6 +77,7 @@ namespace ft
 				x = y;
 				y = temp;
 			}
+			
 		public:
 			typedef typename ft::Iterator<pointer>						iterator;
 			typedef typename ft::Iterator<const_pointer>				const_iterator;
@@ -349,7 +350,7 @@ namespace ft
 				else
 				{
 					if (index >= _size)
-						realloc(this->_size * 2);
+						realloc(this->index * 2);
 					allocator.construct(content + index, value);
 					index++;
 				}

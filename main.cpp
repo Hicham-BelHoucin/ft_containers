@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 11:53:34 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/30 13:09:29 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 11:32:11 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Inorder(Tree root, int space)
 
 #include <vector>
 
-int main(void)
+int main(int ac, char **av, char **env)
 {
     // ft::BinarySearchTree<int, int> BST;
 

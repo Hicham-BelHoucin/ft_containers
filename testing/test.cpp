@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/26 12:39:43 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 11:20:42 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ int main(void)
     std::string     Container[3];
     int             i;
 
-    i = 0;
+    i = 2;
     path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
     // path[0] = "find ../Tests/map_tests/swap.cpp > OutPut";
     path[1] = "find ../Tests/vector_tests/*/*.cpp > OutPut";
@@ -220,7 +220,7 @@ int main(void)
     Container[0] = "Map : ";
     Container[1] = "Vactor : ";
     Container[2] = "Stack : ";
-    while (i < 2)
+    while (i < 3)
     {
         SetCmd(path[i]);
         SetName();

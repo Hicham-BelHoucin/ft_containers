@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 18:10:40 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/01 18:56:24 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 11:19:11 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,8 @@ namespace ft
 	{
 		public:
 			typedef iterator											iterator_type;
-			typedef typename iterator::Tree 							Tree;
-			typedef	typename iterator::value_type						value_type;
 			typedef	typename iterator::reference						reference;
 			typedef	typename iterator::pointer							pointer;
-			typedef	typename iterator::bstType							bstType;
 		reverse_map_iter()
 		{
 		}
@@ -52,12 +49,12 @@ namespace ft
 			--(*this);
 			return temp;
 		}
-		const reference operator*() const {
+		reference operator*() const {
 			iterator_type temp = it;
 			temp--;
 			return *temp;
 		}
-		const pointer operator->() {
+		pointer operator->() {
 			return &(operator*());
 		}
 		template <class revIterator>

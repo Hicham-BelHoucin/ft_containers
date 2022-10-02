@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 13:55:48 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/11 14:12:02 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 11:56:08 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int main(void)
 {
     {
         std::deque<int> mydeque (3,100);
-        NAME_SPACE::vector<int> myvector (2,200);       
+        NAME_SPACE::vector<int> myvector (2,200);
 
-        NAME_SPACE::stack<int> first;                   
-        NAME_SPACE::stack<int, std::deque<int> > second (mydeque);     
+        NAME_SPACE::stack<int> first;
+        NAME_SPACE::stack<int, std::deque<int> > second (mydeque);
 
-        NAME_SPACE::stack<int, NAME_SPACE::vector<int> > third; 
+        NAME_SPACE::stack<int, NAME_SPACE::vector<int> > third;
         NAME_SPACE::stack<int, NAME_SPACE::vector<int> > fourth (myvector);
 
         std::cout << "size of first: " << first.size() << '\n';
@@ -30,10 +30,13 @@ int main(void)
         std::cout << "size of fourth: " << fourth.size() << '\n';
     }
     {
-        NAME_SPACE::stack<int> mystack;
+        NAME_SPACE::stack<int, NAME_SPACE::vector<int> > mystack;
         int sum (0);
 
-        for (int i = 1; i <= 10;i++) mystack.push(i);
+        for (int i = 1; i < 89;i++)
+		{
+			mystack.push(i);
+		}
 
         while (!mystack.empty())
         {
