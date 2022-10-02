@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 11:32:49 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/27 11:29:02 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 12:31:32 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,18 @@ int main(void)
 	// 	myints[i] = std::rand() % 10000 + 1;
 	// srand(time(0));
 
-	Tree.root = Tree.insert(Tree.root, 10);
-	Tree.root = Tree.insert(Tree.root, 9);
-	Tree.root = Tree.insert(Tree.root, 85);
-	Tree.root = Tree.insert(Tree.root, 7);
-	Tree.root = Tree.insert(Tree.root, -66);
-	Tree.root = Tree.insert(Tree.root, 51);
-	Tree.root = Tree.insert(Tree.root, 40);
-	Tree.root = Tree.insert(Tree.root, -3);
-	for (int i = 0; i < 50 ; i++)
-		Tree.root = Tree.insert(Tree.root, random(15, 35));
-	Tree.root = Tree.insert(Tree.root, 11);
-	Tree.root = Tree.insert(Tree.root, 12);
+	// Tree.root = Tree.insert(Tree.root, 10);
+	// Tree.root = Tree.insert(Tree.root, 9);
+	// Tree.root = Tree.insert(Tree.root, 85);
+	// Tree.root = Tree.insert(Tree.root, 7);
+	// Tree.root = Tree.insert(Tree.root, -66);
+	// Tree.root = Tree.insert(Tree.root, 51);
+	// Tree.root = Tree.insert(Tree.root, 40);
+	// Tree.root = Tree.insert(Tree.root, -3);
+	for (int i = 0; i < 174 ; i++)
+		Tree.root = Tree.insert(Tree.root, random(15, 35000));
+	// Tree.root = Tree.insert(Tree.root, 11);
+	// Tree.root = Tree.insert(Tree.root, 12);
 
 
 	Tree.Inorder(Tree.root, 0);

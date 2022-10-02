@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 13:44:18 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/26 16:38:41 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 12:27:50 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ typedef	Node*	Tree;
 
 Tree rightRotate(Tree y)
 {
+	if (!y->left)
+		return y;
 	Tree x = y->left;
 	Tree T2 = x->right;
 
@@ -94,6 +96,8 @@ Tree rightRotate(Tree y)
 
 Tree leftRotate(Tree x)
 {
+	if (!x->right)
+		return x;
 	Tree y = x->right;
 	Tree T2 = y->left;
 
@@ -124,15 +128,15 @@ int		getRotationType(Tree root, int data)
 	Tree	newnode;
 
 	if (root->left && root->left->data == data)
-		newnode = root->left;
-	else
-		newnode = root->right;
-	if (!newnode)
-		return 0;
+			newnode = root->left;
+		else if (root->right && root->right->data == data)
+			newnode = root->right;
+		if (!newnode || !root)
+			return 0;
 	if (!root->isLeftChild() && !newnode->isLeftChild())
-		return LL;
+			return RR;
 	else if (root->isLeftChild() && newnode->isLeftChild())
-		return RR;
+		return LL;
 	else if (root->isLeftChild() && !newnode->isLeftChild())
 		return LR;
 	else if (!root->isLeftChild() && newnode->isLeftChild())
@@ -155,12 +159,12 @@ Tree	fixTree(Tree root, int & rotations, int data)
 		if (neededrotation == LR)
 		{
 			root = leftRotate(root);
-			rotations = RR;
+			rotations = LL;
 		}
 		else if (neededrotation == RL)
 		{
 			root = rightRotate(root);
-			rotations = LL;
+			rotations = RR;
 		}
 		else
 		{
@@ -194,22 +198,28 @@ Tree	insert(Tree root, int data, Tree parent, int & rotations)
 	{
 		root->right = insert(root->right, data, root, rotations);
 		if (root->color == RED && root->right->color == RED)
+		{
 			redconfilct = true;
+			data = root->right->data;
+		}
 	}
 	else if (root->data > data)
 	{
 		root->left = insert(root->left, data, root, rotations);
 		if (root->color == RED && root->left->color == RED)
+		{
 			redconfilct = true;
+			data = root->left->data;
+		}
 	}
-	if (rotations == LL)
+	if (rotations == RR)
 	{
 		root = leftRotate(root);
 		root->changeColor();
 		root->left->changeColor();
 		rotations = 0;
 	}
-	else if (rotations == RR)
+	else if (rotations == LL)
 	{
 		root = rightRotate(root);
 		root->changeColor();
@@ -233,10 +243,45 @@ void	Inorder(Tree root, int space)
 	Inorder(root->left, space + COUNT);
 }
 
+bool isHeightBalanced(Tree root, int &rootMax)
+{
+    // Base case
+    if (root == nullptr) {
+        return true;
+    }
+
+    // to hold the maximum height of the left and right subtree
+    int leftMax = 0, rightMax = 0;
+
+    // proceed only if both left and right subtrees are balanced
+    if (isHeightBalanced(root->left, leftMax) &&
+        isHeightBalanced(root->right, rightMax))
+    {
+        // calculate the minimum and maximum height of the left and right subtree
+        int rootMin = std::min(leftMax, rightMax) + 1;
+        rootMax = std::max(leftMax, rightMax) + 1;
+
+        // return true if the root node is height-balanced
+        return (rootMax <= 2*rootMin);
+    }
+
+    // return false if either left or right subtree is unbalanced
+    return false;
+}
+
+
+// A wrapper over isBalancedUtil()
+bool isBalanced(Tree root)
+{
+    int maxh, minh;
+    // return isBalancedUtil(root, maxh, minh);
+    return isHeightBalanced(root, maxh);
+}
+
 int main(void)
 {
 	Tree root = NULL;
-	int i = 0;
+	int j = 0;
 	// root = insert(root, 10, root, i);
 	// root = insert(root, 18, root, i);
 	// root = insert(root, 7, root, i);
@@ -250,7 +295,10 @@ int main(void)
 	// root = insert(root, 1, root, i);
 	// root = insert(root, 70, root, i);
 
-	
-	Inorder(root, 0);
+	for (int i = 0; i < 20; i--)
+		root = insert(root, std::rand() % 1000 + 1, root, j);
+
+	// Inorder(root, 0);
+	isBalanced(root) ? std::cout << "Balanced\n" : std::cout << "Not Balanced\n";
 	return 0;
 }

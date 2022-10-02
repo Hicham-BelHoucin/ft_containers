@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/01 16:10:54 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 12:56:43 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ namespace ft
 		typedef ft::pair<const key_type, value_type>														dataType;
 		typedef typename Alloc::template rebind<Node<ft::pair<const key_type, value_type> > >::other 		newAlloc;
 		typedef	typename				newAlloc::pointer													Tree;
-		typedef	typename				newAlloc::const_pointer													constTree;
-		// typedef typename Alloc::template rebind<const Node<ft::pair<const key_type, value_type> > >::other 	constnewAlloc;
-		// typedef	typename				constnewAlloc::pointer												constTree;
+		typedef	typename				newAlloc::const_pointer												constTree;
 		typedef	size_t																						size_type;
 		newAlloc																							alloc;
 		Tree																								root;
