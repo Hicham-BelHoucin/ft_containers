@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 18:00:15 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 13:39:46 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ void TestContainer()
         std_time = compileAndExecute(Generate_cmd(i), "./a.out > std");
         fileEdit("./Namespace.hpp", "std", "ft");
         compareOutputAndTiming(ft_time, std_time, i);
-        system("rm -rf ft std a.out OutPut OutPut1 diff *.dSYM");
+        system("rm -rf ft std a.out OutPut OutPut1 *.dSYM");
         i++;
     }
     names.clear();
@@ -262,5 +262,5 @@ int main(int ac, char **av)
         TestContainer();
         i++;
     }
-    system("rm -rf ft std a.out OutPut OutPut1 diff *.dSYM");
+    system("rm -rf ft std a.out OutPut OutPut1 *.dSYM");
 }

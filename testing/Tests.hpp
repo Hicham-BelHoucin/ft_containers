@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/08 07:18:52 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 18:19:25 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 13:22:28 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define TESTS_HPP
 
 template <typename iter>
-void    PrintVectorValues(iter begin, iter end)
+void    PrintVectorValues(iter begin, iter end, std::string value = "Vector values :")
 {
-	std::cout << "Vector values :" << std::endl;
+	std::cout << value << std::endl;
 	while (begin != end)
 	{
 		std::cout << *begin << " ";
