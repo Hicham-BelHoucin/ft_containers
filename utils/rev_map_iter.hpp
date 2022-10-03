@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 18:10:40 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 11:19:11 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 11:12:33 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ namespace ft
 			typedef iterator											iterator_type;
 			typedef	typename iterator::reference						reference;
 			typedef	typename iterator::pointer							pointer;
+
 		reverse_map_iter()
 		{
 		}

@@ -1,6 +1,7 @@
 #ifndef NAMESPACE_HPP
 #define NAMESPACE_HPP
 
-# define NAME_SPACE ft
+# include "./Tests.hpp"
+# define NS ft
 
 #endif // NAMESPACE_HPP

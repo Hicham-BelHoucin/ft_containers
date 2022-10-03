@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 13:35:15 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/30 15:14:25 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 11:17:44 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,32 +113,32 @@ namespace ft
 			}
 
 			template <class _Tp, class __Tp>
-			friend bool operator==(const reverse_iterator<_Tp> &lhs, const reverse_iterator<__Tp> &rhs)
+			friend bool operator==(const reverse_iterator<_Tp> &rhs, const reverse_iterator<__Tp> &lhs)
 			{
 				return (lhs._ptr == rhs._ptr);
 			}
 			template <class _Tp, class __Tp>
-			friend bool operator!=(const reverse_iterator<_Tp> &lhs, const reverse_iterator<__Tp> &rhs)
+			friend bool operator!=(const reverse_iterator<_Tp> &rhs, const reverse_iterator<__Tp> &lhs)
 			{
 				return (lhs._ptr != rhs._ptr);
 			}
 			template <class _Tp, class __Tp>
-			friend bool operator<(const reverse_iterator<_Tp> &lhs, const reverse_iterator<__Tp> &rhs)
+			friend bool operator<(const reverse_iterator<_Tp> &rhs, const reverse_iterator<__Tp> &lhs)
 			{
 				return (lhs._ptr < rhs._ptr);
 			}
 			template <class _Tp, class __Tp>
-			friend bool operator<=(const reverse_iterator<_Tp> &lhs, const reverse_iterator<__Tp> &rhs)
+			friend bool operator<=(const reverse_iterator<_Tp> &rhs, const reverse_iterator<__Tp> &lhs)
 			{
 				return (lhs._ptr <= rhs._ptr);
 			}
 			template <class _Tp, class __Tp>
-			friend bool operator>(const reverse_iterator<_Tp> &lhs, const reverse_iterator<__Tp> &rhs)
+			friend bool operator>(const reverse_iterator<_Tp> &rhs, const reverse_iterator<__Tp> &lhs)
 			{
 				return (lhs._ptr > rhs._ptr);
 			}
 			template <class _Tp, class __Tp>
-			friend bool operator>=(const reverse_iterator<_Tp> &lhs, const reverse_iterator<__Tp> &rhs)
+			friend bool operator>=(const reverse_iterator<_Tp> &rhs, const reverse_iterator<__Tp> &lhs)
 			{
 				return (lhs._ptr >= rhs._ptr);
 			}

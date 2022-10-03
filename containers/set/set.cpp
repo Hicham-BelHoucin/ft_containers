@@ -6,13 +6,15 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:46:40 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 17:25:35 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 17:44:59 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "set.hpp"
+#include <set>
 
-#define	NS ft
+#include "./../../testing/Namespace.hpp"
+// #define	NS ft
 
 bool fncomp (int lhs, int rhs) {return lhs<rhs;}
 

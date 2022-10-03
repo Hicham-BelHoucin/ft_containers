@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 17:48:21 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 11:18:57 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 13:02:48 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ namespace ft
 		public:
 			typedef typename Alloc::template rebind<Tree>::other 			nodeAlloc;
 			typedef	typename nodeAlloc::pointer								Nodeptr;
-			typedef	value_type*													pointer;
-			typedef value_type&													reference;
+			typedef	value_type*												pointer;
+			typedef value_type&												reference;
 		private:
 			bstType	BST;
 			Nodeptr root;
@@ -85,6 +85,7 @@ namespace ft
 				return (lhs.current == rhs.current);
 			}
 	};
+	
 
 }
 

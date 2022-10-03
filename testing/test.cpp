@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 08:18:39 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 11:20:42 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/02 18:00:15 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,9 +194,9 @@ void TestContainer()
     while (i < tests.size())
     {
         ft_time = compileAndExecute(Generate_cmd(i), "./a.out > ft");
-        fileEdit("./../Tests/Namespace.hpp", "ft", "std");
+        fileEdit("./Namespace.hpp", "ft", "std");
         std_time = compileAndExecute(Generate_cmd(i), "./a.out > std");
-        fileEdit("./../Tests/Namespace.hpp", "std", "ft");
+        fileEdit("./Namespace.hpp", "std", "ft");
         compareOutputAndTiming(ft_time, std_time, i);
         system("rm -rf ft std a.out OutPut OutPut1 diff *.dSYM");
         i++;
@@ -205,22 +205,56 @@ void TestContainer()
     tests.clear();
 }
 
-int main(void)
+int main(int ac, char **av)
 {
-    const char      *path[3];
-    std::string     Container[3];
+    const char      *path[4];
+    std::string     Container[4];
     int             i;
+	int				end;
 
-    i = 2;
-    path[0] = "find ../Tests/map_tests/*.cpp > OutPut";
-    // path[0] = "find ../Tests/map_tests/swap.cpp > OutPut";
-    path[1] = "find ../Tests/vector_tests/*/*.cpp > OutPut";
-    // path[1] = "find ../Tests/vector_tests/modifiers/insert.cpp > OutPut";
-    path[2] = "find ../Tests/Stack/*.cpp > OutPut";
+	if (ac == 2)
+	{
+		if (!strcmp(av[1], "map"))
+		{
+			i = 0;
+			end = 1;
+		}
+		else if (!strcmp(av[1], "vector"))
+		{
+			i = 1;
+			end = 2;
+		}
+		else if (!strcmp(av[1], "stack"))
+		{
+			i = 2;
+			end = 3;
+		}
+		else if (!strcmp(av[1], "set"))
+		{
+			i = 3;
+			end = 4;
+		}
+		else
+		{
+			i = 0;
+			end = 4;
+		}
+	}
+	else
+	{
+		i = 0;
+		end = 4;
+	}
+
+    path[0] = "find ../containers/map/*.cpp > OutPut";
+    path[1] = "find ../containers/vector/*.cpp > OutPut";
+    path[2] = "find ../containers/stack/*.cpp > OutPut";
+    path[3] = "find ../containers/set/*.cpp > OutPut";
     Container[0] = "Map : ";
     Container[1] = "Vactor : ";
     Container[2] = "Stack : ";
-    while (i < 3)
+    Container[3] = "set : ";
+    while (i < end)
     {
         SetCmd(path[i]);
         SetName();

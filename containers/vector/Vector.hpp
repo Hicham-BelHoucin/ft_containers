@@ -16,6 +16,7 @@
 # include <memory.h>
 # include <algorithm>
 # include <iostream>
+# include "../../utils/isChar.hpp"
 # include "../../utils/Iterator.hpp"
 # include "../../utils/reverse_iterator.hpp"
 # include "../../utils/is_integral.hpp"
@@ -43,30 +44,25 @@ namespace ft
 			size_type 	_size;
 			size_type 	index;
 
-			void realloc(unsigned int new_cap)
+			void	realloc(size_type new_cap) //size_t in bytes
 			{
-				try
+				value_type * 	newptr;
+				size_type		i;
+
+				i = 0;
+				newptr = allocator.allocate(new_cap);
+				while (i < index)
 				{
-					T *temp = nullptr;
-					temp = this->allocator.allocate(index);
-					for (size_type i = 0; i < index; i++)
-						temp[i] = this->content[i];
-					if (content != nullptr && _size > 0)
-					{
-						for (size_type i = 0; i < this->index; i++)
-							allocator.destroy(content + i);
-						allocator.deallocate(content, _size);
-					}
-					this->_size = new_cap;
-					this->content = this->allocator.allocate(new_cap);
-					for (size_type i = 0; i < index; i++)
-						allocator.construct(content + i, temp[i]);
-					this->allocator.deallocate(temp, index);
+					allocator.construct(newptr + i, content[i]);
+					i++;
 				}
-				catch(const std::exception& e)
-				{
-					std::cerr << e.what() << '\n';
-				}
+				clear();
+				index = i;
+				if (content)
+					allocator.deallocate(content, _size);
+				_size = new_cap;
+				content = newptr;
+				newptr = NULL;
 			}
 
 			template <class _Tp>
@@ -77,7 +73,7 @@ namespace ft
 				x = y;
 				y = temp;
 			}
-			
+
 		public:
 			typedef typename ft::Iterator<pointer>						iterator;
 			typedef typename ft::Iterator<const_pointer>				const_iterator;
@@ -93,16 +89,11 @@ namespace ft
 			explicit vector(size_type n, const value_type &val = value_type(),
 							const allocator_type &alloc = allocator_type()) : allocator(alloc)
 			{
-				if (n > max_size())
-					throw std::length_error("");
-				else
-				{
-					this->_size = n;
-					this->index = n;
-					this->content = this->allocator.allocate(n);
-					for (size_type i = 0; i < n; i++)
-						allocator.construct(content + i, val);
-				}
+				this->_size = n;
+				this->index = n;
+				this->content = this->allocator.allocate(n);
+				for (size_type i = 0; i < n; i++)
+					allocator.construct(content + i, val);
 			};
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last,
@@ -113,19 +104,12 @@ namespace ft
 			}
 			vector(const vector &x)
 			{
-				try
-				{
-					this->allocator = x.allocator;
-					this->content = this->allocator.allocate((x.capacity()));
-					this->_size = x._size;
-					this->index = x.index;
-					for (size_type i = 0; i < x.index; i++)
-						allocator.construct(content + i, x.content[i]);
-				}
-				catch(const std::exception& e)
-				{
-					std::cerr << e.what() << '\n';
-				}
+				this->allocator = x.allocator;
+				this->content = this->allocator.allocate((x.capacity()));
+				this->_size = x._size;
+				this->index = x.index;
+				for (size_type i = 0; i < x.index; i++)
+					allocator.construct(content + i, x.content[i]);
 			};
 
 			/* //////////////////////////[ Destructors ]/////////////////////////////// */
@@ -209,7 +193,9 @@ namespace ft
 			}
 			size_type max_size() const
 			{
-				return this->allocator.max_size();
+				if (ft::isChar<value_type>::value)
+					return allocator_type().max_size() / 2;
+				return (std::numeric_limits<size_type>::max)() / sizeof(value_type);
 			}
 			void resize(size_type n, value_type val = value_type())
 			{
@@ -340,17 +326,21 @@ namespace ft
 
 			void push_back(const value_type &value)
 			{
-				if (index == 0 && !content && !_size)
+				if (!index && !_size)
 				{
 					content = allocator.allocate(1);
 					allocator.construct(content + index, value);
 					index++;
 					_size = 1;
 				}
-				else
+				else if (index >= _size)
 				{
-					if (index >= _size)
-						realloc(this->index * 2);
+					realloc(capacity() * 2);
+					allocator.construct(content + index, value);
+					index++;
+				}
+				else if (index < _size)
+				{
 					allocator.construct(content + index, value);
 					index++;
 				}

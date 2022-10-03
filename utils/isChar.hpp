@@ -1,31 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   empty.cpp                                          :+:      :+:    :+:   */
+/*   isChar.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/08 14:57:28 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/08/08 15:02:51 by hbel-hou         ###   ########.fr       */
+/*   Created: 2022/10/03 11:27:15 by hbel-hou          #+#    #+#             */
+/*   Updated: 2022/10/03 11:36:01 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../Tests.hpp"
+#ifndef	IS_CHAR_HPP
+#define	IS_CHAR_HPP
 
-int main ()
+namespace ft
 {
-    vector                      myvector;
-    iter_type                   begin, end;
+	template <typename _Tp>
+	struct isChar
+	{
+		static const bool value = false;
+	};
+
+	template <>
+	struct isChar<char>
+	{
+		static const bool value = true;
+	};
+
+	template <>
+	struct isChar<unsigned char>
+	{
+		static const bool value = true;
+	};
+
+	template <>
+	struct isChar<signed char>
+	{
+		static const bool value = true;
+	};
 
 
-    std::cout << (myvector.empty() ? "true" : "false") << std::endl;
-
-    myvector.push_back(1);
-
-    std::cout << (myvector.empty() ? "true" : "false") << std::endl;
-
-    begin = myvector.begin();
-    end = myvector.end();
-    PrintVectorValues(begin, end);
-    return 0;
 }
+
+#endif	//IS_CHAR_HPP

@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 18:25:57 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 17:26:54 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 13:08:34 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ namespace ft
 				while (first != last)
 				{
 					BST.insert(*first);
+					_size++;
 					first ++;
 				}
 			};
 
 			set (const set& x)
 			{
-				// implement later
 				BST.root = BST.cloneBinaryTree(x.BST.root);
 				_size = x._size;
 				comp = x.comp;

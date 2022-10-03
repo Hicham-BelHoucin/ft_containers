@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 12:53:27 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 11:45:18 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 12:38:11 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ namespace ft
 			typedef T												value_type;
 			typedef Container										container_type;
 			typedef typename container_type::size_type				size_type;
+			typedef typename container_type::reference				reference;
+			typedef typename container_type::const_reference			const_reference;
+
 		explicit stack (const container_type& ctnr = container_type()) : _c(ctnr)
 		{
 		}

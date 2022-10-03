@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 10:58:42 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 17:01:34 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/03 13:10:44 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class RedBlackTree
 	int					rotations;
 	nodeAlloc			alloc;
 
-	RedBlackTree(const nodeAlloc & alloc = nodeAlloc() ) : rotations(0), root(NULL), alloc(alloc)
+	RedBlackTree(const nodeAlloc & alloc = nodeAlloc() ) : root(NULL), rotations(0), alloc(alloc)
 	{
 	}
 
@@ -494,9 +494,9 @@ class RedBlackTree
 		if (!root)
 		{
 			if (!parent)
-				root = new Node<T>(data, BLACK, parent);
+				root = createNewNode(data, BLACK, parent);
 			else
-				root = new Node<T>(data, RED, parent);
+				root = createNewNode(data, RED, parent);
 		}
 		else if (root->data == data)
 			return root;
