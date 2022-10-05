@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 12:21:30 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/02 12:56:43 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/05 10:45:36 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,42 +54,40 @@ namespace ft
 			return height(root->left) - height(root->right);
 		}
 
-		Tree rightRotate(Tree y)
+		Tree rightRotate(Tree root)
 		{
-			Tree x = y->left;
-			Tree T2 = x->right;
+			Tree new_root;
+			Tree child;
 
+			// init
+			new_root = root->left;
+			child = new_root->right;
 			// Perform rotation
-			x->right = y;
-			y->left = T2;
-
+			new_root->right = root;
+			root->left = child;
 			// Update heights
-			y->height = std::max(height(y->left),
-							height(y->right)) + 1;
-			x->height = std::max(height(x->left),
-							height(x->right)) + 1;
-
+			root->height = std::max(height(root->left), height(root->right)) + 1;
+			new_root->height = std::max(height(new_root->left), height(new_root->right)) + 1;
 			// Return new root
-			return x;
+			return new_root;;
 		}
 
-		Tree leftRotate(Tree x)
+		Tree leftRotate(Tree root)
 		{
-			Tree y = x->right;
-			Tree T2 = y->left;
+			Tree new_root;
+			Tree child;
 
+			// init
+			new_root = root->right;
+			child = new_root->left;
 			// Perform rotation
-			y->left = x;
-			x->right = T2;
-
+			new_root->left = root;
+			root->right = child;
 			// Update heights
-			x->height = std::max(height(x->left),
-							height(x->right)) + 1;
-			y->height = std::max(height(y->left),
-							height(y->right)) + 1;
-
+			root->height = std::max(height(root->left), height(root->right)) + 1;
+			new_root->height = std::max(height(new_root->left), height(new_root->right)) + 1;
 			// Return new root
-			return y;
+			return new_root;
 		}
 
 		Tree  min(Tree root)
@@ -164,19 +162,6 @@ namespace ft
 			return lowerBound(root, key);
 		}
 
-		// Tree	find(Tree root, key_type key)
-		// {
-		// 	if (root == NULL)
-		// 		return NULL;
-		// 	if (!Compare()(root->data.first, key) && !Compare()(key, root->data.first))
-		// 		return root;
-		// 	if (Compare()(key, root->data.first))
-		// 		root = find(root->left, key);
-		// 	else if (!Compare()(key, root->data.first))
-		// 		root = find(root->right, key);
-		// 	return root;
-		// }
-
 		Tree	find(Tree root, key_type key) const
 		{
 			if (root == NULL)
@@ -218,7 +203,6 @@ namespace ft
 			node = root;
 			while (node != current)
 			{
-				// if (*current > *node)
 				if (!Compare()(current->data.first, node->data.first))
 				{
 					Predecessor = node;
@@ -245,7 +229,6 @@ namespace ft
 			node = root;
 			while (node != current)
 			{
-				// if (*current > *node)
 				if (!Compare()(current->data.first, node->data.first))
 				{
 					Predecessor = node;
@@ -408,20 +391,12 @@ namespace ft
 
 		Tree cloneBinaryTree(Tree root)
 		{
-			// base case
-			if (root == NULL) {
+			if (root == NULL)
 				return NULL;
-			}
-
-			// create a new node with the same data as the root node
-			// Tree root_copy = new Node<dataType>(root->data);
 			Tree root_copy = createNewNode(root->data);
-
-			// clone the left and right subtree
 			root_copy->left = cloneBinaryTree(root->left);
 			root_copy->right = cloneBinaryTree(root->right);
 
-			// return cloned root node
 			return root_copy;
 		}
 

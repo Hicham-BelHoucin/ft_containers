@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 10:58:42 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/10/03 13:10:44 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2022/10/05 12:52:28 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,6 @@ class RedBlackTree
 		node = root;
 		while (node != current)
 		{
-			// if (*current > *node)
 			if (!Compare()(current->data, node->data))
 			{
 				Predecessor = node;
@@ -224,7 +223,6 @@ class RedBlackTree
 		node = root;
 		while (node != current)
 		{
-			// if (*current > *node)
 			if (!Compare()(current->data, node->data))
 			{
 				Predecessor = node;
@@ -380,55 +378,52 @@ class RedBlackTree
 
 	Tree cloneBinaryTree(Tree root)
 	{
-		// base case
-		if (root == NULL) {
+		if (root == NULL)
 			return NULL;
-		}
-
-		// create a new node with the same data as the root node
-		// Tree root_copy = new Node<dataType>(root->data);
 		Tree root_copy = createNewNode(root->data, root->color, root->parent);
-
-		// clone the left and right subtree
 		root_copy->left = cloneBinaryTree(root->left);
 		root_copy->right = cloneBinaryTree(root->right);
-
-		// return cloned root node
 		return root_copy;
 	}
 
-	Tree rightRotate(Tree y)
+	Tree rightRotate(Tree root)
 	{
-		if (!y->left)
-			return y;
-		Tree x = y->left;
-		Tree T2 = x->right;
+		Tree new_root;
+		Tree child;
 
+		if (!root->left)
+			return root;
+		// init
+		new_root = root->left;
+		child = new_root->right;
 		// Perform rotation
-		x->right = y;
-		y->left = T2;
+		new_root->right = root;
+		root->left = child;
 		// change parent
-		x->parent = y->parent;
-		y->parent = x;
+		new_root->parent = root->parent;
+		root->parent = new_root;
 		// Return new root
-		return x;
+		return new_root;
 	}
 
-	Tree leftRotate(Tree x)
+	Tree leftRotate(Tree root)
 	{
-		if (!x->right)
-			return x;
-		Tree y = x->right;
-		Tree T2 = y->left;
+		Tree new_root;
+		Tree child;
 
+		if (!root->right)
+			return root;
+		// init
+		new_root = root->right;
+		child = new_root->left;
 		// Perform rotation
-		y->left = x;
-		x->right = T2;
+		new_root->left = root;
+		root->right = child;
 		// change parent
-		y->parent = x->parent;
-		x->parent = y;
+		new_root->parent = root->parent;
+		root->parent = new_root;
 		// Return new root
-		return y;
+		return new_root;
 	}
 
 	int		getRotationType(Tree root, value_type data)
@@ -498,9 +493,9 @@ class RedBlackTree
 			else
 				root = createNewNode(data, RED, parent);
 		}
-		else if (root->data == data)
+		else if (!Compare()(root->data, data) && !Compare()(data, root->data))
 			return root;
-		else if (root->data < data)
+		else if (Compare()(root->data, data))
 		{
 			root->right = insertHelper(root->right, data, root, rotations);
 			if (root->color == RED && root->right->color == RED)
@@ -509,7 +504,7 @@ class RedBlackTree
 				data = root->right->data;
 			}
 		}
-		else if (root->data > data)
+		else if (!Compare()(root->data , data))
 		{
 			root->left = insertHelper(root->left, data, root, rotations);
 			if (root->color == RED && root->left->color == RED)
