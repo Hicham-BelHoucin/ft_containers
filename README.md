@@ -1,7 +1,7 @@
 # ft_containers
 
 
-ft_containers Is 42 Project  
+ft_containers Is 42 Project
 It Is All About Implementing Containers Of Cpp **Vector** **Stack** **Map** And **Set**
 And Some Tools That Those Containers use like : **Equal** **Enable_if** ...
 
@@ -24,6 +24,6 @@ function in it's underlaying container**
 [What Is a map ? ](https://cplusplus.com/reference/map/map/)
 
 **to implement map you use something called binary search tree  [What Is a Binary Search Tree ? ](https://en.wikipedia.org/wiki/Binary_search_tree)
-when you use bst you face timing your map will be to slow so to fix this probleme you need to use An Avl Tree [What Is a Binary Search Tree ? ](https://en.wikipedia.org/wiki/AVL_tree)**
+when you use bst you face timing problem your map will be to slow so to fix this probleme you need to use An Avl Tree [What Is a Avl Tree ? ](https://en.wikipedia.org/wiki/AVL_tree)**
 
-[example of rotations](./rotations.png)
+![example of rotations](./rotations.png)
