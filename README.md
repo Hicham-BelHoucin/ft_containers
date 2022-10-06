@@ -36,4 +36,4 @@ when you use bst you face timing problem your map will be to slow so to fix this
 
 ## example of Red Black Tree :
 
-![example](./"red_black_Tree_example.jpg")
+![example](./red_black_Tree_example.jpg)
