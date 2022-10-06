@@ -32,8 +32,9 @@ when you use bst you face timing problem your map will be to slow so to fix this
 
 ## fourth container with us is set :
 
-**to implement set you will use something called Red Black tree [What Is a Red Black Tree ? ](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) **
+**to implement set you will use something called Red Black tree [What Is a Red Black Tree ? ](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)**
 
 ## example of Red Black Tree :
 
 ![example](./red_black_Tree_example.jpg)
+
