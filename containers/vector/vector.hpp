@@ -389,7 +389,7 @@ namespace ft
 			}
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last,
-						typename ft::enable_if<!std::is_integral<InputIterator>::value>::type * = nullptr)
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = nullptr)
 			{
 				size_type pos;
 

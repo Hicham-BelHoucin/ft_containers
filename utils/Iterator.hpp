@@ -6,7 +6,7 @@
 /*   By: hbel-hou <hbel-hou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 16:51:29 by hbel-hou          #+#    #+#             */
-/*   Updated: 2022/09/30 13:22:38 by hbel-hou         ###   ########.fr       */
+/*   Updated: 2023/02/19 22:47:00 by hbel-hou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iterator>
 # include "iterator_traits.hpp"
+# include <iostream>
 
 namespace ft
 {
